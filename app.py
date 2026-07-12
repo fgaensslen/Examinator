@@ -102,59 +102,47 @@ st.markdown("""
         margin-bottom: 15px;
     }
 
-    /* STYLING FOR INTERACTIVE BUTTON CARDS */
-    .answer-btn button, [data-testid="stButton"].answer-btn button {
+    /* TARGET EVERY SINGLE ELEMENT RENDERED INSIDE MAIN BUTTONS */
+    [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; 
+        text-align: left !important;
         width: 100% !important;
         padding: 16px 20px !important;
         border-radius: 16px !important;
-        border: 1px solid #e2e8f0 !important;
-        background-color: #ffffff !important;
-        color: #1a202c !important;
-        transition: all 0.2s ease !important;
         min-height: 60px !important;
         height: auto !important;
         margin-bottom: 10px !important;
     }
-    .answer-btn button p, [data-testid="stButton"].answer-btn button p {
+
+    /* FIXES THE HIDDEN INNER LAYOUT WRAPPER */
+    [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button > div {
+        display: flex !important;
+        justify-content: flex-start !important;
         text-align: left !important;
-        margin: 0 !important;
-        font-size: 16px !important;
-    }
-    .answer-btn button:hover {
-        border-color: #cbd5e1 !important;
-        background-color: #f8fafc !important;
-    }
-    
-    /* FIX: Precise targeting for the selected active state highlight */
-    .answer-btn-selected button, [data-testid="stButton"].answer-btn-selected button {
-        border: 4px solid #1d4ed8 !important;
-        background-color: #eff6ff !important;
-        box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15) !important;
         width: 100% !important;
-        padding: 16px 20px !important;
-        border-radius: 16px !important;
-        color: #1a202c !important;
-        min-height: 60px !important;
-        height: auto !important;
-        margin-bottom: 10px !important;
     }
-    .answer-btn-selected button p, [data-testid="stButton"].answer-btn-selected button p {
-        text-align: left !important;
+
+    [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button p {
+        text-align: left !important;  
+        width: 100% !important;
         margin: 0 !important;
         font-size: 16px !important;
     }
 
     /* FEEDBACK CARD CONTAINERS MATCHING THE SCREENSHOT - NO BUBBLES, TEXT LEFT ALIGNED */
     .feedback-card {
-        padding: 16px 20px;
-        border-radius: 16px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 16px;
-        line-height: 1.5;
-        text-align: left;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; 
+        text-align: left !important;
+        width: 100% !important;
+        padding: 16px 20px !important;
+        border-radius: 16px !important;
+        min-height: 60px !important;
+        height: auto !important;
+        margin-bottom: 10px !important;
     }
     .card-correct {
         border: 3px solid #10b981 !important;
@@ -195,28 +183,18 @@ st.markdown("""
         white-space: nowrap;
         margin-left: 15px;
     }
+            
+     /* Ensure the markdown HTML cards align perfectly with Streamlit's native button layout wrapper bounds */
+    [data-testid="stMarkdownContainer"] .feedback-card {
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+    }
 
-    /* RESULTS STATUS BANNERS */
-    .status-banner {
-        padding: 14px 20px;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 16px;
-        margin-top: 15px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .status-correct {
-        background-color: #d1fae5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
-    }
-    .status-incorrect {
-        background-color: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fca5a5;
-    }
+    /* Remove default paragraph margin/padding from Streamlit markdown containers that causes vertical/horizontal offset */
+    [data-testid="stMarkdownContainer"] {
+        margin: 0 !important;
+        padding: 0 !important;
+    }       
     </style>
 """, unsafe_allow_html=True)
 
@@ -446,10 +424,10 @@ elif st.session_state.current_view == "quiz":
         is_correct_choice = c_idx in q["correct"]
         
         if not is_checked:
-            # Active selection view layout
-            btn_class = "answer-btn-selected" if is_selected else "answer-btn"
-            st.markdown(f'<div class="{btn_class}">', unsafe_allow_html=True)
-            if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True):
+            # Native Streamlit button types: 'primary' applies a filled highlight color
+            btn_type = "primary" if is_selected else "secondary"
+            
+            if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
                 if c_idx in current_selections:
                     st.session_state.selected_answers[current_idx].remove(c_idx)
                 else:
@@ -458,7 +436,6 @@ elif st.session_state.current_view == "quiz":
                     else:
                         st.session_state.selected_answers[current_idx].append(c_idx)
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
         else:
             # Locked Review mode with clear indication of what you selected
             if is_correct_choice:
@@ -488,10 +465,6 @@ elif st.session_state.current_view == "quiz":
 
     if is_checked:
         is_perfect = sorted(current_selections) == sorted(q["correct"])
-        if is_perfect:
-            st.markdown('<div class="status-banner status-correct">✔ Correct</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="status-banner status-incorrect">❌ Incorrect</div>', unsafe_allow_html=True)
 
     st.write("")
     
@@ -507,9 +480,12 @@ elif st.session_state.current_view == "quiz":
             st.rerun()
             
     with c_btn2:
-        if st.button("Check Answer", key=f"chk_{current_idx}", disabled=is_checked):
-            st.session_state.checked_questions.add(current_idx)
-            st.rerun()
+            # Disable if the question is already checked OR if no answers are selected yet
+            no_answer_selected = len(current_selections) == 0
+            
+            if st.button("Check Answer", key=f"chk_{current_idx}", disabled=(is_checked or no_answer_selected)):
+                st.session_state.checked_questions.add(current_idx)
+                st.rerun()
                 
     with c_btn3:
         if st.button("Next Question ➡️", key=f"next_{current_idx}", disabled=(current_idx + 1 >= total_qs)):
