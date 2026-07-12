@@ -4,6 +4,8 @@ import re
 import streamlit as st
 import frontmatter
 
+QUESTIONS_DIR = "./questions"
+
 # Page config - Changes the browser tab title and icon
 st.set_page_config(page_title="Certificator", page_icon="🎓", layout="centered")
 
@@ -50,11 +52,14 @@ st.markdown("""
 # Helper Functions
 # -------------------------------------------------------------
 def get_available_exams():
-    """Scans current working directory for folders containing .md questions."""
+    """Scans ./questions folder for exam subfolders."""
+    if not os.path.exists(QUESTIONS_DIR):
+        return []
+    
     exams = []
-    for item in os.listdir("."):
-        if os.path.isdir(item) and not item.startswith(".") and not item.startswith("__"):
-            md_files = [f for f in os.listdir(item) if f.endswith(".md")]
+    for item in os.listdir(QUESTIONS_DIR):
+        if os.path.isdir(os.path.join(QUESTIONS_DIR, item)) and not item.startswith(".") and not item.startswith("__"):
+            md_files = [f for f in os.listdir(os.path.join(QUESTIONS_DIR, item)) if f.endswith(".md")]
             if md_files:
                 exams.append((item, len(md_files)))
     return sorted(exams)
@@ -62,10 +67,11 @@ def get_available_exams():
 def load_questions(exam_folder):
     """Loads and parses all markdown quiz questions in a folder."""
     questions = []
-    files = sorted([f for f in os.listdir(exam_folder) if f.endswith(".md")])
+    folder_path = os.path.join(QUESTIONS_DIR, exam_folder)
+    files = sorted([f for f in os.listdir(folder_path) if f.endswith(".md")])
     
     for file in files:
-        filepath = os.path.join(exam_folder, file)
+        filepath = os.path.join(folder_path, file)
         post = frontmatter.load(filepath)
         
         choices = []
@@ -127,8 +133,8 @@ if st.session_state.current_view == "dashboard":
 # View 2: Mode Selector Page (With Range Slicer)
 # -------------------------------------------------------------
 elif st.session_state.current_view == "exam_menu":
-    st.markdown(f'<div class="app-header"><h1>🎓 Certificator</h1></div>', unsafe_allow_html=True)
-    st.markdown(f"<h3 style='text-align: center;'>Options for <b>{st.session_state.selected_exam}</b></h3>", unsafe_allow_html=True)
+    st.markdown(f'<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
+    st.markdown(f"<h3 style='text-align: center;'><b>{st.session_state.selected_exam}</b></h3>", unsafe_allow_html=True)
     
     if st.button("⬅️ Back to Dashboard"):
         st.session_state.current_view = "dashboard"
@@ -172,7 +178,7 @@ elif st.session_state.current_view == "exam_menu":
 # View 3: Quiz Presentation
 # -------------------------------------------------------------
 elif st.session_state.current_view == "quiz":
-    st.markdown(f'<div class="app-header"><h1>🎓 Certificator</h1></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
     st.markdown(f"<h3 style='text-align: center;'><b>{st.session_state.selected_exam}</b> - {'Study Mode' if st.session_state.mode == 'browse' else 'Practice Exam'}</h3>", unsafe_allow_html=True)
     
     if st.button("🚪 Exit Quiz Mode"):
