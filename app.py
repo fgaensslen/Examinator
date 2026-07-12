@@ -101,6 +101,122 @@ st.markdown("""
         gap: 15px;
         margin-bottom: 15px;
     }
+
+    /* STYLING FOR INTERACTIVE BUTTON CARDS */
+    .answer-btn button, [data-testid="stButton"].answer-btn button {
+        width: 100% !important;
+        padding: 16px 20px !important;
+        border-radius: 16px !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #ffffff !important;
+        color: #1a202c !important;
+        transition: all 0.2s ease !important;
+        min-height: 60px !important;
+        height: auto !important;
+        margin-bottom: 10px !important;
+    }
+    .answer-btn button p, [data-testid="stButton"].answer-btn button p {
+        text-align: left !important;
+        margin: 0 !important;
+        font-size: 16px !important;
+    }
+    .answer-btn button:hover {
+        border-color: #cbd5e1 !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* FIX: Precise targeting for the selected active state highlight */
+    .answer-btn-selected button, [data-testid="stButton"].answer-btn-selected button {
+        border: 4px solid #1d4ed8 !important;
+        background-color: #eff6ff !important;
+        box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15) !important;
+        width: 100% !important;
+        padding: 16px 20px !important;
+        border-radius: 16px !important;
+        color: #1a202c !important;
+        min-height: 60px !important;
+        height: auto !important;
+        margin-bottom: 10px !important;
+    }
+    .answer-btn-selected button p, [data-testid="stButton"].answer-btn-selected button p {
+        text-align: left !important;
+        margin: 0 !important;
+        font-size: 16px !important;
+    }
+
+    /* FEEDBACK CARD CONTAINERS MATCHING THE SCREENSHOT - NO BUBBLES, TEXT LEFT ALIGNED */
+    .feedback-card {
+        padding: 16px 20px;
+        border-radius: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: left;
+    }
+    .card-correct {
+        border: 3px solid #10b981 !important;
+        background-color: #ecfdf5 !important;
+    }
+    .card-wrong {
+        border: 3px solid #ef4444 !important;
+        background-color: #fef2f2 !important;
+    }
+    .card-neutral {
+        border: 1px solid #e2e8f0 !important;
+        background-color: #ffffff !important;
+        color: #64748b;
+    }
+    
+    /* BADGES FOR SELECTED REVIEW STATE */
+    .badge-wrong {
+        background-color: #fee2e2;
+        color: #ef4444;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        margin-left: 15px;
+    }
+    .badge-correct {
+        background-color: #d1fae5;
+        color: #10b981;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        margin-left: 15px;
+    }
+
+    /* RESULTS STATUS BANNERS */
+    .status-banner {
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+    .status-incorrect {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -164,6 +280,10 @@ if "current_q_idx" not in st.session_state:
     st.session_state.current_q_idx = 0
 if "panel_page" not in st.session_state:
     st.session_state.panel_page = 1
+if "selected_answers" not in st.session_state:
+    st.session_state.selected_answers = {}  
+if "checked_questions" not in st.session_state:
+    st.session_state.checked_questions = set() 
 
 # -------------------------------------------------------------
 # View 1: Main Dashboard
@@ -179,6 +299,8 @@ if st.session_state.current_view == "dashboard":
         if st.button(f"📄 {exam_name} ({q_count} Questions)"):
             st.session_state.selected_exam = exam_name
             st.session_state.quiz_data = load_questions(exam_name)
+            st.session_state.selected_answers = {}
+            st.session_state.checked_questions = set()
             st.session_state.current_view = "exam_menu"
             st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
@@ -210,6 +332,8 @@ elif st.session_state.current_view == "exam_menu":
             st.session_state.quiz_data = st.session_state.quiz_data[start_idx - 1 : end_idx]
             st.session_state.current_q_idx = 0
             st.session_state.panel_page = 1
+            st.session_state.selected_answers = {}
+            st.session_state.checked_questions = set()
             st.session_state.current_view = "quiz"
             st.rerun()
     with col2:
@@ -220,6 +344,8 @@ elif st.session_state.current_view == "exam_menu":
             st.session_state.quiz_data = sliced_subset
             st.session_state.current_q_idx = 0
             st.session_state.panel_page = 1
+            st.session_state.selected_answers = {}
+            st.session_state.checked_questions = set()
             st.session_state.current_view = "quiz"
             st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
@@ -239,6 +365,9 @@ elif st.session_state.current_view == "quiz":
     start_item_idx = (curr_page - 1) * items_per_page
     end_item_idx = min(start_item_idx + items_per_page, total_qs)
     
+    if current_idx not in st.session_state.selected_answers:
+        st.session_state.selected_answers[current_idx] = []
+        
     # --- SIDEBAR NAV PANEL ---
     with st.sidebar:
         side_head_col1, side_head_col2 = st.columns([2, 1])
@@ -249,7 +378,6 @@ elif st.session_state.current_view == "quiz":
                 st.session_state.current_view = "dashboard"
                 st.rerun()
 
-        # Small lowercase 'of' styling patch
         st.markdown(
             f'<div style="font-weight: bold; margin-bottom: 8px;">'
             f'{start_item_idx + 1}–{end_item_idx} <span style="font-size: 12px; font-weight: normal; color: #666; text-transform: lowercase;">of</span> {total_qs}'
@@ -257,7 +385,6 @@ elif st.session_state.current_view == "quiz":
             unsafe_allow_html=True
         )
         
-        # Grid layout for individual questions (smaller dimensions handled via CSS)
         for row_start in range(start_item_idx, end_item_idx, 4):
             cols = st.columns(4)
             for c_offset in range(4):
@@ -278,13 +405,11 @@ elif st.session_state.current_view == "quiz":
         st.markdown('<div class="custom-pagination-row">', unsafe_allow_html=True)
         nav_columns = st.columns(6) 
         
-        # Slot 1: Left Chevron Button
         with nav_columns[0]:
             if st.button("«", disabled=(curr_page == 1), key="nav_prev_page"):
                 st.session_state.panel_page -= 1
                 st.rerun()
         
-        # Slots 2 to 5: Static numerical assignments
         for idx in range(4):
             with nav_columns[idx + 1]:
                 if idx < len(sorted_pages):
@@ -296,7 +421,6 @@ elif st.session_state.current_view == "quiz":
                 else:
                     st.write("")
                     
-        # Slot 6: Right Chevron Button
         with nav_columns[5]:
             if st.button("»", disabled=(curr_page == total_pages or total_pages <= 1), key="nav_next_page"):
                 st.session_state.panel_page += 1
@@ -313,13 +437,65 @@ elif st.session_state.current_view == "quiz":
     st.markdown(f"### Question {current_idx + 1} of {total_qs}")
     st.info(q["question"])
     
-    user_selection = []
+    is_checked = current_idx in st.session_state.checked_questions
+    current_selections = st.session_state.selected_answers[current_idx]
+    
+    # Render Answers List
     for c_idx, choice in enumerate(q["choices"]):
-        user_selection.append(st.checkbox(choice, key=f"q_{current_idx}_c_{c_idx}"))
+        is_selected = c_idx in current_selections
+        is_correct_choice = c_idx in q["correct"]
         
+        if not is_checked:
+            # Active selection view layout
+            btn_class = "answer-btn-selected" if is_selected else "answer-btn"
+            st.markdown(f'<div class="{btn_class}">', unsafe_allow_html=True)
+            if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True):
+                if c_idx in current_selections:
+                    st.session_state.selected_answers[current_idx].remove(c_idx)
+                else:
+                    if len(q["correct"]) == 1:
+                        st.session_state.selected_answers[current_idx] = [c_idx]
+                    else:
+                        st.session_state.selected_answers[current_idx].append(c_idx)
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            # Locked Review mode with clear indication of what you selected
+            if is_correct_choice:
+                badge_html = '<span class="badge-correct">Your Answer</span>' if is_selected else ''
+                st.markdown(
+                    f'<div class="feedback-card card-correct">'
+                    f'<span>{choice}</span>'
+                    f'{badge_html}'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+            elif is_selected and not is_correct_choice:
+                st.markdown(
+                    f'<div class="feedback-card card-wrong">'
+                    f'<span>{choice}</span>'
+                    f'<span class="badge-wrong">Your Answer</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    f'<div class="feedback-card card-neutral">'
+                    f'<span>{choice}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+    if is_checked:
+        is_perfect = sorted(current_selections) == sorted(q["correct"])
+        if is_perfect:
+            st.markdown('<div class="status-banner status-correct">✔ Correct</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div class="status-banner status-incorrect">❌ Incorrect</div>', unsafe_allow_html=True)
+
     st.write("")
     
-    # Bottom layout containing Previous, Check, and Next actions seamlessly
+    # Bottom Layout Action Buttons Row
     st.markdown('<div class="quiz-action-container">', unsafe_allow_html=True)
     c_btn1, c_btn2, c_btn3 = st.columns([1.2, 1, 1.2])
     
@@ -331,15 +507,9 @@ elif st.session_state.current_view == "quiz":
             st.rerun()
             
     with c_btn2:
-        if st.button("Check Answer", key=f"chk_{current_idx}"):
-            selected_indices = [idx for idx, checked in enumerate(user_selection) if checked]
-            if selected_indices == q["correct"]:
-                st.success("🎉 Correct!")
-            else:
-                correct_answers_text = ", ".join([q["choices"][c_idx] for c_idx in q["correct"]])
-                st.error(f"❌ Incorrect. Correct answer(s): {correct_answers_text}")
-            if q["documentation"]:
-                st.markdown(f"[Read Documentation Blueprint]({q['documentation']})")
+        if st.button("Check Answer", key=f"chk_{current_idx}", disabled=is_checked):
+            st.session_state.checked_questions.add(current_idx)
+            st.rerun()
                 
     with c_btn3:
         if st.button("Next Question ➡️", key=f"next_{current_idx}", disabled=(current_idx + 1 >= total_qs)):
