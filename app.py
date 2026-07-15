@@ -183,18 +183,16 @@ st.markdown("""
         white-space: nowrap;
         margin-left: 15px;
     }
-            
-     /* Ensure the markdown HTML cards align perfectly with Streamlit's native button layout wrapper bounds */
+
+    /* ELIMINATE JUMPING AND OFFSET EFFECTS ON STATE CHANGE */
     [data-testid="stMarkdownContainer"] .feedback-card {
         box-sizing: border-box !important;
         max-width: 100% !important;
     }
-
-    /* Remove default paragraph margin/padding from Streamlit markdown containers that causes vertical/horizontal offset */
     [data-testid="stMarkdownContainer"] {
         margin: 0 !important;
         padding: 0 !important;
-    }       
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -221,6 +219,18 @@ def load_questions(exam_folder):
         filepath = os.path.join(folder_path, file)
         post = frontmatter.load(filepath)
         
+        # Extract image from Markdown text (e.g., ![text](image.png))
+        md_image_match = re.search(r'!\[.*?\]\((.*?)\)', post.content)
+        inline_img = None
+        if md_image_match:
+            # Join the folder path with the filename found in the markdown
+            inline_img = os.path.join(folder_path, md_image_match.group(1))
+        
+        # Determine optional image paths
+        base_name = os.path.splitext(file)[0]
+        q_img = os.path.join(folder_path, f"{base_name}.png")
+        ans_img = os.path.join(folder_path, f"{base_name}_answer.png")
+        
         choices = []
         correct_indices = []
         lines = post.content.strip().split("\n")
@@ -239,7 +249,9 @@ def load_questions(exam_folder):
             "question": post.get("question", "Missing Question Text"),
             "documentation": post.get("documentation", ""),
             "choices": choices,
-            "correct": correct_indices
+            "correct": correct_indices,
+            "q_image": q_img if os.path.exists(q_img) else None,
+            "ans_image": ans_img if os.path.exists(ans_img) else None
         })
     return questions
 
@@ -415,6 +427,11 @@ elif st.session_state.current_view == "quiz":
     st.markdown(f"### Question {current_idx + 1} of {total_qs}")
     st.info(q["question"])
     
+    # Render Question Image ONLY if it exists in directory
+    if q["q_image"]:
+        st.image(q["q_image"], use_container_width=True)
+        st.write("")  # Little space buffer
+    
     is_checked = current_idx in st.session_state.checked_questions
     current_selections = st.session_state.selected_answers[current_idx]
     
@@ -463,6 +480,11 @@ elif st.session_state.current_view == "quiz":
                     unsafe_allow_html=True
                 )
 
+    # Render Answer/Explanation Image ONLY if checked and exists in directory
+    if is_checked and q["ans_image"]:
+        st.write("---")
+        st.image(q["ans_image"], use_container_width=True, caption="Explanation")
+
     if is_checked:
         is_perfect = sorted(current_selections) == sorted(q["correct"])
 
@@ -480,12 +502,10 @@ elif st.session_state.current_view == "quiz":
             st.rerun()
             
     with c_btn2:
-            # Disable if the question is already checked OR if no answers are selected yet
-            no_answer_selected = len(current_selections) == 0
-            
-            if st.button("Check Answer", key=f"chk_{current_idx}", disabled=(is_checked or no_answer_selected)):
-                st.session_state.checked_questions.add(current_idx)
-                st.rerun()
+        # The button is now ONLY disabled if the question is already checked
+        if st.button("Check Answer", key=f"chk_{current_idx}", disabled=is_checked):
+            st.session_state.checked_questions.add(current_idx)
+            st.rerun()
                 
     with c_btn3:
         if st.button("Next Question ➡️", key=f"next_{current_idx}", disabled=(current_idx + 1 >= total_qs)):
