@@ -231,18 +231,22 @@ def load_questions(exam_folder):
         q_img = os.path.join(folder_path, f"{base_name}.png")
         ans_img = os.path.join(folder_path, f"{base_name}_answer.png")
         
-        choices = []
-        correct_indices = []
+        # ... inside the loop where you process choices ...
+        raw_choices = [] # Store pairs of (choice_text, is_correct)
         lines = post.content.strip().split("\n")
-        idx = 0
+        
         for line in lines:
             match = re.match(r'^\s*-\s*\[([ xX])\]\s*(.*)$', line)
             if match:
                 is_correct = match.group(1).lower() == 'x'
-                choices.append(match.group(2).strip())
-                if is_correct:
-                    correct_indices.append(idx)
-                idx += 1
+                raw_choices.append({"text": match.group(2).strip(), "is_correct": is_correct})
+        
+        # Shuffle the choices
+        random.shuffle(raw_choices)
+        
+        # Extract the shuffled text and the new correct indices
+        choices = [item["text"] for item in raw_choices]
+        correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
                 
         questions.append({
             "filename": file,
