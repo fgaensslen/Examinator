@@ -3,7 +3,7 @@ question: "How does GitHub Copilot identify matching code and ensure that public
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 
-- [ ] A. Implementing safeguards to detect and avoid suggesting verbatim snippets from public code
+- [x] A. Implementing safeguards to detect and avoid suggesting verbatim snippets from public code
 - [x] B. Filtering out suggestions that match code from public repositories
 - [ ] C. Using machine learning models trained only on private repositories
 - [ ] D. Reviewing and storing user-specific private repository data for future suggestions

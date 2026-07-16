@@ -5,5 +5,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 
 - [x] A. Explain code and suggest improvements
 - [ ] B. Find out about releases and commits
-- [ ] C. Generate unit tests
+- [x] C. Generate unit tests
 - [ ] D. Plan coding tasks

@@ -1,0 +1,28 @@
+---
+question: "You have an Azure SQL database that contains a table named Rooms. Rooms was created by using the following Transact-SQL statement. 
+
+
+CREATE TABLE Rooms
+
+(
+
+    RoomID int PRIMARY KEY,
+    
+    Owner nvarchar(100),
+
+    Capactiy int
+
+);
+
+
+You discover that some records in the Rooms table contain NULL values for the Owner field. 
+
+
+You need to ensure that all future records have a value for the Owner field. What should you add?"
+documentation: "https://learn.microsoft.com/en-us/azure/"
+---
+
+- [ ] A. a foreign key
+- [x] B. a check constraint
+- [ ] C. a nonclustered index
+- [ ] D. a unique constraint

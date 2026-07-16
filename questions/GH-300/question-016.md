@@ -5,5 +5,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 
 - [x] A. Chat
 - [ ] B. Pull Request Diff Analysis
-- [ ] C. Code suggestions
+- [x] C. Code suggestions
 - [ ] D. Knowledge Base
