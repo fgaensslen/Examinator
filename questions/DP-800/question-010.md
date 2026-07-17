@@ -4,9 +4,8 @@ question: "You have an Azure SQL database that contains database-level Data Defi
 Which Transact-SQL statement should you use?"
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-
-- [ ] A. ALTER TRIGGER
-- [ ] B. ALTER DATABASE
-- [ ] C. ALTER SERVER AUDIT SPECIFICATION
-- [x] D. DISABLE TRIGGER
-- [ ] E. ALTER DATABASE AUDIT SPECIFICATION
+- [ ]ALTER TRIGGER
+- [ ]ALTER DATABASE
+- [ ]ALTER SERVER AUDIT SPECIFICATION
+- [x]DISABLE TRIGGER
+- [ ]ALTER DATABASE AUDIT SPECIFICATION

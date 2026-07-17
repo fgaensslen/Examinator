@@ -16,10 +16,9 @@ Which two database configurations should you perform? Each correct answer presen
 NOTE: Each correct selection is worth one point."
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-
-- [ ] A. Create an AFTER trigger on dbo.Employee for Data Manipulation Language (DML).
-- [ ] B. Set Sql_Trigger_MaxBatchSize to 100.
-- [x] C. Enable change tracking on the dbo.Employee table.
-- [x] D. Enable change tracking at the database level.
-- [ ] E. Set Sql_Trigger_PollingIntervalMs to 5000.
-- [ ] F. Enable change data capture (CDC) for dbo.Employee table changes.
+- [ ]Create an AFTER trigger on dbo.Employee for Data Manipulation Language (DML).
+- [ ]Set Sql_Trigger_MaxBatchSize to 100.
+- [x]Enable change tracking on the dbo.Employee table.
+- [x]Enable change tracking at the database level.
+- [ ]Set Sql_Trigger_PollingIntervalMs to 5000.
+- [ ]Enable change data capture (CDC) for dbo.Employee table changes.

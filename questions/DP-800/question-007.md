@@ -22,8 +22,7 @@ You write the following code.
 What should you insert at line 05? "
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-
-- [ ] A. RETURN DATEDIFF(year, GETDATE(), @OrderDate);
-- [ ] B. DATEDIFF(month, @orderdate, GETDATE()) / 12
-- [ ] C. DATEPART(year, GETDATE()) - DATEPART(year, @orderdate)
-- [x] D. RETURN DATEDIFF(year, @OrderDate, GETDATE());
+- [ ]RETURN DATEDIFF(year, GETDATE(), @OrderDate);
+- [ ]DATEDIFF(month, @orderdate, GETDATE()) / 12
+- [ ]DATEPART(year, GETDATE()) - DATEPART(year, @orderdate)
+- [x]RETURN DATEDIFF(year, @OrderDate, GETDATE());

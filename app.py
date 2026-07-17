@@ -489,7 +489,7 @@ elif st.session_state.current_view == "quiz":
     # Render Answer/Explanation Image ONLY if checked and exists in directory
     if is_checked and q["ans_image"]:
         st.write("---")
-        st.image(q["ans_image"], use_container_width=True, caption="Explanation")
+        st.image(q["ans_image"], use_container_width=True)
 
     if is_checked:
         is_perfect = sorted(current_selections) == sorted(q["correct"])

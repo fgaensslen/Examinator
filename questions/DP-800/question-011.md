@@ -6,8 +6,7 @@ You need to ensure that any Transact-SQL queries that run from GitHub Copilot Ch
 What prevents the GitHub Copilot Chat-run queries from accessing data beyond the developer’s access?"
 documentation: "https://docs.github.com/en/actions"
 ---
-
-- [ ] A. GitHub Copilot Chat runs queries in a read-only sandbox that is isolated from production database permissions.
-- [x] B. GitHub Copilot Chat runs queries by using the developer’s database identity and permissions.
-- [ ] C. GitHub Copilot Chat filters query results on the client side to remove rows the developer is unauthorized to see.
-- [ ] D. GitHub Copilot Chat uses different row-level security (RLS) policies than the developer.
+- [ ]GitHub Copilot Chat runs queries in a read-only sandbox that is isolated from production database permissions.
+- [x]GitHub Copilot Chat runs queries by using the developer’s database identity and permissions.
+- [ ]GitHub Copilot Chat filters query results on the client side to remove rows the developer is unauthorized to see.
+- [ ]GitHub Copilot Chat uses different row-level security (RLS) policies than the developer.

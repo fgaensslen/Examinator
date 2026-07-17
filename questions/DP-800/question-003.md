@@ -6,7 +6,6 @@ You need to disable the GitHub Copilot repository-level instructions for yoursel
 What should you do?"
 documentation: "https://docs.github.com/en/actions"
 ---
-
-- [x] A. From Visual Studio Code, modify your GitHub Copilot Chat user settings.
-- [ ] B. Add a --debug flag when you start the GitHub Copilot Chat extension.
-- [ ] C. Delete .github/copilot-instructions.md.
+- [x]From Visual Studio Code, modify your GitHub Copilot Chat user settings.
+- [ ]Add a --debug flag when you start the GitHub Copilot Chat extension.
+- [ ]Delete .github/copilot-instructions.md.

@@ -2,9 +2,8 @@
 question: "What content can be configured to be excluded with content exclusions? Each correct answer presents part of the solution. (Choose three.)"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
-
-- [ ] A. Gists
-- [ ] B. Repositories
-- [ ] C. Files
-- [ ] D. Lines in files
-- [x] E. Folders
+- [ ]Gists
+- [ ]Repositories
+- [ ]Files
+- [ ]Lines in files
+- [x]Folders

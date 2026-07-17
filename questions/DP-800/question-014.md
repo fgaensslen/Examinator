@@ -21,8 +21,7 @@ You discover that some records in the Rooms table contain NULL values for the Ow
 You need to ensure that all future records have a value for the Owner field. What should you add?"
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-
-- [ ] A. a foreign key
-- [x] B. a check constraint
-- [ ] C. a nonclustered index
-- [ ] D. a unique constraint
+- [ ]a foreign key
+- [x]a check constraint
+- [ ]a nonclustered index
+- [ ]a unique constraint
