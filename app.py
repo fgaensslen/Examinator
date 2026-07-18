@@ -8,7 +8,7 @@ import frontmatter
 QUESTIONS_DIR = "./questions"
 
 # Page config
-st.set_page_config(page_title="Certificator", page_icon="🎓", layout="centered")
+st.set_page_config(page_title="Examinator", page_icon="🎓", layout="centered")
 
 # Custom CSS layout corrections
 st.markdown("""
