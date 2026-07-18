@@ -6,11 +6,11 @@ CREATE TABLE Rooms
 
 (
 
-    RoomID int PRIMARY KEY,
+&emsp;RoomID int PRIMARY KEY,
     
-    Owner nvarchar(100),
+ &emsp;Owner nvarchar(100),
 
-    Capactiy int
+ &emsp;Capactiy int
 
 );
 
