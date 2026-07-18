@@ -4,12 +4,20 @@ question: "DRAG DROP -
 You have an Azure SQL database that contains a table named Sales.Orders. Sales.Orders contains the following columns.
 
 
-| Column      | Data type    |
-| ----------- | -----------  |
-| OrderId     | int          |
-| CustomerId  | int          |
-| OrderDate   | datetime2    |
-| TotalAmount | decimal(18,2)|
+| Column      | Data type     |
+
+
+| OrderId     | int           |
+
+
+| CustomerId  | int           |
+
+
+| OrderDate   | datetime2     | 
+
+
+| TotalAmount | decimal(18,2) |
+
 
 
 Reporting queries frequently repeat logic to calculate the number of days since an order was placed.

@@ -431,7 +431,7 @@ elif st.session_state.current_view == "quiz":
     st.markdown(f"### Question {current_idx + 1} of {total_qs}")
     # Using st.markdown allows for <br> tags or double-space line breaks
     # Wrap the markdown rendering in a div that uses your custom CSS
-    st.markdown(q["question"].replace('\n', '<br>'), unsafe_allow_html=True)    
+    st.markdown(q["question"], unsafe_allow_html=True)    
     
     # Render Question Image ONLY if it exists in directory
     if q["q_image"]:
