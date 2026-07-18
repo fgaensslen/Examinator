@@ -1,5 +1,5 @@
 ---
-question: "What is the impact of the “Fill-In-the-Middle” (FIM) technique on GitHub Copilot’s code suggestions?"
+question: "What is the impact of the "Fill-In-the-Middle" (FIM) technique on GitHub Copilot’s code suggestions?"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [x]Improves suggestions by considering both the prefix and suffix of the code, filling in the middle part more accurately.

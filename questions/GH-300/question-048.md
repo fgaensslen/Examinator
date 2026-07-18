@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [x]By adding variables (#selection) to your prompt
 - [ ]By adding the full file paths to your prompt of important files
 - [ ]By adding the important files to your .gitconfig
-- [ ]By opening the relevant tabs in your IDE
+- [x]By opening the relevant tabs in your IDE

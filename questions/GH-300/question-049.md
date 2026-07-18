@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [ ]Creation of end-to-end performance testing scenarios for a web application
 - [x]Creation of a unit test scenario for newly developed Python code
 - [ ]Create a technical requirement specification from the business requirement documentation
-- [ ]Explain a legacy COBOL code and translate the code to another language like C#
+- [x]Explain a legacy COBOL code and translate the code to another language like C#
