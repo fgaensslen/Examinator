@@ -17,27 +17,27 @@ You write the following Transact-SQL code.
 
 04 CREATE OR ALTER PROCEDURE dbo.AskManuals
 
-05 ...
+05&emsp; ...
 
-06 SELECT @chunks =
+06&emsp; SELECT @chunks =
 
-07 ...
+07&emsp; ...
 
-08 SET @payload =
+08&emsp; SET @payload =
 
-09 ...
+09&emsp; ...
 
-10 EXEC @retval = sys.sp_invoke_external_rest_endpoint
+10&emsp; EXEC @retval = sys.sp_invoke_external_rest_endpoint
 
-11 @url = N'https://<your-resource>.openai.azure.com/openai/deployments/<your-deployment>/chat/completions?api-version=2024-02-15-preview',
+11&emsp;&emsp; @url = N'https://<your-resource>.openai.azure.com/openai/deployments/\\<your-deployment\\>/chat/completions?api-version=2024-02-15-preview',
 
-12 @method = N'POST',
+12&emsp;&emsp; @method = N'POST',
 
-13 @credential = N'AzureOpenAIHeaders',
+13&emsp;&emsp; @credential = N'AzureOpenAIHeaders',
 
-14 @payload = @payload,
+14&emsp;&emsp; @payload = @payload,
 
-15 @response = @response OUTPUT;
+15&emsp;&emsp; @response = @response OUTPUT;
 
 16 END;
 

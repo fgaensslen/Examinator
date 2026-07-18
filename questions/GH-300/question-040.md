@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [ ]GitHub Copilot Codespace
 - [x]GitHub Copilot Business
 - [ ]GitHub Copilot Individual
-- [ ]GitHub Copilot Enterprise
+- [x]GitHub Copilot Enterprise

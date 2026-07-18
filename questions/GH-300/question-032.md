@@ -5,5 +5,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [ ]The API can generate detailed reports on code quality improvements made by GitHub Copilot.
 - [x]The API can track the number of code suggestions accepted and used in the organization.
 - [ ]The API can provide feedback on coding style and standards compliance.
-- [ ]The API can provide Copilot Chat specific suggestions acceptance metrics.
+- [x]The API can provide Copilot Chat specific suggestions acceptance metrics.
 - [ ]The API can refactor your code to improve productivity.

@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [ ]Free (not billed) for all open source projects
 - [x]Monthly, as metered service based on actual consumption
 - [ ]Annually as a subscription
-- [ ]Monthly as a subscription
+- [x]Monthly as a subscription
