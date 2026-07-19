@@ -102,33 +102,34 @@ st.markdown("""
         margin-bottom: 15px;
     }
 
-    /* TARGET EVERY SINGLE ELEMENT RENDERED INSIDE MAIN BUTTONS */
+    /* Update the main button styling for centralized text */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button {
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-start !important; 
-        text-align: left !important;
+        justify-content: center !important; /* CENTER TEXT HORIZONTALLY */
+        text-align: center !important;      /* CENTER TEXT */
         width: 100% !important;
-        padding: 16px 20px !important;
-        border-radius: 16px !important;
-        min-height: 60px !important;
+        padding: 10px 16px !important;      /* SMALLER PADDING */
+        border-radius: 8px !important;      /* SMALLER RADIUS */
+        min-height: 45px !important;        /* SMALLER HEIGHT */
         height: auto !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 8px !important;
     }
 
-    /* FIXES THE HIDDEN INNER LAYOUT WRAPPER */
+    /* Ensure the inner text container also centers */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button > div {
         display: flex !important;
-        justify-content: flex-start !important;
-        text-align: left !important;
+        justify-content: center !important; /* CENTER INNER WRAPPER */
+        text-align: center !important;
         width: 100% !important;
     }
 
+    /* Ensure the paragraph text is centered */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button p {
-        text-align: left !important;  
+        text-align: center !important;  
         width: 100% !important;
         margin: 0 !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
     }
 
     /* FEEDBACK CARD CONTAINERS MATCHING THE SCREENSHOT - NO BUBBLES, TEXT LEFT ALIGNED */
@@ -280,24 +281,51 @@ if "checked_questions" not in st.session_state:
     st.session_state.checked_questions = set() 
 
 # -------------------------------------------------------------
-# View 1: Main Dashboard
+# View 1: Main Dashboard (Updated)
 # -------------------------------------------------------------
 if st.session_state.current_view == "dashboard":
     st.markdown('<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
     exams = get_available_exams()
+    
     if not exams:
         st.warning("No question folders found.")
     
-    st.markdown('<div class="dashboard-btn-container">', unsafe_allow_html=True)
     for exam_name, q_count in exams:
-        if st.button(f"📄 {exam_name} ({q_count} Questions)"):
-            st.session_state.selected_exam = exam_name
-            st.session_state.quiz_data = load_questions(exam_name)
-            st.session_state.selected_answers = {}
-            st.session_state.checked_questions = set()
-            st.session_state.current_view = "exam_menu"
-            st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+        # Create an expander for each exam card
+        with st.expander(f"📄 {exam_name} ({q_count} Questions)", expanded=False):
+            
+            # 1. Slider for number of questions
+            # Using unique keys for each slider
+            num_qs = st.slider(f"Number of questions", 
+                               min_value=1, 
+                               max_value=q_count, 
+                               value=q_count, 
+                               key=f"slider_{exam_name}")
+            
+            # 2. Start Practice Test Button
+            if st.button("Start Practice Test", key=f"start_{exam_name}", type="primary", use_container_width=True):
+                st.session_state.selected_exam = exam_name
+                st.session_state.quiz_data = load_questions(exam_name)
+                
+                # Randomize and slice
+                random.shuffle(st.session_state.quiz_data)
+                st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
+                
+                st.session_state.mode = "exam"
+                st.session_state.selected_answers = {}
+                st.session_state.checked_questions = set()
+                st.session_state.current_view = "quiz"
+                st.rerun()
+            
+            # 3. "Browse individually" link/button
+            if st.button("Browse questions individually →", key=f"browse_{exam_name}", use_container_width=True):
+                st.session_state.selected_exam = exam_name
+                st.session_state.quiz_data = load_questions(exam_name)
+                st.session_state.mode = "browse"
+                st.session_state.selected_answers = {}
+                st.session_state.checked_questions = set()
+                st.session_state.current_view = "quiz"
+                st.rerun()
 
 # -------------------------------------------------------------
 # View 2: Mode Selector Page
