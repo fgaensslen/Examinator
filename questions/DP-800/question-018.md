@@ -6,6 +6,7 @@ You have an Azure SQL database that contains a table named dbo.Customers. dbo.Cu
 
 • CustomerId (int)(primary key)
 
+
 • ProfileJson (nvarchar(max))
 
 
@@ -16,6 +17,7 @@ You need to write a query that returns:
 
 
 • One row per customer
+
 
 • A PhoneNUmerals column that contains only the digits
 

@@ -1,6 +1,7 @@
 --- 
 question: "You have a SQL database in Microsoft Fabric that contains a column named Payload. Payload stores customer data in JSON documents that have the the following format.
 
+
 ```
 {
   \"date\": \"2020-01-25\",
@@ -8,6 +9,7 @@ question: "You have a SQL database in Microsoft Fabric that contains a column na
   ...
 }
 ```
+
 
 Data analysis shows that some customers have subaddressing in their email address, for example, user1+promo@contoso.com.
 

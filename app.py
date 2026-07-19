@@ -544,10 +544,12 @@ elif st.session_state.current_view == "quiz":
                 if c_idx in current_selections:
                     st.session_state.selected_answers[current_idx].remove(c_idx)
                 else:
-                    if len(q["correct"]) == 1:
-                        st.session_state.selected_answers[current_idx] = [c_idx]
-                    else:
+                    # Only allow selection if the user hasn't hit the required count
+                    if len(current_selections) < len(q["correct"]):
                         st.session_state.selected_answers[current_idx].append(c_idx)
+                    else:
+                        # Optional: Notify user they've reached the limit
+                        st.toast(f"You can only select {len(q['correct'])} answers.")
                 st.rerun()
         else:
             # Locked Review mode with clear indication of what you selected
@@ -600,13 +602,20 @@ elif st.session_state.current_view == "quiz":
                 st.session_state.panel_page -= 1
             st.rerun()
             
-    # 2. Check Answer Button (Only in Browse Mode)
+    # 2. Check Answer Button
     with col2:
         if st.session_state.mode == "browse":
-            # The button stays in the column, but becomes disabled if already checked
-            if st.button("❓Check Answer", 
+            # Calculate required answers
+            required_count = len(q["correct"])
+            user_count = len(current_selections)
+            
+            # The button is ONLY enabled if the number of selected answers 
+            # matches the number of correct answers
+            can_check = (user_count == required_count)
+            
+            if st.button("Check Answer", 
                          key=f"chk_btn_{current_idx}", 
-                         disabled=is_checked, 
+                         disabled=is_checked or not can_check, 
                          use_container_width=True):
                 st.session_state.checked_questions.add(current_idx)
                 st.rerun()

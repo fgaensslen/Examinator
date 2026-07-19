@@ -1,19 +1,24 @@
 ---
 question: "DRAG DROP - 
 
+
 You have a Microsoft SQL Server 2025 database that contains a table named dbo.CustomerMessages. dbo.CustomerMessages contains two columns named MessageID (int) and MessageRaw (nvarchar(max)). 
+
 
 MessageRaw can contain a phone number in multiple formats, and some rows do NOT contain a phone number. 
 
 
 You need to write a single SELECT query that meets the following requirements: 
 
+
 The query must return MessageID, RawNumber, DigitsOnly, and PhoneStatus. 
+
 
 RawNumber must contain the first substring that matches a phone-number pattern, or NULL if no match exists. 
 
 
 DigitsOnly must remove all non-digit characters from RawNumber, or return NULL.
+
 
 PhoneStatus must return valid when a phone number exists in MessageRaw, otherwise return Missing.
 

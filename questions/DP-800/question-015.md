@@ -5,6 +5,7 @@ You have a SQL database in Microsoft Fabric that contains a table named WebSite.
 
 You have a daily report that filters by the \\$.severity JSON property and returns LogId, LogDateTime, and log. The report frequently causes full table scans.
 
+
 You need to modify WebSite.Logs to support efficient filtering by \\$.severity and avoid key lookups for the columns returned by the report.
 
 

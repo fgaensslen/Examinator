@@ -1,11 +1,15 @@
 ---
 question: "You have an Azure SQL database named SalesDB that contains a table named dbo.Articles. dbo.Articles contains two million articles with embeddings. The articles are updated frequently throughout the day.
 
+
 You query the embeddings by using VECTOR_SEARCH.
+
 
 Users report that semantic search results do NOT reflect the updates until the following day.
 
+
 You need to ensure that the embeddings are updated whenever the articles change. The solution must minimize CPU usage on SalesDB.
+
 
 Which embedding maintenance method should you implement?"
 documentation: "https://learn.microsoft.com/en-us/azure/"

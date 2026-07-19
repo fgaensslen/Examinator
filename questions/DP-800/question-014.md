@@ -4,13 +4,17 @@ question: "You have an Azure SQL database that contains a table named Rooms. Roo
 
 CREATE TABLE Rooms
 
+
 (
 
 &emsp;RoomID int PRIMARY KEY,
+
     
  &emsp;Owner nvarchar(100),
 
+
  &emsp;Capactiy int
+
 
 );
 

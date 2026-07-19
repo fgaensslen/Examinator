@@ -1,11 +1,15 @@
 ---
 question: "You have a GitHub Codespaces environment that has GitHub Copilot Chat installed and is connected to a SQL database in Microsoft Fabric named DB1. DB1 contains tables named Sales.Orders and Sales.Customers.
 
+
 You use GitHub Copilot Chat in the context of DB1.
+
 
 A company policy prohibits sharing customer Personally Identifiable Information (PII), secrets, and query result sets with any AI service.
 
+
 You need to use GitHub Copilot Chat to write and review Transact-SQL code for a new stored procedure that will join Sales.Orders to Sales.Customers and return customer names and email addresses. The solution must NOT share the actual data in the tables with GitHub Copilot Chat.
+
 
 What should you do? Copilot Chat can generate the stored procedure."
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
