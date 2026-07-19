@@ -106,8 +106,8 @@ st.markdown("""
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button {
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important; /* CENTER TEXT HORIZONTALLY */
-        text-align: center !important;      /* CENTER TEXT */
+        justify-content: flex-start !important; 
+        text-align: left !important;
         width: 100% !important;
         padding: 10px 16px !important;      /* SMALLER PADDING */
         border-radius: 8px !important;      /* SMALLER RADIUS */
@@ -119,14 +119,14 @@ st.markdown("""
     /* Ensure the inner text container also centers */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button > div {
         display: flex !important;
-        justify-content: center !important; /* CENTER INNER WRAPPER */
-        text-align: center !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
         width: 100% !important;
     }
 
     /* Ensure the paragraph text is centered */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button p {
-        text-align: center !important;  
+        text-align: left !important;   
         width: 100% !important;
         margin: 0 !important;
         font-size: 15px !important;
@@ -194,6 +194,49 @@ st.markdown("""
         margin: 0 !important;
         padding: 0 !important;
     }
+            
+    /* Sidebar Map Styles */
+    .map-btn-answered {
+        border: 2px solid #3b82f6 !important; /* Blue for answered */
+        background-color: #dbeafe !important;
+    }
+
+    .map-btn-unanswered {
+        border: 1px solid #e2e8f0 !important; /* Gray for unanswered */
+        background-color: #ffffff !important;
+    }
+
+    /* Ensure sidebar buttons align with your new grid layout */
+    [data-testid="stSidebar"] button {
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+    }        
+            
+    /* Sidebar button map colors */
+    .btn-unanswered { border: 2px solid #e2e8f0 !important; color: #64748b !important; }
+    .btn-answered { border: 2px solid #3b82f6 !important; background-color: #dbeafe !important; }
+    .btn-correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; }
+    .btn-wrong { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; }   
+
+     /* Sidebar map button container */
+    .map-btn {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        margin: 2px;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+    .map-unanswered { background-color: #ffffff; color: #333; }
+    .map-answered { background-color: #dbeafe; color: #1e40af; border-color: #3b82f6; }
+    .map-correct { background-color: #d1fae5; color: #065f46; border-color: #10b981; }
+    .map-wrong { background-color: #fee2e2; color: #991b1b; border-color: #ef4444; }
+    .map-current { outline: 3px solid #6366f1; }            
+            
     </style>
 """, unsafe_allow_html=True)
 
@@ -278,7 +321,9 @@ if "panel_page" not in st.session_state:
 if "selected_answers" not in st.session_state:
     st.session_state.selected_answers = {}  
 if "checked_questions" not in st.session_state:
-    st.session_state.checked_questions = set() 
+    st.session_state.checked_questions = set()
+if "submitted" not in st.session_state:
+    st.session_state.submitted = False
 
 # -------------------------------------------------------------
 # View 1: Main Dashboard (Updated)
@@ -318,7 +363,7 @@ if st.session_state.current_view == "dashboard":
                 st.rerun()
             
             # 3. "Browse individually" link/button
-            if st.button("Browse questions individually →", key=f"browse_{exam_name}", use_container_width=True):
+            if st.button("Browse questions individually", key=f"browse_{exam_name}", use_container_width=True):
                 st.session_state.selected_exam = exam_name
                 st.session_state.quiz_data = load_questions(exam_name)
                 st.session_state.mode = "browse"
@@ -396,7 +441,7 @@ elif st.session_state.current_view == "quiz":
         with side_head_col1:
             st.write(f"### {total_qs} questions")
         with side_head_col2:
-            if st.button("🚪 Exit", key="side_exit_btn", type="secondary"):
+            if st.button("🏠 Start", key="side_exit_btn", type="secondary"):
                 st.session_state.current_view = "dashboard"
                 st.rerun()
 
@@ -413,8 +458,25 @@ elif st.session_state.current_view == "quiz":
                 item_idx = row_start + c_offset
                 if item_idx < end_item_idx:
                     with cols[c_offset]:
+                        # Determine the status
+                        is_answered = len(st.session_state.selected_answers.get(item_idx, [])) > 0
+                        is_wrong = item_idx in st.session_state.checked_questions and \
+                                sorted(st.session_state.selected_answers.get(item_idx, [])) != sorted(questions[item_idx]["correct"])
+                        is_correct = item_idx in st.session_state.checked_questions and \
+                                    sorted(st.session_state.selected_answers.get(item_idx, [])) == sorted(questions[item_idx]["correct"])
+
+                        # Determine visual style
                         btn_type = "primary" if item_idx == current_idx else "secondary"
-                        if st.button(f"{item_idx + 1}", key=f"nav_grid_{item_idx}", type=btn_type, use_container_width=True):
+                        
+                        # We display the button. To add the color, we use the visual indicator
+                        # Note: Streamlit buttons change color based on 'type'. 
+                        # For full color control, we use the label to indicate the state.
+                        label = f"{item_idx + 1}"
+                        if is_wrong: label = f"❌ {item_idx + 1}"
+                        elif is_correct: label = f"✅ {item_idx + 1}"
+                        elif is_answered: label = f"● {item_idx + 1}"
+
+                        if st.button(label, key=f"nav_grid_{item_idx}", type=btn_type, use_container_width=True):
                             st.session_state.current_q_idx = item_idx
                             st.rerun()
         
@@ -524,28 +586,62 @@ elif st.session_state.current_view == "quiz":
 
     st.write("")
     
-    # Bottom Layout Action Buttons Row
+    # --- Bottom Layout Action Buttons Row ---
     st.markdown('<div class="quiz-action-container">', unsafe_allow_html=True)
-    c_btn1, c_btn2, c_btn3 = st.columns([1.2, 1, 1.2])
     
-    with c_btn1:
-        if st.button("⬅️ Previous Question", key=f"prev_{current_idx}", disabled=(current_idx == 0)):
+    # Create 3 equal columns for perfect distribution
+    col1, col2, col3 = st.columns(3)
+    
+    # 1. Previous Button
+    with col1:
+        if st.button("⬅️ Previous", key=f"prev_{current_idx}", disabled=(current_idx == 0), use_container_width=True):
             st.session_state.current_q_idx -= 1
             if st.session_state.current_q_idx < (st.session_state.panel_page - 1) * items_per_page:
                 st.session_state.panel_page -= 1
             st.rerun()
             
-    with c_btn2:
-        # The button is now ONLY disabled if the question is already checked
-        if st.button("Check Answer", key=f"chk_{current_idx}", disabled=is_checked):
-            st.session_state.checked_questions.add(current_idx)
+    # 2. Check Answer Button (Only in Browse Mode)
+    with col2:
+        if st.session_state.mode == "browse":
+            # The button stays in the column, but becomes disabled if already checked
+            if st.button("❓Check Answer", 
+                         key=f"chk_btn_{current_idx}", 
+                         disabled=is_checked, 
+                         use_container_width=True):
+                st.session_state.checked_questions.add(current_idx)
+                st.rerun()
+        else:
+            st.empty()
+
+    # 3. Next / Submit Button
+    with col3:
+        if current_idx + 1 < total_qs:
+            if st.button("Next Question ➡️", key=f"next_{current_idx}", use_container_width=True):
+                st.session_state.current_q_idx += 1
+                if st.session_state.current_q_idx >= (st.session_state.panel_page * items_per_page):
+                    st.session_state.panel_page += 1
+                st.rerun()
+        else:
+            if st.button("🚀 Submit Exam", key="submit_exam", use_container_width=True):
+                answered_count = len([i for i in range(total_qs) if st.session_state.selected_answers.get(i)])
+                st.session_state.summary_data = (answered_count, total_qs - answered_count)
+                st.session_state.show_summary = True
+                st.rerun()
+
+    @st.dialog("Submit Practice Test?")
+    def show_summary(answered, unanswered):
+        st.write(f"Once submitted, you'll see your score and can review each question.")
+        st.write(f"• Answered: {answered}")
+        st.write(f"• Unanswered: {unanswered}")
+        if st.button("Confirm Submit"):
+            st.session_state.submitted = True
+            st.session_state.show_summary = False
+            # Lock all questions for review
+            st.session_state.checked_questions = set(range(len(st.session_state.quiz_data)))
             st.rerun()
-                
-    with c_btn3:
-        if st.button("Next Question ➡️", key=f"next_{current_idx}", disabled=(current_idx + 1 >= total_qs)):
-            st.session_state.current_q_idx += 1
-            if st.session_state.current_q_idx >= (st.session_state.panel_page * items_per_page):
-                st.session_state.panel_page += 1
-            st.rerun()
-            
+
+    # Call this if the flag is set
+    if st.session_state.get("show_summary"):
+        show_summary(*st.session_state.summary_data)
+
     st.markdown('</div>', unsafe_allow_html=True)
