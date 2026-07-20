@@ -221,15 +221,17 @@ st.markdown("""
      /* Sidebar map button container */
     .map-btn {
         display: block;
-        width: 100%;
-        padding: 8px;
-        margin: 2px;
+        padding: 10px;
         text-align: center;
-        border-radius: 4px;
-        text-decoration: none;
-        font-weight: bold;
+        text-decoration: none !important; /* This removes the underline */
+        border-radius: 5px;
         border: 1px solid #ccc;
-        cursor: pointer;
+        color: inherit;
+        font-weight: normal;
+    }
+    /* Add this to ensure it stays gone on hover */
+    .map-btn:hover {
+        text-decoration: none !important;
     }
     .map-unanswered { background-color: #ffffff; color: #333; }
     .map-answered { background-color: #dbeafe; color: #1e40af; border-color: #3b82f6; }
