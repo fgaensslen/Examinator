@@ -543,15 +543,20 @@ elif st.session_state.current_view == "quiz":
             btn_type = "primary" if is_selected else "secondary"
             
             if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
-                if c_idx in current_selections:
-                    st.session_state.selected_answers[current_idx].remove(c_idx)
+                max_allowed = len(q["correct"])
+                
+                if max_allowed == 1:
+                    # Single-choice question: clicking a new choice immediately replaces the old one
+                    st.session_state.selected_answers[current_idx] = [c_idx]
                 else:
-                    # Only allow selection if the user hasn't hit the required count
-                    if len(current_selections) < len(q["correct"]):
-                        st.session_state.selected_answers[current_idx].append(c_idx)
+                    # Multi-choice question: keep existing toggle behavior
+                    if c_idx in current_selections:
+                        st.session_state.selected_answers[current_idx].remove(c_idx)
                     else:
-                        # Optional: Notify user they've reached the limit
-                        st.toast(f"You can only select {len(q['correct'])} answers.")
+                        if len(current_selections) < max_allowed:
+                            st.session_state.selected_answers[current_idx].append(c_idx)
+                        else:
+                            st.toast(f"You can only select {max_allowed} answers.")
                 st.rerun()
         else:
             # Locked Review mode with clear indication of what you selected
