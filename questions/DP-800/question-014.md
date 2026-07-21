@@ -2,10 +2,8 @@
 question: "You have an Azure SQL database that contains a table named Rooms. Rooms was created by using the following Transact-SQL statement. 
 
 
-CREATE TABLE Rooms
+CREATE TABLE Rooms (
 
-
-(
 
 &emsp;RoomID int PRIMARY KEY,
 

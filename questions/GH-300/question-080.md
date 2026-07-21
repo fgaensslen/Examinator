@@ -3,6 +3,6 @@ question: "What two options navigate to configure duplicate detection? Each corr
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [x]Organization settings → Copilot → Policies
-- [ ]Enterprise settings → Copilot → Policies
+- [x]Enterprise settings → Copilot → Policies
 - [ ]Repository settings → Copilot → Policies
 - [ ]User settings → Copilot → Policies
