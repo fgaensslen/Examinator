@@ -3,7 +3,7 @@ question: "What types of content can GitHub Copilot Knowledge Base answer questi
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]compiled binaries
-- [ ]code snippets
-- [ ]design patterns
+- [x]code snippets
+- [x]design patterns
 - [ ]screenshots
 - [x]documentation
