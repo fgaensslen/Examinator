@@ -133,30 +133,61 @@ st.markdown("""
     }
 
     /* FEEDBACK CARD CONTAINERS MATCHING THE SCREENSHOT - NO BUBBLES, TEXT LEFT ALIGNED */
+    [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button,
     .feedback-card {
         display: flex !important;
         align-items: center !important;
         justify-content: flex-start !important; 
         text-align: left !important;
         width: 100% !important;
-        padding: 16px 20px !important;
-        border-radius: 16px !important;
-        min-height: 60px !important;
+        padding: 10px 16px !important;     /* Uniform padding */
+        border-radius: 8px !important;     /* Uniform radius */
+        min-height: 48px !important;       /* Strict minimum height */
         height: auto !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 8px !important;     /* Uniform spacing */
+        box-sizing: border-box !important;
+    }
+
+    /* FEEDBACK CARD SPECIFIC VARIANTS */
+    .feedback-card {
+        font-size: 15px !important;
+        font-weight: 400 !important;
     }
     .card-correct {
         border: 3px solid #10b981 !important;
         background-color: #ecfdf5 !important;
+        color: #065f46 !important;
     }
     .card-wrong {
         border: 3px solid #ef4444 !important;
         background-color: #fef2f2 !important;
+        color: #991b1b !important;
     }
     .card-neutral {
         border: 1px solid #e2e8f0 !important;
         background-color: #ffffff !important;
-        color: #64748b;
+        color: #64748b !important;
+    }
+
+    .feedback-card {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important; 
+        text-align: left !important;
+        width: 100% !important;
+        padding: 10px 16px !important;
+        border-radius: 8px !important;
+        min-height: 48px !important;
+        height: auto !important;
+        margin-bottom: 8px !important;
+        box-sizing: border-box !important;
+        font-size: 15px !important;
+    }
+    
+    .feedback-card span.choice-text {
+        flex-grow: 1 !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
     }
     
     /* BADGES FOR SELECTED REVIEW STATE */
@@ -559,12 +590,12 @@ elif st.session_state.current_view == "quiz":
                             st.toast(f"You can only select {max_allowed} answers.")
                 st.rerun()
         else:
-            # Locked Review mode with clear indication of what you selected
+            # Locked Review mode with unified height and inline text wrapper
             if is_correct_choice:
                 badge_html = '<span class="badge-correct">Your Answer</span>' if is_selected else ''
                 st.markdown(
                     f'<div class="feedback-card card-correct">'
-                    f'<span>{choice}</span>'
+                    f'<span class="choice-text">{choice}</span>'
                     f'{badge_html}'
                     f'</div>',
                     unsafe_allow_html=True
@@ -572,7 +603,7 @@ elif st.session_state.current_view == "quiz":
             elif is_selected and not is_correct_choice:
                 st.markdown(
                     f'<div class="feedback-card card-wrong">'
-                    f'<span>{choice}</span>'
+                    f'<span class="choice-text">{choice}</span>'
                     f'<span class="badge-wrong">Your Answer</span>'
                     f'</div>',
                     unsafe_allow_html=True
@@ -580,7 +611,7 @@ elif st.session_state.current_view == "quiz":
             else:
                 st.markdown(
                     f'<div class="feedback-card card-neutral">'
-                    f'<span>{choice}</span>'
+                    f'<span class="choice-text">{choice}</span>'
                     f'</div>',
                     unsafe_allow_html=True
                 )
