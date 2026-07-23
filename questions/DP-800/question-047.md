@@ -10,4 +10,7 @@ You need to configure OrderApi to connect to SalesDB by using Microsoft Entra au
 Which Transact-SQL statements should you run in SalesDB?"
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-
+- [ ] CREATE LOGIN [OrderApi-Id] FROM EXTERNAL PROVIDER; ALTER ROLE db_datareader ADD MEMBER [OrderApi-Id]; ALTER ROLE db_datawriter ADD MEMBER [OrderApi-Id];
+- [ ] CREATE USER [OrderApi-Id] WITH PASSWORD = 'P@ssw0rd!'; ALTER ROLE db_datareader ADD MEMBER [OrderApi-Id]; ALTER ROLE db_datawriter ADD MEMBER [OrderApi-Id];
+- [x] CREATE USER [OrderApi-Id] FROM EXTERNAL PROVIDER; ALTER ROLE db_datareader ADD MEMBER [OrderApi-Id]; ALTER ROLE db_datawriter ADD MEMBER [OrderApi-Id];
+- [ ] CREATE LOGIN [OrderApi-Id] WITH PASSWORD = 'P@ssw0rd!'; ALTER SERVER ROLE sysadmin ADD MEMBER [OrderApi-Id];

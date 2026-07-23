@@ -29,10 +29,6 @@ st.markdown("""
     [data-testid="stSidebarUserContent"] {
         padding-top: 3rem !important;
     }
-    
-    [data-testid="stSidebar"] {
-        background-color: #f7f7f7 !important;
-    }
 
     /* MOVE THE MIDDLE MAIN CONTAINER BLOCKS SLIGHTLY HIGHER */
     [data-testid="stMainBlockContainer"] {
@@ -164,9 +160,9 @@ st.markdown("""
         color: #991b1b !important;
     }
     .card-neutral {
-        border: 1px solid #e2e8f0 !important;
-        background-color: #ffffff !important;
-        color: #64748b !important;
+        border: 1px solid rgba(128, 128, 128, 0.3) !important;
+        background-color: rgba(128, 128, 128, 0.05) !important;
+        color: inherit !important;
     }
 
     .feedback-card {
@@ -505,8 +501,8 @@ elif st.session_state.current_view == "quiz":
                         # Note: Streamlit buttons change color based on 'type'. 
                         # For full color control, we use the label to indicate the state.
                         label = f"{item_idx + 1}"
-                        if is_wrong: label = f"❌ {item_idx + 1}"
-                        elif is_correct: label = f"✅ {item_idx + 1}"
+                        if is_wrong: label = f"✕ {item_idx + 1}"
+                        elif is_correct: label = f"✓ {item_idx + 1}"
                         elif is_answered: label = f"● {item_idx + 1}"
 
                         if st.button(label, key=f"nav_grid_{item_idx}", type=btn_type, use_container_width=True):
