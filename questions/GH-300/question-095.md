@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [x]Create a documentation file for the newly created code base.
 - [ ]Fast tracking of release management activities to move code to production main branch.
 - [ ]A project plan for the team needs to be generated using a project management software.
-- [ ]A developer is added to a new project and would like to understand the current software code.
+- [x]A developer is added to a new project and would like to understand the current software code.

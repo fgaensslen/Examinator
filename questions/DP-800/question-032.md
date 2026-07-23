@@ -66,4 +66,8 @@ You write the following Transact-SQL code.
 What should you insert at line 02?"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
-
+- [ ]WITH IDENTITY = 'HTTPEndpointQueryString', SECRET = N'{"api-key":"<value>"}';
+- [x]WITH IDENTITY = 'Managed Identity', SECRET = N'{"resourceid":"<value>"}';
+- [ ]WITH IDENTITY = 'Managed Identity', SECRET = N'{"api-key":"<value>"}';
+- [ ]WITH IDENTITY = 'HTTPEndpointHeaders', SECRET = N'{"api-key":"<value>"}';
+- [ ]WITH IDENTITY = 'AzureOpenAI', SECRET = N'{"resourceid":"<value>"}';

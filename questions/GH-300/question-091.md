@@ -4,5 +4,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 ---
 - [ ]View code suggestions for a specific user
 - [x]List all GitHub Copilot seat assignments for an organization
-- [ ]Get a summary of GitHub Copilot usage for organization members
+- [x]Get a summary of GitHub Copilot usage for organization members
 - [ ]List of all unsubscribed GitHub Copilot members within an organization

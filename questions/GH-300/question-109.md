@@ -3,7 +3,7 @@ question: "What content can be configured to be excluded with content exclusions
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Gists
-- [ ]Repositories
-- [ ]Files
+- [x]Repositories
+- [x]Files
 - [ ]Lines in files
 - [x]Folders

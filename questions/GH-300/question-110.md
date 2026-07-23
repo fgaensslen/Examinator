@@ -5,4 +5,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [x]Engage with chat participants such as @workspace to incorporate collaborative context into the responses.
 - [ ]Access developer’s previous projects and code repositories to understand their coding style without explicit permission.
 - [ ]Utilize to interpret developer’s thoughts and intentions without any code or comments.
-- [ ]Utilize chat variables like #file and #editors to anchor the conversation within the specific context of the files or editors in use.
+- [x]Utilize chat variables like #file and #editors to anchor the conversation within the specific context of the files or editors in use.
