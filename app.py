@@ -144,10 +144,10 @@ st.markdown("""
         box-sizing: border-box !important;
     }
 
-    /* FEEDBACK CARD SPECIFIC VARIANTS */
     .feedback-card {
         font-size: 15px !important;
         font-weight: 400 !important;
+        justify-content: space-between !important;
     }
     .card-correct {
         border: 3px solid #10b981 !important;
@@ -163,21 +163,6 @@ st.markdown("""
         border: 1px solid rgba(128, 128, 128, 0.3) !important;
         background-color: rgba(128, 128, 128, 0.05) !important;
         color: inherit !important;
-    }
-
-    .feedback-card {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important; 
-        text-align: left !important;
-        width: 100% !important;
-        padding: 10px 16px !important;
-        border-radius: 8px !important;
-        min-height: 48px !important;
-        height: auto !important;
-        margin-bottom: 8px !important;
-        box-sizing: border-box !important;
-        font-size: 15px !important;
     }
     
     .feedback-card span.choice-text {
@@ -212,6 +197,30 @@ st.markdown("""
         margin-left: 15px;
     }
 
+    /* IN-CODE BLANK FEEDBOX FEEDBACK STYLING */
+    .code-blank-correct {
+        border: 2px solid #10b981 !important;
+        background-color: #ecfdf5 !important;
+        color: #065f46 !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        font-family: 'Consolas', monospace !important;
+        font-weight: bold !important;
+        display: inline-block !important;
+        margin: 2px 0 !important;
+    }
+    .code-blank-wrong {
+        border: 2px solid #ef4444 !important;
+        background-color: #fef2f2 !important;
+        color: #991b1b !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        font-family: 'Consolas', monospace !important;
+        font-weight: bold !important;
+        display: inline-block !important;
+        margin: 2px 0 !important;
+    }
+
     /* ELIMINATE JUMPING AND OFFSET EFFECTS ON STATE CHANGE */
     [data-testid="stMarkdownContainer"] .feedback-card {
         box-sizing: border-box !important;
@@ -238,14 +247,6 @@ st.markdown("""
         border-radius: 6px !important;
         font-weight: 600 !important;
     }        
-            
-    /* Sidebar button map colors */
-    .btn-unanswered { border: 2px solid #e2e8f0 !important; color: #64748b !important; }
-    .btn-answered { border: 2px solid #3b82f6 !important; background-color: #dbeafe !important; }
-    .btn-correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; }
-    .btn-wrong { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; }   
-
-     /* Sidebar map button container */
     .map-btn {
         display: block;
         padding: 10px;
@@ -290,45 +291,57 @@ def load_questions(exam_folder):
     
     for file in files:
         filepath = os.path.join(folder_path, file)
-        post = frontmatter.load(filepath)
         
-        # Extract image from Markdown text (e.g., ![text](image.png))
+        # Read raw content to correctly parse frontmatter and body code template separated by '---'
+        with open(filepath, 'r', encoding='utf-8') as f:
+            file_raw = f.read()
+            
+        post = frontmatter.loads(file_raw)
+        
         md_image_match = re.search(r'!\[.*?\]\((.*?)\)', post.content)
-        inline_img = None
-        if md_image_match:
-            # Join the folder path with the filename found in the markdown
-            inline_img = os.path.join(folder_path, md_image_match.group(1))
+        q_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png")) else None
+        ans_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png")) else None
         
-        # Determine optional image paths
-        base_name = os.path.splitext(file)[0]
-        q_img = os.path.join(folder_path, f"{base_name}.png")
-        ans_img = os.path.join(folder_path, f"{base_name}_answer.png")
+        question_text = post.get("question", "Missing Question Text")
+        is_drag_drop = question_text.strip().startswith("DRAG DROP -") or post.get("question_type") == "drag_drop"
         
-        # ... inside the loop where you process choices ...
-        raw_choices = [] # Store pairs of (choice_text, is_correct)
-        lines = post.content.strip().split("\n")
+        choices = []
+        correct_indices = []
+        code_template = post.get("code_template", "")
         
-        for line in lines:
-            match = re.match(r'^\s*-\s*\[([ xX])\]\s*(.*)$', line)
-            if match:
-                is_correct = match.group(1).lower() == 'x'
-                raw_choices.append({"text": match.group(2).strip(), "is_correct": is_correct})
-        
-        # Shuffle the choices
-        random.shuffle(raw_choices)
-        
-        # Extract the shuffled text and the new correct indices
-        choices = [item["text"] for item in raw_choices]
-        correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
+        if is_drag_drop:
+            choices = post.get("values_pool", [])
+            correct_mapping = post.get("correct_mapping", {})
+            correct_indices = correct_mapping
+            
+            # Properly extract the code block following the frontmatter section
+            parts = file_raw.split("---")
+            if len(parts) >= 3:
+                # Everything after the second '---' delimiter is the code template body
+                code_template = "---".join(parts[2:]).strip()
+            else:
+                code_template = post.content
+        else:
+            raw_choices = []
+            lines = post.content.strip().split("\n")
+            for line in lines:
+                match = re.match(r'^\s*-\s*\[([ xX])\]\s*(.*)$', line)
+                if match:
+                    is_correct = match.group(1).lower() == 'x'
+                    raw_choices.append({"text": match.group(2).strip(), "is_correct": is_correct})
+            random.shuffle(raw_choices)
+            choices = [item["text"] for item in raw_choices]
+            correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
                 
         questions.append({
             "filename": file,
-            "question": post.get("question", "Missing Question Text"),
-            "documentation": post.get("documentation", ""),
+            "question": question_text,
+            "is_drag_drop": is_drag_drop,
             "choices": choices,
             "correct": correct_indices,
-            "q_image": q_img if os.path.exists(q_img) else None,
-            "ans_image": ans_img if os.path.exists(ans_img) else None
+            "code_template": code_template,
+            "q_image": q_img,
+            "ans_image": ans_img
         })
     return questions
 
@@ -462,7 +475,10 @@ elif st.session_state.current_view == "quiz":
     end_item_idx = min(start_item_idx + items_per_page, total_qs)
     
     if current_idx not in st.session_state.selected_answers:
-        st.session_state.selected_answers[current_idx] = []
+        if questions[current_idx]["is_drag_drop"]:
+            st.session_state.selected_answers[current_idx] = {}
+        else:
+            st.session_state.selected_answers[current_idx] = []
         
     # --- SIDEBAR NAV PANEL ---
     with st.sidebar:
@@ -487,19 +503,21 @@ elif st.session_state.current_view == "quiz":
                 item_idx = row_start + c_offset
                 if item_idx < end_item_idx:
                     with cols[c_offset]:
-                        # Determine the status
-                        is_answered = len(st.session_state.selected_answers.get(item_idx, [])) > 0
-                        is_wrong = item_idx in st.session_state.checked_questions and \
-                                sorted(st.session_state.selected_answers.get(item_idx, [])) != sorted(questions[item_idx]["correct"])
-                        is_correct = item_idx in st.session_state.checked_questions and \
-                                    sorted(st.session_state.selected_answers.get(item_idx, [])) == sorted(questions[item_idx]["correct"])
+                        q_item = questions[item_idx]
+                        if q_item["is_drag_drop"]:
+                            ans_val = st.session_state.selected_answers.get(item_idx, {})
+                            is_answered = len(ans_val) > 0 and all(v != "" for v in ans_val.values())
+                            is_wrong = item_idx in st.session_state.checked_questions and ans_val != q_item["correct"]
+                            is_correct = item_idx in st.session_state.checked_questions and ans_val == q_item["correct"]
+                        else:
+                            is_answered = len(st.session_state.selected_answers.get(item_idx, [])) > 0
+                            is_wrong = item_idx in st.session_state.checked_questions and \
+                                    sorted(st.session_state.selected_answers.get(item_idx, [])) != sorted(q_item["correct"])
+                            is_correct = item_idx in st.session_state.checked_questions and \
+                                        sorted(st.session_state.selected_answers.get(item_idx, [])) == sorted(q_item["correct"])
 
-                        # Determine visual style
                         btn_type = "primary" if item_idx == current_idx else "secondary"
                         
-                        # We display the button. To add the color, we use the visual indicator
-                        # Note: Streamlit buttons change color based on 'type'. 
-                        # For full color control, we use the label to indicate the state.
                         label = f"{item_idx + 1}"
                         if is_wrong: label = f"✕ {item_idx + 1}"
                         elif is_correct: label = f"✓ {item_idx + 1}"
@@ -511,7 +529,6 @@ elif st.session_state.current_view == "quiz":
         
         st.write("---")
         
-        # --- SMART GHCERTIFIED PAGINATION ROW STYLE ---
         display_pages = {1, curr_page, min(curr_page + 1, total_pages), total_pages}
         sorted_pages = sorted(list(display_pages))
         
@@ -559,66 +576,112 @@ elif st.session_state.current_view == "quiz":
     
     is_checked = current_idx in st.session_state.checked_questions
     current_selections = st.session_state.selected_answers[current_idx]
-    
-    # Render Answers List
-    for c_idx, choice in enumerate(q["choices"]):
-        is_selected = c_idx in current_selections
-        is_correct_choice = c_idx in q["correct"]
+
+    # Render Interactive Drag-and-Drop or Standard Multiple Choice
+    if q["is_drag_drop"]:
+        values_pool = q["choices"]
+        correct_map = q["correct"]
+        code_template = q["code_template"]
         
-        if not is_checked:
-            # Native Streamlit button types: 'primary' applies a filled highlight color
-            btn_type = "primary" if is_selected else "secondary"
+        dropdown_options = [""] + values_pool
+        
+        template_lines = code_template.split("\n")
+        
+        for line in template_lines:
+            has_placeholder = any(f"{{{b_key}}}" in line for b_key in correct_map.keys())
             
-            if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
-                max_allowed = len(q["correct"])
-                
-                if max_allowed == 1:
-                    # Single-choice question: clicking a new choice immediately replaces the old one
-                    st.session_state.selected_answers[current_idx] = [c_idx]
-                else:
-                    # Multi-choice question: keep existing toggle behavior
-                    if c_idx in current_selections:
-                        st.session_state.selected_answers[current_idx].remove(c_idx)
-                    else:
-                        if len(current_selections) < max_allowed:
-                            st.session_state.selected_answers[current_idx].append(c_idx)
-                        else:
-                            st.toast(f"You can only select {max_allowed} answers.")
-                st.rerun()
-        else:
-            # Locked Review mode with unified height and inline text wrapper
-            if is_correct_choice:
-                badge_html = '<span class="badge-correct">Your Answer</span>' if is_selected else ''
-                st.markdown(
-                    f'<div class="feedback-card card-correct">'
-                    f'<span class="choice-text">{choice}</span>'
-                    f'{badge_html}'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-            elif is_selected and not is_correct_choice:
-                st.markdown(
-                    f'<div class="feedback-card card-wrong">'
-                    f'<span class="choice-text">{choice}</span>'
-                    f'<span class="badge-wrong">Your Answer</span>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
+            if not has_placeholder:
+                leading_spaces = len(line) - len(line.lstrip(' '))
+                indent_str = "&nbsp;" * (leading_spaces * 4)
+                formatted_line = indent_str + line.lstrip(' ').replace(" ", "&nbsp;")
+                st.markdown(f'<div style="line-height: 1.4; margin: 0; padding: 0; white-space: nowrap;">{formatted_line}</div>', unsafe_allow_html=True)
             else:
-                st.markdown(
-                    f'<div class="feedback-card card-neutral">'
-                    f'<span class="choice-text">{choice}</span>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
+                for b_key in sorted(correct_map.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x else 0):
+                    placeholder = f"{{{b_key}}}"
+                    if placeholder in line:
+                        parts = line.split(placeholder)
+                        leading_spaces = len(parts[0]) - len(parts[0].lstrip(' '))
+                        indent_str = "&nbsp;" * (leading_spaces * 4)
+                        
+                        col_prefix = parts[0].strip().replace(" ", "&nbsp;")
+                        col_suffix = parts[1].strip().replace(" ", "&nbsp;") if len(parts) > 1 else ""
+                        
+                        b_val = current_selections.get(b_key, "")
+                        if not is_checked:
+                            c_input, c_text = st.columns([8.5, 2.5], vertical_alignment="center")
+                            with c_input:
+                                b_choice = st.selectbox(
+                                    f"Select for {b_key}", 
+                                    dropdown_options, 
+                                    index=dropdown_options.index(b_val) if b_val in dropdown_options else 0, 
+                                    key=f"dd_{current_idx}_{b_key}", 
+                                    label_visibility="collapsed"
+                                )
+                                st.session_state.selected_answers[current_idx][b_key] = b_choice
+                            with c_text:
+                                # Apply white-space: nowrap to prevent ugly automatic wrapping mid-text
+                                st.markdown(f'<div style="line-height: 1.3; margin: 0; white-space: nowrap;">{col_prefix} {col_suffix}</div>', unsafe_allow_html=True)
+                        else:
+                            b_correct = correct_map.get(b_key, "")
+                            if b_val == b_correct:
+                                badge_html = f'<span class="code-blank-correct">[{b_val}]</span>'
+                            else:
+                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span>'
+                            
+                            combined_html = f'<div style="line-height: 1.3; margin: 2px 0; white-space: nowrap;">{indent_str}{badge_html} {col_prefix} {col_suffix}</div>'
+                            st.markdown(combined_html, unsafe_allow_html=True)
+    else:
+        for c_idx, choice in enumerate(q["choices"]):
+            is_selected = c_idx in current_selections
+            is_correct_choice = c_idx in q["correct"]
+            
+            if not is_checked:
+                btn_type = "primary" if is_selected else "secondary"
+                
+                if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
+                    max_allowed = len(q["correct"])
+                    
+                    if max_allowed == 1:
+                        st.session_state.selected_answers[current_idx] = [c_idx]
+                    else:
+                        if c_idx in current_selections:
+                            st.session_state.selected_answers[current_idx].remove(c_idx)
+                        else:
+                            if len(current_selections) < max_allowed:
+                                st.session_state.selected_answers[current_idx].append(c_idx)
+                            else:
+                                st.toast(f"You can only select {max_allowed} answers.")
+                    st.rerun()
+            else:
+                if is_correct_choice:
+                    badge_html = '<span class="badge-correct">Your Answer</span>' if is_selected else ''
+                    st.markdown(
+                        f'<div class="feedback-card card-correct">'
+                        f'<span class="choice-text">{choice}</span>'
+                        f'{badge_html}'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+                elif is_selected and not is_correct_choice:
+                    st.markdown(
+                        f'<div class="feedback-card card-wrong">'
+                        f'<span class="choice-text">{choice}</span>'
+                        f'<span class="badge-wrong">Your Answer</span>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown(
+                        f'<div class="feedback-card card-neutral">'
+                        f'<span class="choice-text">{choice}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
 
     # Render Answer/Explanation Image ONLY if checked and exists in directory
     if is_checked and q["ans_image"]:
         st.write("---")
         st.image(q["ans_image"], use_container_width=True)
-
-    if is_checked:
-        is_perfect = sorted(current_selections) == sorted(q["correct"])
 
     st.write("")
     
@@ -636,16 +699,14 @@ elif st.session_state.current_view == "quiz":
                 st.session_state.panel_page -= 1
             st.rerun()
             
-    # 2. Check Answer Button
     with col2:
         if st.session_state.mode == "browse":
-            # Calculate required answers
-            required_count = len(q["correct"])
-            user_count = len(current_selections)
-            
-            # The button is ONLY enabled if the number of selected answers 
-            # matches the number of correct answers
-            can_check = (user_count == required_count)
+            if q["is_drag_drop"]:
+                can_check = all(v != "" for v in current_selections.values())
+            else:
+                required_count = len(q["correct"])
+                user_count = len(current_selections)
+                can_check = (user_count == required_count)
             
             if st.button("Check Answer", 
                          key=f"chk_btn_{current_idx}", 

@@ -27,6 +27,31 @@ How should you complete the Transact-SQL query? To answer, drag the appropriate 
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
----
 
+question_type: "drag_drop"
+values_pool:
+  - "REGEXP_COUNT("
+  - "REGEXP_INSTR("
+  - "REGEXP_LIKE("
+  - "REGEXP_REPLACE( REGEXP_SUBSTR("
+  - "REGEXP_SUBSTR("
+  - "STRING_SIMILARITY("
+correct_mapping:
+  blank_1: "REGEXP_SUBSTR("
+  blank_2: "REGEXP_REPLACE( REGEXP_SUBSTR("
+  blank_3: "REGEXP_COUNT("
+---
+SELECT
+    MessageID,
+    {blank_1}
+    MessageRaw, '\d{3}[()\-\s]*\d{3}[\-\s]*\d{4}' ) AS RawNumber,
+    {blank_2}
+    MessageRaw, '\d{3}[()\-\s]*\d{3}[\-\s]*\d{4}' ),'\D', '') AS DigitsOnly,
+    CASE
+    WHEN 
+    {blank_3}
+    MessageRaw, '\d{3}[()\-\s]*\d{3}[\-\s]*\d{4}') = 1
+    THEN 'Valid'
+    ELSE 'Missing'
+    END AS PhoneStatus
+FROM dbo.CustomerMessages;
