@@ -1,7 +1,5 @@
 ---
-question: "DRAG DROP -
-
-You have an Azure SQL database that stores sales data and contains tables named Sales and Products. Sales contains three columns named SalesDate, ProductKey, and TotalSale.
+question: "You have an Azure SQL database that stores sales data and contains tables named Sales and Products. Sales contains three columns named SalesDate, ProductKey, and TotalSale.
 
 
 Sales is 10 TB and is loaded nightly by using a batch process. Most reporting queries scan large portions of Sales, filter on SalesDate or ProductKey, and use SUM() to aggregate TotalSale.
@@ -17,6 +15,17 @@ Which type of index should you recommend for each table? To answer, drag the app
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "A clustered columnstore index"
+    - "A clustered rowstore index"
+    - "A nonclustered columnstore index"
+    - "A nonclustered rowstore index"
+correct_mapping:
+    blank_1: "A clustered columnstore index"
+    blank_2: "A clustered rowstore index"
 ---
-
+Sales:
+{blank_1}
+Products:
+{blank_2}

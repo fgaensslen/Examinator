@@ -16,6 +16,35 @@ How should you complete the stored procedure? To answer, drag the appropriate va
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+- "BEGIN CATCH"
+- "IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION"
+- "RAISERROR('CreateOrder failed', 16, 1)"
+- "ROLLBACK TRANSACTION"
+- "SET @OrderId = SCOPE_IDENTITY()"
+- "THROW"
+correct_mapping:
+    blank_1: "SET @OrderId = SCOPE_IDENTITY()"
+    blank_2: "IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION"
 ---
+CREATE OR ALTER PROCEDURE dbo.usp_CreateOrder
+    @CustomerId int,
+    @Amount decimal(10,2),
+    @OrderId int OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        INSERT INTO dbo.Orders(CustomerId, Amount, CreatedAt)
+        VALUES (@CustomerId, @Amount, SYSUTCDATETIME());
+        {blank_1};
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        {blank_2};
+        THROW;
+    END CATCH
+END
 

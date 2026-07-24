@@ -1,6 +1,5 @@
 ---
-question: "DRAG DROP -
-You have a SQL database in Microsoft Fabric that contains a table named WebSite.Logs. WebSite.Logs stores application telemetry data. WebSite.Logs contains a nvarchar (max) column named log that stores JSON documents.
+question: "You have a SQL database in Microsoft Fabric that contains a table named WebSite.Logs. WebSite.Logs stores application telemetry data. WebSite.Logs contains a nvarchar (max) column named log that stores JSON documents.
 
 
 You have a daily report that filters by the \\$.severity JSON property and returns LogId, LogDateTime, and log. The report frequently causes full table scans.
@@ -13,6 +12,21 @@ How should you complete the Transact-SQL code to avoid full table scans? To answ
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server"
+question_type: "drag_drop"
+values_pool:
+    - "AS JSON_QUERY([log], '$.severity')"
+    - "AS JSON_VALUE([log], '$.severity') PERSISTED"
+    - "INCLUDE (log)"
+    - "INCLUDE (LogId, LogDateTime, [log])"
+correct_mapping:
+    blank_1: "AS JSON_VALUE([log], '$.severity') PERSISTED"
+    blank_2: "INCLUDE (LogId, LogDateTime, [log])"
 ---
-
+ALTER TABLE WebSite.Logs
+ADD severity 
+{blank_1};
+GO
+CREATE INDEX ix_severity
+ON WebSite.Logs(severity)
+    {blank_2};
+GO

@@ -1,7 +1,5 @@
 ---
-question: "DRAG DROP -
-
-You have an Azure SQL database that contains a table named dbo.Customers. dbo.Customers contains the following columns:
+question: "You have an Azure SQL database that contains a table named dbo.Customers. dbo.Customers contains the following columns:
 
 
 • CustomerId (int)(primary key)
@@ -26,5 +24,29 @@ How should you complete the Transact-SQL query? To answer, drag the appropriate 
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "JSON_QUERY(c.ProfileJson, '$.contact.phone')"
+    - "JSON_VALUE(c.ProfileJson, '$.contact.phone')"
+    - "OPENJSON(c.ProfileJson, '$.contact.phone')"
+    - "p.PhoneRaw"
+    - "REGEXP_LIKE(p.PhoneRaw, '[^0-9]', '')"
+    - "REGEXP_REPLACE(p.PhoneRaw, '[^0-9]', '')"
+    - "REGEXP_SUBSTR(p.PhoneRaw, '[0-9]+')"
+correct_mapping:
+    blank_1: "JSON_VALUE(c.ProfileJson, '$.contact.phone')"
+    blank_2: "REGEXP_REPLACE(p.PhoneRaw, '[^0-9]', '')"
+    blank_3: "p.PhoneRaw"
 ---
+WITH PhoneCTE AS
+(
+    SELECT  DISTINCT c.CustomerId,
+        {blank_1} AS PhoneRaw
+    FROM dbo.Customers AS c
+)
+SELECT
+    p.CustomerId,
+    {blank_2} AS PhoneNUmerals
+FROM PhoneCTE AS p
+WHERE 
+{blank_3} IS NOT NULL;

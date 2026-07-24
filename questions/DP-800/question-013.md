@@ -1,8 +1,5 @@
 ---
-question: "DRAG DROP - 
-
-
-You have a Microsoft SQL Server 2025 database that contains a table named dbo.CustomerMessages. dbo.CustomerMessages contains two columns named MessageID (int) and MessageRaw (nvarchar(max)). 
+question: "You have a Microsoft SQL Server 2025 database that contains a table named dbo.CustomerMessages. dbo.CustomerMessages contains two columns named MessageID (int) and MessageRaw (nvarchar(max)). 
 
 
 MessageRaw can contain a phone number in multiple formats, and some rows do NOT contain a phone number. 

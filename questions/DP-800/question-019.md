@@ -1,7 +1,5 @@
 ---
-question: "DRAG DROP -
-
-You have an Azure SQL database named SalesDB that supports an ecommerce application. SalesDB contains a table named dbo.Orders that has a clustered index on a column named OrderId.
+question: "You have an Azure SQL database named SalesDB that supports an ecommerce application. SalesDB contains a table named dbo.Orders that has a clustered index on a column named OrderId.
 
 
 dbo.Orders receives continuous OLTP inserts and updates during business hours.
@@ -24,6 +22,20 @@ Which type of index should you use for each requirement? To answer, drag the app
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "A clustered columnstore index"
+    - "A clustered rowstore index ordered by key columns"
+    - "A filtered nonclustered index with a WHERE predicate"
+    - "A nonclustered columnstore index on an existing rowstore table"
+correct_mapping:
+    blank_1: "A nonclustered columnstore index on an existing rowstore table"
+    blank_2: "A nonclustered columnstore index on an existing rowstore table"
+    blank_3: "A filtered nonclustered index with a WHERE predicate"
 ---
-
+Support NRT analytics on dbo.Orders: 
+{blank_1}
+Reduce read time when retrieving analytical data: 
+{blank_2}
+Index only rows that match a predicate: 
+{blank_3}
