@@ -20,7 +20,7 @@ You plan to implement a Retrieval Augmented Generation (RAG) pattern that meets 
 Which Transact-SQL function should you use to extract the response text?"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
-- [ ]JSON_MODIFY(@response, ‘$.result’)
+- [ ]JSON_MODIFY(@response, '$.result')
 - [ ]OPENJSON(@response)
-- [ ]JSON_QUERY(@response, ‘$.choices’)
-- [x]JSON_VALUE(@response, ‘$.choices[0].message.content’)
+- [ ]JSON_QUERY(@response, '$.choices')
+- [x]JSON_VALUE(@response, '$.choices[0].message.content')

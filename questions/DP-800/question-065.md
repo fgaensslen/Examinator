@@ -1,8 +1,5 @@
 ---
-question: "HOTSPOT -
-
-
-You have an Azure SQL database that contains a table named Sales.Customer. Sales.Customer contains columns named CustomerId, FullName, Email, TaxID, and RegionId.
+question: "You have an Azure SQL database that contains a table named Sales.Customer. Sales.Customer contains columns named CustomerId, FullName, Email, TaxID, and RegionId.
 
 
 You have a database role named AppSupport that is used by a support application.
@@ -24,6 +21,22 @@ Which Transact-SQL statements should you include in the solution? To answer, sel
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "DENY SELECT ON OBJECT::Sales.Customer TO AppSupport;"
+    - "DENY SELECT ON OBJECT::Sales.Customer(TaxID) TO AppSupport;"
+    - "GRANT EXECUTE ON OBJECT::Sales.usp_GetCustomerByCustomerId TO AppSupport;"
+    - "GRANT SELECT ON OBJECT::Sales.Customer TO AppSupport;"
+    - "GRANT SELECT ON OBJECT::Sales.usp_GetCustomerByCustomerId TO AppSupport;"
+    - "REVOKE SELECT ON OBJECT::Sales.Customer(TaxID) FROM AppSupport;"
+correct_mapping:
+    blank_1: "GRANT EXECUTE ON OBJECT::Sales.usp_GetCustomerByCustomerId TO AppSupport;"
+    blank_2: "GRANT SELECT ON OBJECT::Sales.Customer TO AppSupport;"
+    blank_3: "DENY SELECT ON OBJECT::Sales.Customer(TaxID) TO AppSupport;"
 ---
-
+To run Sales.usp_GetCustomerByCustomerId:
+{blank_1}
+To query Sales.Customer:
+{blank_2}
+To prevent viewing TaxID:
+{blank_3}

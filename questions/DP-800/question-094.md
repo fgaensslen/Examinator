@@ -20,8 +20,8 @@ You need to reduce latency and CPU utilization related to the App1 feature.
 What should you do?"
 documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
-- [ ]Create a vector index on products.embedding and change the query to use VECTOR_NORMALIZE and NORM_TYPE = ‘norm1’.
+- [ ]Create a vector index on products.embedding and change the query to use VECTOR_NORMALIZE and NORM_TYPE = 'norm1'.
 - [ ]Use CONTAINSTABLE against description only and remove the vector search.
-- [x]Create a vector index on products.embedding and change the query to use VECTOR_SEARCH and METRIC = ‘cosine’.
+- [x]Create a vector index on products.embedding and change the query to use VECTOR_SEARCH and METRIC = 'cosine'.
 - [ ]Add a nonclustered index on products.embedding.
 - [ ]Change embedding to VARBINARY(8000).

@@ -1,8 +1,5 @@
 ---
-question: "DRAG DROP -
-
-
-You have an Azure SQL database named SalesDB. SalesDB contains a table named dbo.Articles. dbo.Articles contains the following columns:
+question: "You have an Azure SQL database named SalesDB. SalesDB contains a table named dbo.Articles. dbo.Articles contains the following columns:
 
 
 • ArticleId
@@ -33,6 +30,29 @@ How should you complete the Transact-SQL script? To answer, drag the appropriate
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "0"
+    - "EXEC sys.sp_cdc_disable_db;"
+    - "EXEC sys.sp_cdc_enable_db;"
+    - "N'Title, Body, LastModifiedUtc, EmbeddingVector'"
+    - "N'ArticleId, Title, Body'"
+    - "1"
+correct_mapping:
+    blank_1: "EXEC sys.sp_cdc_enable_db;"
+    blank_2: "N'ArticleId, Title, Body'"
+    blank_3: "1"
 ---
-
+USE [SalesDB];
+GO
+{blank_1}
+GO
+EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'Articles',
+    @role_name = NULL,
+    @captured_column_list = 
+    {blank_2},
+    @supports_net_changes = 
+    {blank_3};
+GO

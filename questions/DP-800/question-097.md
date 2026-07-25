@@ -1,8 +1,5 @@
 ---
-question: "DRAG DROP -
-
-
-You have an Azure AI Search service and an index named hotels that includes a vector field named DescriptionVector.
+question: "You have an Azure AI Search service and an index named hotels that includes a vector field named DescriptionVector.
 
 
 You query hotels by using the Search Documents REST API.
@@ -18,6 +15,38 @@ To answer, drag the appropriate values to the correct targets. Each value may be
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
+question_type: "drag_drop"
+values_pool:
+    - "\"default\""
+    - "\"full\""
+    - "\"generative\""
+    - "\"hybrid\""
+    - "\"none\""
+    - "\"simple\""
+    - "\"semantic\""
+    - "\"extractive\""
+    - "\"hotels\""
+correct_mapping:
+    blank_1: "\"semantic\""
+    blank_2: "\"hotels\""
+    blank_3: "\"extractive\""
 ---
-
+{
+    "search": "ocean view",
+    "queryType": 
+    {blank_1},
+    "semanticConfiguration": 
+    {blank_2},
+    "captions": 
+    {blank_3},
+    "top": 10,
+    "hybridSearch": { "maxTextRecallSize": 50 },
+    "vectorQueries": [
+        {
+            "kind": "vector",
+            "vector": [/* embedding array */],
+            "fields": "DescriptionVector",
+            "k": 50
+        }
+    ]
+}

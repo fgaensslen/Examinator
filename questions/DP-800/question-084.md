@@ -1,8 +1,5 @@
 ---
-question: "DRAG DROP -
-
-
-You have an Azure SQL database named DB1 that contains two tables named knowledge_base and query_cache. knowledge_base contains support articles and embeddings. query_cache contains chat questions, responses, and embeddings. DB1 supports an AI-enabled chat agent.
+question: "You have an Azure SQL database named DB1 that contains two tables named knowledge_base and query_cache. knowledge_base contains support articles and embeddings. query_cache contains chat questions, responses, and embeddings. DB1 supports an AI-enabled chat agent.
 
 
 You need to design a solution that meets the following requirements:
@@ -24,6 +21,23 @@ Which Transact-SQL commands should you use for each requirement? To answer, drag
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
+question_type: "drag_drop"
+values_pool:
+    - "AI_GENERATE_CHUNKS"
+    - "FOR XML PATH"
+    - "OPENJSON"
+    - "VECTOR_DISTANCE"
+    - "FOR JSON PATH"
+    - "JSON_VALUE"
+    - "JSON_QUERY"
+correct_mapping:
+    blank_1: "FOR JSON PATH"
+    blank_2: "JSON_VALUE"
+    blank_3: "JSON_QUERY"
 ---
-
+Serialize the retrieved rows from knowledge_base:
+{blank_1}
+Extract the answer field from the response:
+{blank_2}
+Extract the embeddings to store in query_cache:
+{blank_3}

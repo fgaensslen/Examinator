@@ -15,6 +15,22 @@ What should you use? To answer, drag the appropriate tools to the correct step. 
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
+question_type: "drag_drop"
+values_pool:
+    - "Azure Monitor"
+    - "Log Analytics"
+    - "The Query Store plan store"
+    - "Query Performance Insight"
+    - "The Regressed Queries pane in Query Store"
+    - "Plan forcing in Query Store"
+correct_mapping:
+    blank_1: "Query Performance Insight"
+    blank_2: "The Regressed Queries pane in Query Store"
+    blank_3: "Plan forcing in Query Store"
 ---
-
+To identify long-running queries:
+{blank_1}
+To verify that the query has multiple persisted plans over time:
+{blank_2}
+To restore a previous plan without changing the code:
+{blank_3}
