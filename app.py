@@ -626,7 +626,7 @@ elif st.session_state.current_view == "quiz":
                             if b_val == b_correct:
                                 badge_html = f'<span class="code-blank-correct">[{b_val}]</span>'
                             else:
-                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span>'
+                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span> <span style="color: green; font-size: 1.0em;">([{b_correct}])</span>'
                             
                             combined_html = f'<div style="line-height: 1.3; margin: 2px 0; white-space: nowrap;">{indent_str}{badge_html} {col_prefix} {col_suffix}</div>'
                             st.markdown(combined_html, unsafe_allow_html=True)
