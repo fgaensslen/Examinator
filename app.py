@@ -626,7 +626,7 @@ elif st.session_state.current_view == "quiz":
                             if b_val == b_correct:
                                 badge_html = f'<span class="code-blank-correct">[{b_val}]</span>'
                             else:
-                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span> <span style="color: green; font-size: 1.0em;">([{b_correct}])</span>'
+                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span> <span style="color: green; font-size: 1.0em;">[{b_correct}]</span>'
                             
                             combined_html = f'<div style="line-height: 1.3; margin: 2px 0; white-space: nowrap;">{indent_str}{badge_html} {col_prefix} {col_suffix}</div>'
                             st.markdown(combined_html, unsafe_allow_html=True)
@@ -732,19 +732,34 @@ elif st.session_state.current_view == "quiz":
                 st.session_state.show_summary = True
                 st.rerun()
 
-    @st.dialog("Submit Practice Test?")
+    @st.dialog("Exam Results")
     def show_summary(answered, unanswered):
-        st.write(f"Once submitted, you'll see your score and can review each question.")
-        st.write(f"• Answered: {answered}")
-        st.write(f"• Unanswered: {unanswered}")
-        if st.button("Confirm Submit"):
+        # Calculate actual correct answers
+        correct_count = 0
+        total_qs = len(questions)
+        
+        for idx, q in enumerate(questions):
+            user_ans = st.session_state.selected_answers.get(idx, [])
+            if q["is_drag_drop"]:
+                if user_ans == q["correct"]:
+                    correct_count += 1
+            else:
+                if sorted(user_ans) == sorted(q["correct"]):
+                    correct_count += 1
+                    
+        score_pct = (correct_count / total_qs) * 100 if total_qs > 0 else 0        
+        
+        st.write(f"You answered **{correct_count} out of {total_qs}** questions correctly.")
+        st.markdown(f"<h2>Total Score: {score_pct:.1f}%</h2>", unsafe_allow_html=True)
+        st.write("")
+        
+        if st.button("Close & Review", type="primary", use_container_width=True):
             st.session_state.submitted = True
-            st.session_state.show_summary = False
-            # Lock all questions for review
-            st.session_state.checked_questions = set(range(len(st.session_state.quiz_data)))
+            st.session_state.checked_questions = set(range(total_qs)) # auto-reveal answers for review
+            del st.session_state.show_summary
             st.rerun()
 
-    # Call this if the flag is set
+    # Call dialogs if their respective flags are set
     if st.session_state.get("show_summary"):
         show_summary(*st.session_state.summary_data)
 
