@@ -1,5 +1,5 @@
 ---
-question: "HOTSPOT - You have a SQL database in Microsoft Fabric that contains the following functions:
+question: "You have a SQL database in Microsoft Fabric that contains the following functions:
 
 
 A multi-statement table-valued function (TVF) named Sales.mstvf_OrderStatus() that returns order status information
@@ -20,6 +20,18 @@ EXEC @ret = ufn_GetTaxMultiplier @TaxAmt = 100.00, @StateCode = 'WA';
 For each of the following statements, select Yes if the statement is true. Otherwise, select No.
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "Yes"
+    - "No"
+correct_mapping:
+    blank_1: "No"
+    blank_2: "Yes"
+    blank_3: "No"
 ---
-
+You can use GETDATE() in dbo.ufn_GetTaxMultiplier to produce nondeterministic results.
+{blank_1}
+Rewriting sales.mstvf_OrderStatus() as an inline table TVF will reduce the number of inconsistent execution plans.
+{blank_2}
+Replacing ufn_GetTaxMultiplier with dbo.ufn_GetTaxMultiplier in the EXEC function statement will resolve the error.
+{blank_3}

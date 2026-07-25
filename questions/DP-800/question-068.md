@@ -10,11 +10,15 @@ The container app has the following configurations:
 
 • Secrets: mssql-connection-string, dab-config-base64
 
+
 • Environment variables:
+
 
 • MSSQL_CONNECTION_STRING=secretref:mssql-connection-string
 
+
 • DAB_CONFIG_BASE64=secretref:dab-config-base64
+
 
 • Ingress: External on port 5000
 

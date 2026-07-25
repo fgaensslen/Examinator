@@ -1,7 +1,5 @@
 ---
-question: "DRAG DROP -
-
-You have an Azure SQL database that contains a table named Sales.Orders. Sales.Orders contains the following columns.
+question: "You have an Azure SQL database that contains a table named Sales.Orders. Sales.Orders contains the following columns.
 
 
 | Column      | Data type     |
@@ -30,6 +28,27 @@ How should you complete the Transact-SQL code? To answer, drag the appropriate v
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "AS RETURN"
+    - "DATEADD(day, @OrderDate, GETDATE())"
+    - "DATEDIFF(day, @OrderDate, GETDATE())"
+    - "RETURNS INT"
+    - "RETURNS TABLE"
+    - "WITH SCHEMABINDING"
+correct_mapping:
+    blank_1: "RETURNS INT"
+    blank_2: "DATEDIFF(day, @OrderDate, GETDATE())"
 ---
-
+CREATE FUNCTION dbo.ufn_DaysSinceOrder
+(
+    @OrderDate datetime2(0)
+)
+{blank_1}
+BEGIN
+    DECLARE @Days int;
+    SELECT @Days = 
+    {blank_2};
+    RETURN @Days;
+END;
+GO

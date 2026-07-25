@@ -58,6 +58,18 @@ For each of the following statements, select Yes if the statement is true. Other
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
+question_type: "drag_drop"
+values_pool:
+    - "Yes"
+    - "No"
+correct_mapping:
+    blank_1: "Yes"
+    blank_2: "No"
+    blank_3: "Yes"
 ---
-
+To avoid the explicit sort for the query, create a nonclustered index on (CustomerId, OrderDate DESC) that includes (Status, TotalAmount).
+{blank_1}
+To eliminate the sort and make the query use an ordered seek, add CustomerId as an included column to IX_Orders_OrderDate.
+{blank_2}
+The plan indicates a bottleneck from a suboptimal query plan, rather locking or blocking.
+{blank_3}
