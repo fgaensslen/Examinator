@@ -19,6 +19,7 @@ EXEC @ret = ufn_GetTaxMultiplier @TaxAmt = 100.00, @StateCode = 'WA';
 
 For each of the following statements, select Yes if the statement is true. Otherwise, select No.
 
+
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
 values_pool:

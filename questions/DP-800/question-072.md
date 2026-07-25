@@ -1,8 +1,5 @@
 ---
-question: "DRAG DROP -
-
-
-You have an Azure SQL database named SalesDB that has Query Store enabled. SalesDB supports an AI-driven product search API.
+question: "You have an Azure SQL database named SalesDB that has Query Store enabled. SalesDB supports an AI-driven product search API.
 
 
 Users report that the latency of the API increased immediately after the API was deployed and remains high.

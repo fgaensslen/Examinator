@@ -1,5 +1,5 @@
 ---
-question: "HOTSPOT - You have an Azure SQL database that has Query Store enabled.
+question: "You have an Azure SQL database that has Query Store enabled.
 Query Performance Insight shows that one stored procedure has the longest runtime. The procedure runs the following parameterized query.
 
 
