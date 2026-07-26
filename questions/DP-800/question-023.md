@@ -25,5 +25,5 @@ correct_mapping:
 CREATE PARTITION FUNCTION PartitionByYear (datetime2)
 AS
 {blank_1}
-FOR VALUES
-( {blank_2} );
+FOR VALUES (
+{blank_2});
