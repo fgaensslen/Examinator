@@ -1,5 +1,8 @@
 ---
-question: "How should you complete the Transact-SQL query? To answer, select the appropriate options in the answer area."
+question: "You need to meet the development requirements for the FeedbackJson column.
+
+
+How should you complete the Transact-SQL query? To answer, select the appropriate options in the answer area."
 
 question_type: "drag_drop"
 values_pool:

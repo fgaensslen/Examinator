@@ -1,5 +1,14 @@
 ---
-question: "For each of the following statements, select Yes if the statement is true. Otherwise, select No. NOTE: Each correct selection is worth one point."
+question: "You need to create a table in the database to store the telemetry data.
+
+
+You have the following Transact-SQL code.
+
+
+For each of the following statements, select Yes if the statement is true. Otherwise, select No.
+
+
+NOTE: Each correct selection is worth one point."
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 question_type: "drag_drop"
 values_pool:

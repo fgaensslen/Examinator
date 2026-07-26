@@ -1,9 +1,11 @@
 import os
+from pathlib import Path
 import random
 import re
 import math
 import streamlit as st
 import frontmatter
+import yaml
 
 QUESTIONS_DIR = "./questions"
 
@@ -273,6 +275,37 @@ st.markdown("""
 # -------------------------------------------------------------
 # Helper Functions
 # -------------------------------------------------------------
+def parse_case_study(file_path):
+    """Parses a case study markdown file containing YAML frontmatter and section headings."""
+    if not os.path.exists(file_path):
+        return None, {}
+        
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+        
+    content = content.replace("\xa0", " ")
+        
+    metadata = {}
+    if content.startswith("---"):
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            try:
+                metadata = yaml.safe_load(parts[1])
+            except Exception as e:
+                st.error(f"YAML Error in {file_path}: {e}")
+            content = parts[2]
+            
+    # Improved regex to capture headings and their bodies correctly
+    # Find all matches of # Heading followed by body content
+    pattern = r"^#\s+(.+?)\n(.*?)(?=\n^#\s+|\Z)"
+    matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+    
+    sections = {}
+    for heading, body in matches:
+        sections[heading.strip()] = body.strip()
+        
+    return sections, metadata
+
 def get_available_exams():
     if not os.path.exists(QUESTIONS_DIR):
         return []
@@ -559,12 +592,85 @@ elif st.session_state.current_view == "quiz":
         st.markdown('</div>', unsafe_allow_html=True)
     
     # --- MAIN BODY PRESENTATION ---
+    @st.dialog("Case Study Details", width="large")
+    def show_case_study_dialog(case_study_filename):
+        # Dynamically point to the active exam's case_studies folder
+        current_exam = st.session_state.get("selected_exam", "")
+        case_study_dir = os.path.join(QUESTIONS_DIR, current_exam, "case_studies")
+        
+        # Combine directory and filename properly
+        file_path = os.path.join(case_study_dir, case_study_filename)
+        
+        sections, metadata = parse_case_study(file_path)
+        
+        if not sections:
+            st.error(f"Could not load case study file from path: {file_path}")
+            return
+            
+        tab_titles = list(sections.keys())
+        tabs = st.tabs(tab_titles)
+        
+        for tab, (heading, body) in zip(tabs, sections.items()):
+            with tab:
+                st.markdown(f"### {heading}")
+                
+                tokens = re.split(r"(!\[.*?\]\(.*?\))", body)
+                for token in tokens:
+                    token = token.strip()
+                    if not token:
+                        continue
+                    img_match = re.match(r"!\[(.*?)\]\((.*?)\)", token)
+                    if img_match:
+                        alt_text, img_file = img_match.groups()
+                        # Images are typically stored in the same case_studies folder
+                        img_path = os.path.join(case_study_dir, img_file)
+                        if os.path.exists(img_path):
+                            st.image(img_path, caption=alt_text, width=300)
+                        else:
+                            st.warning(f"Image not found: {img_file}")
+                    else:
+                        st.markdown(token, unsafe_allow_html=True)
+
     st.markdown(f'<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
     st.markdown(f"<h4 style='text-align: center; color: gray;'><b>{st.session_state.selected_exam}</b> - {'Study Mode' if st.session_state.mode == 'browse' else 'Practice Exam'}</h4>", unsafe_allow_html=True)
     st.write("---")
     
     q = questions[current_idx]
-    st.markdown(f"### Question {current_idx + 1} of {total_qs}")
+    current_q_filename = q.get("filename", f"question_{current_idx:03d}.md")
+
+    # Layout Header & Case Study Button side-by-side
+    col_header, col_btn = st.columns([3, 1])
+
+    with col_header:
+        st.markdown(f"### Question {current_idx + 1} of {total_qs}")
+
+    # Check if this question is linked to any case study
+    matched_case_study = None
+    case_study_dir = "./case_studies"
+
+    # Assuming st.session_state.selected_exam holds the current exam folder name (e.g., "DP-800")
+    current_exam = st.session_state.get("selected_exam", "")
+
+    # Build the path dynamically relative to your questions directory and active exam
+    case_study_dir = os.path.join(QUESTIONS_DIR, current_exam, "case_studies")
+
+    if os.path.exists(case_study_dir):
+        for cs_file in os.listdir(case_study_dir):
+            if cs_file.endswith(".md"):
+                sections, metadata = parse_case_study(os.path.join(case_study_dir, cs_file))
+                linked_qs = metadata.get("linked_questions", [])
+                if current_q_filename in linked_qs:
+                    matched_case_study = cs_file
+
+                    break
+
+    if matched_case_study:
+        with col_btn:
+            if st.button("📖 Case Study", use_container_width=True, type="secondary"):
+                show_case_study_dialog(matched_case_study)
+
+    st.write("---")
+
     # Using st.markdown allows for <br> tags or double-space line breaks
     # Wrap the markdown rendering in a div that uses your custom CSS
     st.markdown(q["question"], unsafe_allow_html=True)    

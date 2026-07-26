@@ -1,5 +1,11 @@
 ---
-question: "You may need to drag the split bar between panes or scroll to view content. NOTE: Each correct selection is worth one point."
+question: "You need to meet the database performance requirements for maintenance data.
+
+
+How should you complete the Transact-SQL code? To answer, drag the appropriate values to the correct targets. Each value may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.
+
+
+NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
 values_pool:
     - "i.MaintenanceId IS NOT NULL"

@@ -1,5 +1,13 @@
 ---
-question: "For each of the following statements, select Yes if the statement is true. Otherwise, select No. NOTE: Each correct selection is worth one point."
+question: "You are creating a table that will store customer profiles.
+
+
+You have the following Transact-SQL code.
+
+
+For each of the following statements, select Yes if the statement is true. Otherwise, select No.
+
+NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
 values_pool:
     - "Yes"

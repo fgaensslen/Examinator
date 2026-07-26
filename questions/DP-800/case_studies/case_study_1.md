@@ -1,37 +1,139 @@
 ---
-title: "Case Study 1: Cloud Architecture Scaling & Security"
-exam: "exam_folder_name"
 linked_questions:
-  - "question_001.md"
-  - "question_002.md"
-  - "question_003.md"
+  - question-001.md
+  - question-027.md
+  - question-028.md
+  - question-029.md
+  - question-030.md
+  - question-031.md
+  - question-077.md
+  - question-078.md
+  - question-079.md
 ---
 
-## Executive Summary
-Briefly describe the scenario, enterprise context, or system architecture setup that the student needs to understand before answering the related questions.
+# Case Study
+This is a case study. Case studies are not timed separately. You can use as much exam time as you would like to complete each case. However, there may be additional case studies and sections on this exam. You must manage your time to ensure that you are able to complete all questions included on this exam in the time provided.
 
----
 
-## Architecture Diagram / Scenario Visual
-You can embed images using standard markdown syntax, which your code can parse:
+To answer the questions included in a case study, you will need to reference information that is provided in the case study. Case studies might contain exhibits and other resources that provide more information about the scenario that is described in the case study. Each question is independent of the other questions in this case study.
 
-![System Architecture Overview](architecture_diagram.png)
 
----
+At the end of this case study, a review screen will appear. This screen allows you to review your answers and to make changes before you move to the next section of the exam. After you begin a new section, you cannot return to this section.
 
-## Key Technical Specifications
-* **Infrastructure Provider:** AWS / Kubernetes
-* **Traffic Load:** 50,000 requests per second peak
-* **Constraint:** Zero downtime deployment requirement
+# Azure Environment
+Contoso has an Azure subscription in North Europe that contains the corporate infrastructure. The current infrastructure contains a Microsoft SQL Server 2017 database. The database contains the following tables.
 
----
+| Table names | Column names |
+| :--- | :--- |
+| **CustomerFeedback** | &bull; FeedbackId (int) (primarykey) <br>&bull; FeedbackJson (nvarchar(max)) |
+| **Fleets** | &bull; FleetId (int) (primarykey)<br>&bull; FleetName (nvarchar(100))<br>&bull; Description (nvarchar(256)) |
+| **MaintenanceEvents** | &bull; MaintenanceId (int) (primarykey)<br>&bull; VehicleId (int)<br>&bull; LastModifiedUTC (datetime2)<br>&bull; Description (nvarchar(256)) |
+| **SupportTickets** | &bull; TicketId (int) (primarykey)<br>&bull; FleetId (int)<br>&bull; CreatedUtc (datetime2) |
+| **UserAccounts** | &bull; UserId (int) (primarykey)<br>&bull; UserPrincipalName (nvarchar(256))<br>&bull; JobRole (nvarchar(256))<br>&bull; StartDate (datetime2) |
+| **VehicleIncidentReports** | &bull; IncidentId (int) (primarykey)<br>&bull; VehicleId (int)<br>&bull; FleetId (int)<br>&bull; IncidentType (nvarchar(50))<br>&bull; VehicleLocation (nvarchar(200))<br>&bull; IncidentDescription (nvarchar(max))<br>&bull; SeverityScore (int) |
+| **Vehicles** | &bull; VehicleId (int) (primarykey)<br>&bull; VIN (nvarchar(50))<br>&bull; VehicleDescription (nvarchar(256)) |
+| **VehicleHealthSummary** | &bull; VehicleId (int) (primarykey)<br>&bull; FleetId (int)<br>&bull; Summary (nvarchar(2000))<br>&bull; LastUpdatedUtc (datetime2)<br>&bull; EngineStatus [bit]<br>&bull; EngineStatusLastUpdatedUtc (datetime2)<br>&bull; BatteryHealth (int)<br>&bull; Embeddings (vector (1536)) |
 
-## Detailed Scenario Description
-Provide the core details, background logs, or configuration files relevant to the case:
-
+The FeedbackJson column has a full-text index and stores JSON documents in the following format.
 ```json
 {
-  "service": "api-gateway",
-  "timeout_ms": 3000,
-  "retry_policy": "exponential_backoff"
+  "text": "The battery drains too fast when driving uphill.",
+  "category": "Battery",
+  "metadata": {
+    "appVersion": "5.2.1",
+    "device": "Android",
+    "language": "en-GB"
+  }
 }
+```
+The support staff at Contoso never has the UNMASK permission.
+
+# Problem Statements
+Contoso is deploying a new Azure SQL database that will become the authoritative data store for the following:
+
+# Modernized API access
+Retrieval Augmented Generation (RAG) pipelines
+
+
+Sometimes the ingestion pipeline fails due to malformed JSON and duplicate payloads.
+The engineers at Contoso report that the following dashboard query runs slowly.
+
+```SQL
+SELECT VehicleId, LastUpdateUtc, EngineStatus, BatteryHealth
+FROM dbo.VehicleHealthSummary
+WHERE FleetId = @FleetId
+ORDER BY LastUpdateUtc DESC;
+```
+You review the execution plan and discover that the plan shows a clustered index scan.
+
+
+VehicleIncidentReports often contains details about the weather, traffic conditions, and location. Analysts report that it is difficult to find similar incidents based on these details.
+
+# Planned Changes
+Contoso wants to modernize Fleet Intelligence Platform to support AI-powered semantic search over incident reports.
+
+# Security Requirements
+Contoso identifies the following security requirements:
+
+
+Restrict the support staff from viewing Personally Identifiable Information (PII) data, which is full email addresses and phone numbers.
+
+
+Enforce row-level filtering so that analysts see only incidents for the fleets to which they are assigned. The analysts can be assigned to multiple fleets.
+
+
+Database Performance and Requirements
+
+
+Contoso identifies the following telemetry requirements:
+
+
+Telemetry data must be stored in a partitioned table.
+
+
+Telemetry data must provide predictable performance for ingestion and retention operations. latitude, longitude, and accuracy JSON properties must be filtered by using an index seek.
+
+
+Contoso identifies the following maintenance data requirements:
+
+
+Ensure that any changes to a row in the MaintenanceEvents table updates the corresponding value in the LastModifiedUtc column to the time of the change.
+
+
+Avoid recursive updates.
+
+
+AI Search, Embeddings, and Vector Indexing
+
+
+Contoso plans to implement semantic search over incident data to meet the following requirements:
+
+
+Embeddings must be stored in dedicated Azure SQL Database tables.
+
+
+Embeddings must be generated from rich natural language fields.
+
+
+Chunking must preserve semantic coherence.
+
+
+Hybrid search must combine the following:
+
+# Development Requirements
+The development team at Contoso will use Microsoft Visual Studio Code and GitHub Copilot and will retrieve live metadata from the databases.
+
+
+Contoso identifies the following requirements for querying data in the FeedbackJson column of the CustomerFeedback table:
+
+
+Extract the customer feedback text from the JSON document.
+
+
+Filter rows where the JSON text contains a keyword.
+
+
+Calculate a fuzzy similarity score between the feedback text and a known issue description.
+
+
+Order the results by similarity score, with the highest score first.

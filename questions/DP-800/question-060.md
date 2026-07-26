@@ -1,8 +1,11 @@
 ---
-question: "You need to configure a GitHub Actions workflow to support the planned changes for DB1. How should you complete the workflow?
+question: "You create an SDK-style SQL database project in Microsoft Visual Studio Code named Database.sqlproj and add the project to a GitHub repository.
 
 
-To answer, select the appropriate options in the answer area.
+You need to configure a GitHub Actions workflow to support the planned changes for DB1.
+
+
+How should you complete the workflow? To answer, select the appropriate options in the answer area.
 
 
 NOTE: Each correct selection is worth one point."
