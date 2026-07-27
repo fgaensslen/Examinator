@@ -317,15 +317,33 @@ def get_available_exams():
                 exams.append((item, len(md_files)))
     return sorted(exams)
 
+import os
+import re
+import random
+import frontmatter
+from pathlib import Path
+
+# Dynamically point to the new static folder
+BASE_DIR = Path(__file__).resolve().parent
+QUESTIONS_DIR = BASE_DIR / "static" / "questions"
+
 def load_questions(exam_folder):
     questions = []
-    folder_path = os.path.join(QUESTIONS_DIR, exam_folder)
+    folder_path = QUESTIONS_DIR / exam_folder
+    
+    if not folder_path.exists():
+        return questions
+
     files = sorted([f for f in os.listdir(folder_path) if f.endswith(".md")])
-    web_image_prefix = f"/questions/{exam_folder}/"
+    
+    # ------------------------------------------------------------------
+    # Streamlit's dedicated URL route for static file serving
+    # ------------------------------------------------------------------
+    web_image_prefix = f"/app/static/questions/{exam_folder}/"
     
     for file in files:
-        filepath = os.path.join(folder_path, file)
-        base_filename = os.path.splitext(file)[0]
+        filepath = folder_path / file
+        base_filename = filepath.stem
         
         with open(filepath, 'r', encoding='utf-8') as f:
             file_raw = f.read()
@@ -333,9 +351,9 @@ def load_questions(exam_folder):
         post = frontmatter.loads(file_raw)
         question_frontmatter = post.get("question", "")
         
-        # Check if answer image exists, and return web URL route instead of disk path
-        ans_img_disk = os.path.join(folder_path, f"{base_filename}_answer.png")
-        ans_img = f"{web_image_prefix}{base_filename}_answer.png" if os.path.exists(ans_img_disk) else None
+        # Return Streamlit static URL for answer image
+        ans_img_path = folder_path / f"{base_filename}_answer.png"
+        ans_img = f"{web_image_prefix}{base_filename}_answer.png" if ans_img_path.exists() else None
         
         is_drag_drop = post.get("question_type") == "drag_drop"
         
@@ -366,14 +384,13 @@ def load_questions(exam_folder):
             choices = [item["text"] for item in raw_choices]
             correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
             
-            # Reconstruct question text without the choice lines
             question_text = "\n".join(question_lines).strip()
             if not question_text:
                 question_text = question_frontmatter.strip()
 
-        # Always run image prefix transformation on finalized question_text
+        # Safely convert markdown image references to the Streamlit route
         question_text = re.sub(
-            r'!\[(.*?)\]\((?!https?://|/)(.*?)\)', 
+            r'!\[(.*?)\]\((?!https?://|/app/static/)(.*?)\)', 
             rf'![\1]({web_image_prefix}\2)', 
             question_text
         )
