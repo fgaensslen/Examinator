@@ -18,7 +18,6 @@ WITH (PARTITIONS (partition number));
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Yes
 - [ ]No

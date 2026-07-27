@@ -9,7 +9,6 @@ You need to configure ToDo to support the planned app.
 
 
 What should you do?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Enable change tracking on ToDo and dbo.ToDo.
 - [ ]On dbo.ToDo, create a Data Manipulation Language (DML) trigger that calls the Azure Functions HTTP endpoint.

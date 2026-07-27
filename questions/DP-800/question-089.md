@@ -15,7 +15,6 @@ Which scenario is the best use case for implementing a Retrieval Augmented Gener
 
 
 Select the BEST answer."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]summarizing free-form user input text
 - [ ]training a custom language model on historical database data

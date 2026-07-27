@@ -15,7 +15,6 @@ You need to encrypt both columns by using Always Encrypted and the highest secur
 
 
 Which type of Always Encrypted encryption should you use for each column?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]deterministic for NationalIDNumber and randomized for InvestigationNotes
 - [ ]deterministic for NationalIDNumber and deterministic for InvestigationNotes

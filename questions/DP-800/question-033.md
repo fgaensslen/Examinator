@@ -12,7 +12,6 @@ You need to ensure that the embeddings are updated whenever the articles change.
 
 
 Which embedding maintenance method should you implement?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Modify the query to use VECTOR_DISTANCE instead of VECTOR_SEARCH.
 - [x]Enable change data capture (CDC) on dbo.Articles and use an Azure Functions app to process CDC changes.

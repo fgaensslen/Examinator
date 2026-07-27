@@ -9,6 +9,5 @@ You need to add a deployment step that publishes the .dacpac file to an Azure SQ
 
 
 What should you include in the workflow?"
-documentation: "https://docs.github.com/en/actions"
 ---
 

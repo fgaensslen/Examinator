@@ -9,7 +9,6 @@ A mix of GitHub Copilot instructions is configured at different levels, includin
 
 
 Which instructions will take precedence over the others?"
-documentation: "https://docs.github.com/en/actions"
 ---
 - [ ]repository-wide
 - [x]personal

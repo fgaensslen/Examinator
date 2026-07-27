@@ -9,7 +9,6 @@ You need to configure Visual Studio to support the planned configuration. The so
 
 
 What should you create?"
-documentation: "https://docs.github.com/en/actions"
 ---
 - [ ]the \.vs\settings.json file that contains the personal access token (PAT) that has the repo scope
 - [ ]the \.mcp.json file that contains a URL of https://api.githubcopilot.com/mcp/

@@ -15,7 +15,6 @@ Solution: Add the Microsoft.SqlServer.Dacpacs.Master NuGet package to the projec
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Yes
 - [ ]No

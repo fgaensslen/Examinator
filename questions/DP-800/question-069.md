@@ -15,7 +15,6 @@ You need to recommend a solution that meets the following requirements:
 
 
 What should you include in the recommendation?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Azure Key Vault and Always Encrypted
 - [ ]Transparent Data Encryption (TDE) and row-level security (RLS)

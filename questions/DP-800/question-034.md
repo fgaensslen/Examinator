@@ -12,7 +12,6 @@ You need to use GitHub Copilot Chat to write and review Transact-SQL code for a 
 
 
 What should you do?"
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]From Sales.Customers, paste several rows that include email addresses into a chat, so that GitHub Copilot Chat can infer edge cases.
 - [ ]Run a SELECT statement that returns customer names and email addresses and provide the result set to GitHub Copilot Chat so that GitHub Copilot Chat can generate the stored procedure

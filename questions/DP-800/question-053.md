@@ -18,7 +18,6 @@ DROP PARTITION SCHEME (partition_scheme_name);
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Yes
 - [x]No

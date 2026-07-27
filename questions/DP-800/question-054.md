@@ -15,7 +15,6 @@ Solution: Add the Microsoft.SqlServer.Dacpacs.Azure.Master NuGet package to the 
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Yes
 - [ ]No

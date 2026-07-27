@@ -6,7 +6,6 @@ You need to ensure that GitHub Copilot Chat uses the team's coding standards whe
 
 
 What should you use?"
-documentation: "https://docs.github.com/en/actions"
 ---
 - [x].github/copilot-instructions.md
 - [ ].vscode/settings.json

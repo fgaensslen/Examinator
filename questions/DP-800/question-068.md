@@ -33,7 +33,6 @@ You need to ensure that the container app can establish connections to the Azure
 
 
 What should you do on the Azure SQL logical server?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Create an auto-failover group for ProductsDB.
 - [ ]Run DBCC CHECKDB on ProductsDB.

@@ -12,7 +12,6 @@ You need to implement the model change. Applications must be able to use VECTOR_
 
 
 What should you do first?"
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [x]Regenerate embeddings for the existing rows.
 - [ ]Normalize the vector lengths before storing new embeddings.

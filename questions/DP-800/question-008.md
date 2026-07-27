@@ -18,7 +18,6 @@ You need to initialize the DAB configuration to read the SQL connection string.
 
 
 Which command should you run?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]dab init --database-type mssql --connection-string "secretref:DAB_CONFIG_BASE64” --host-mode Production --config dab-config.json
 - [x]dab init --database-type mssql --connection-string "@env('MSSQL_CONNECTION_STRING')” --host-mode Production --config dab-config.json

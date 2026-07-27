@@ -12,7 +12,6 @@ Solution: Build the project by running dotnet build -bl -flp:v=diag.
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Yes
 - [x]No

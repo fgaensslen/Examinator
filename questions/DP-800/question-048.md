@@ -5,7 +5,6 @@ You need to ensure that the data is protected so that neither the stored values 
 
 
 Which should you use?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Always Encrypted with secure enclaves
 - [x]Always Encrypted with randomized encryption

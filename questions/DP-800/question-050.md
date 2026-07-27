@@ -4,7 +4,6 @@ question: "You have a GitHub Actions workflow that builds and deploys an Azure S
 
 Following a code review, you discover that you need to generate a report that shows whether the production schema has diverged from the model in source control.
 Which action should you add to the pipeline?"
-documentation: "https://docs.github.com/en/actions"
 ---
 - [x]SqlPackage.exe /Action:DriftReport
 - [ ]SqlPackage.exe /Action:DeployReport

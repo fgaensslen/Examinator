@@ -9,7 +9,6 @@ You need to restore the previous performance quickly, without changing the API c
 
 
 Which Transact-SQL command should you run?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]EXEC sys.sp_query_store_set_hints
 - [ ]DBCC FREEPROCCACHE

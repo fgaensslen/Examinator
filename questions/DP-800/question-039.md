@@ -12,7 +12,6 @@ Which **two** actions should you perform? Each correct answer presents part of t
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Grant the CONTROL permission on SalesDB to AIApplicationUser.
 - [ ]Create a database audit specification on SalesDB owned by AIApplicationUser.

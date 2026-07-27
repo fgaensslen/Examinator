@@ -13,7 +13,6 @@ Users report that updates to Sales.Orders intermittently time out during the inc
 
 
 What is a possible cause of the blocking?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]A long-running SELECT statement is blocking writers.
 - [ ]Session 72 caused a deadlock.

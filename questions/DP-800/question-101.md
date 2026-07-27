@@ -18,7 +18,6 @@ Which **two** actions should you include in the solution? Each correct answer pr
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Alter the database tables.
 - [x]Regenerate all the embeddings.

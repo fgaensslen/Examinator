@@ -24,7 +24,6 @@ You need to deploy the reference data as part of the same CI/CD process. Rerunni
 
 
 What should you do?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Add a post-deployment script that inserts reference rows by using IF NOT EXISTS or MERGE logic.
 - [ ]Restore a backup after each deployment.

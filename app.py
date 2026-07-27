@@ -325,46 +325,61 @@ def load_questions(exam_folder):
     for file in files:
         filepath = os.path.join(folder_path, file)
         
-        # Read raw content to correctly parse frontmatter and body code template separated by '---'
         with open(filepath, 'r', encoding='utf-8') as f:
             file_raw = f.read()
             
+        # python-frontmatter automatically handles splitting the YAML from the body,
+        # ignoring any '---' that appear inside the YAML block (like your tables).
         post = frontmatter.loads(file_raw)
         
-        md_image_match = re.search(r'!\[.*?\]\((.*?)\)', post.content)
+        # First check file convention on disk
         q_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png")) else None
+
+        # Fallback: check for markdown image syntax if no file convention image was found
+        if not q_img:
+            md_image_match = re.search(r'!\[.*?\]\((.*?)\)', file_raw)
+            if md_image_match:
+                q_img = md_image_match.group(1)
         ans_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png")) else None
         
-        question_text = post.get("question", "Missing Question Text")
-        is_drag_drop = question_text.strip().startswith("DRAG DROP -") or post.get("question_type") == "drag_drop"
+        question_frontmatter = post.get("question", "")
+        is_drag_drop = post.get("question_type") == "drag_drop"
         
         choices = []
         correct_indices = []
-        code_template = post.get("code_template", "")
+        code_template = ""
         
         if is_drag_drop:
             choices = post.get("values_pool", [])
             correct_mapping = post.get("correct_mapping", {})
             correct_indices = correct_mapping
             
-            # Properly extract the code block following the frontmatter section
-            parts = file_raw.split("---")
-            if len(parts) >= 3:
-                # Everything after the second '---' delimiter is the code template body
-                code_template = "---".join(parts[2:]).strip()
-            else:
-                code_template = post.content
+            # Since frontmatter parsed everything perfectly, post.content ONLY contains 
+            # the SQL code block at the very bottom of the file. No metadata leakage!
+            code_template = post.content.strip()
+            question_text = question_frontmatter.strip()
+            
         else:
             raw_choices = []
-            lines = post.content.strip().split("\n")
-            for line in lines:
+            content_lines = post.content.strip().split("\n")
+            question_lines = []
+            
+            for line in content_lines:
                 match = re.match(r'^\s*-\s*\[([ xX])\]\s*(.*)$', line)
                 if match:
                     is_correct = match.group(1).lower() == 'x'
                     raw_choices.append({"text": match.group(2).strip(), "is_correct": is_correct})
+                else:
+                    question_lines.append(line)
+                    
             random.shuffle(raw_choices)
             choices = [item["text"] for item in raw_choices]
             correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
+            
+            # Reconstruct the question text without the choices
+            question_text = "\n".join(question_lines).strip()
+            if not question_text:
+                question_text = question_frontmatter.strip()
                 
         questions.append({
             "filename": file,
@@ -376,6 +391,7 @@ def load_questions(exam_folder):
             "q_image": q_img,
             "ans_image": ans_img
         })
+        
     return questions
 
 # -------------------------------------------------------------

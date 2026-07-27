@@ -31,14 +31,11 @@ correct_mapping:
 CREATE VECTOR INDEX idx_products_embedding ON dbo.Products ( 
     {blank_1} )
 WITH (METRIC = 'cosine', TYPE = 'DiskANN');
-
 DECLARE @query_vector VECTOR(1536) = @SuppliedVector
-
 SELECT
     t.product_id,
     t.product_name,
     s.distance
-
 FROM 
     {blank_2} (
     TABLE = dbo.Products AS t,
@@ -47,5 +44,4 @@ FROM
     METRIC = 'cosine',
     TOP_N = 10
 ) AS s
-
 {blank_3};

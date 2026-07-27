@@ -6,7 +6,6 @@ Which **two** actions should you recommend? Each correct answer presents part of
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Enable snapshot isolation on the database.
 - [ ]Use a trigger to automatically rewrite malformed JSON.

@@ -18,7 +18,6 @@ You need to modify the predicate to ensure that Microsoft SQL Server can use an 
 
 
 Which WHERE clause should you use?"
-documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [x]WHERE CreateDate >= @OrderDate AND CreateDate < DATEADD(day, 1, @OrderDate)
 - [ ]WHERE CreateDate LIKE CONVERT(char(10), @OrderDate, 121) + '%'

@@ -3,7 +3,6 @@ question: "You have an Azure SQL database that contains database-level Data Defi
 
 
 Which Transact-SQL statement should you use?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]ALTER TRIGGER
 - [ ]ALTER DATABASE

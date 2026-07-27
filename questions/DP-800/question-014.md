@@ -19,7 +19,6 @@ Owner nvarchar(100),
 Capactiy int
 
 );"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]a foreign key
 - [x]a check constraint

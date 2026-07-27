@@ -12,7 +12,6 @@ Solution: Add an artifact reference to the Azure SQL Database master.dacpac file
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Yes
 - [x]No

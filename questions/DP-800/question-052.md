@@ -18,7 +18,6 @@ WHERE OrderDate < DATEADD(month, -36, SYSUTCDATETIME());
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Yes
 - [x]No

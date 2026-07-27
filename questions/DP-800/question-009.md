@@ -6,7 +6,6 @@ You need to write a Transact-SQL query that uses REGEXP_SUBSTR to extract the ID
 
 
 What should you include in the query?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [x]Apply STRING_ESCAPE(MessageText, 'json') before calling REGEXP_SUBSTR.
 - [ ]Cast MessageText to nvarchar (4000) before calling REGEXP_SUBSTR.

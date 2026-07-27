@@ -6,7 +6,6 @@ The team connects to an Azure SQL database by using individual database logins a
 
 
 What is used to ensure that GitHub Copilot Chat-generated queries run in the context of the developer?"
-documentation: "https://docs.github.com/en/actions"
 ---
 - [x]SQL permissions
 - [ ]Azure role-based access control (Azure RBAC) permissions

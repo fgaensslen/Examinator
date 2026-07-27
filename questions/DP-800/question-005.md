@@ -18,7 +18,6 @@ You need to return a normalized email value that removes the subaddressing, for 
 
 
 Which Transact-SQL expression should you use?"
-documentation: "https://learn.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server"
 ---
 - [ ]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\\+.*$', '')
 - [ ]REGEXP_SUBSTR(JSON_VALUE(Payload, '\$.customer_email'), '\^[^+]+@.*$=')

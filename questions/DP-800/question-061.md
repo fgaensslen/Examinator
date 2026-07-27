@@ -12,7 +12,6 @@ TRUNCATE TABLE dbo.Orders;
 
 
 Does this meet the goal?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Yes
 - [x]No

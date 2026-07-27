@@ -21,7 +21,6 @@ Which **two** database configurations should you perform? Each correct answer pr
 
 
 NOTE: Each correct selection is worth one point."
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]Create an AFTER trigger on dbo.Employee for Data Manipulation Language (DML).
 - [ ]Set Sql_Trigger_MaxBatchSize to 100.

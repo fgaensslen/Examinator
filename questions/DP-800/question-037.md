@@ -40,7 +40,6 @@ You need to ensure that embeddings are updated every time the underlying documen
 
 
 What should you include in the solution?"
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]fixed-size chunking
 - [ ]a smaller embedding model
