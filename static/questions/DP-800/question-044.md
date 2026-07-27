@@ -5,8 +5,14 @@ question: |
     You have a Microsoft Entry group named SqlUsers.
 
     From Workspace1, you assign permission to SalesApi as shown in the following exhibit.
-    ![asd](question-044_1.png)
+    ![](question-044_1.png)
 
+    The connection to SalesDB has the connectivity option configured as shown in the following exhibit.
+    ![](question-044_2.png)
+
+    SqlUsers has the Viewer role for Workspace1.
+    For each of the following statements, select Yes if the statement is true. Otherwise, select No.
+    NOTE: Each correct selection is worth one point.
 
 question_type: "drag_drop"
 values_pool:

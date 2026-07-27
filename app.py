@@ -432,8 +432,13 @@ if "submitted" not in st.session_state:
 # -------------------------------------------------------------
 # View 1: Main Dashboard (Updated)
 # -------------------------------------------------------------
-if st.session_state.current_view == "dashboard":
-    st.markdown('<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
+if st.session_state.current_view == "dashboard":    
+    st.markdown(f"""
+        <div style="text-align: center;">
+            <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
+        </div>
+    """, unsafe_allow_html=True)
+
     exams = get_available_exams()
     
     if not exams:
@@ -481,51 +486,6 @@ if st.session_state.current_view == "dashboard":
                 st.session_state.checked_questions = set()
                 st.session_state.current_view = "quiz"
                 st.rerun()
-
-# -------------------------------------------------------------
-# View 2: Mode Selector Page
-# -------------------------------------------------------------
-elif st.session_state.current_view == "exam_menu":
-    st.markdown(f'<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
-    st.markdown(f"<h3 style='text-align: center;'><b>{st.session_state.selected_exam}</b></h3>", unsafe_allow_html=True)
-    
-    st.markdown('<div class="dashboard-btn-container">', unsafe_allow_html=True)
-    if st.button("⬅️ Back to Dashboard"):
-        st.session_state.current_view = "dashboard"
-        st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
-        
-    max_questions = len(st.session_state.quiz_data)
-    selected_range = st.slider("Select range of questions:", min_value=1, max_value=max_questions, value=(1, max_questions))
-    
-    start_idx, end_idx = selected_range
-    st.write("---")
-    
-    st.markdown('<div class="dashboard-btn-container">', unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("📚 Browse In Order"):
-            st.session_state.mode = "browse"
-            st.session_state.quiz_data = st.session_state.quiz_data[start_idx - 1 : end_idx]
-            st.session_state.current_q_idx = 0
-            st.session_state.panel_page = 1
-            st.session_state.selected_answers = {}
-            st.session_state.checked_questions = set()
-            st.session_state.current_view = "quiz"
-            st.rerun()
-    with col2:
-        if st.button("⏱️ Random Practice"):
-            st.session_state.mode = "exam"
-            sliced_subset = st.session_state.quiz_data[start_idx - 1 : end_idx]
-            random.shuffle(sliced_subset)
-            st.session_state.quiz_data = sliced_subset
-            st.session_state.current_q_idx = 0
-            st.session_state.panel_page = 1
-            st.session_state.selected_answers = {}
-            st.session_state.checked_questions = set()
-            st.session_state.current_view = "quiz"
-            st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # -------------------------------------------------------------
 # View 3: Quiz Presentation with Sidebar Navigation
@@ -666,27 +626,22 @@ elif st.session_state.current_view == "quiz":
                     else:
                         st.markdown(token, unsafe_allow_html=True)
 
-    st.markdown(f'<div class="app-header"><h1>🎓 Examinator</h1></div>', unsafe_allow_html=True)
-    st.markdown(f"<h4 style='text-align: center; color: gray;'><b>{st.session_state.selected_exam}</b> - {'Study Mode' if st.session_state.mode == 'browse' else 'Practice Exam'}</h4>", unsafe_allow_html=True)
-    st.write("---")
+    st.markdown(f"""
+        <div style="text-align: center;">
+            <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
+            <h4 style="margin: 4px 0 10px 0; padding: 0; color: gray; font-weight: normal;">
+                <b>{st.session_state.selected_exam}</b> - {'Study Mode' if st.session_state.mode == 'browse' else 'Practice Exam'}
+            </h4>
+            <hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">
+        </div>
+    """, unsafe_allow_html=True)
     
     q = questions[current_idx]
     current_q_filename = q.get("filename", f"question_{current_idx:03d}.md")
-
-    # Layout Header & Case Study Button side-by-side
-    col_header, col_btn = st.columns([3, 1])
-
-    with col_header:
-        st.markdown(f"### Question {current_idx + 1} of {total_qs}")
-
-    # Check if this question is linked to any case study
-    matched_case_study = None
-    case_study_dir = "./case_studies"
-
-    # Assuming st.session_state.selected_exam holds the current exam folder name (e.g., "DP-800")
     current_exam = st.session_state.get("selected_exam", "")
 
-    # Build the path dynamically relative to your questions directory and active exam
+    # 1. Determine if a case study exists FIRST
+    matched_case_study = None
     case_study_dir = os.path.join(QUESTIONS_DIR, current_exam, "case_studies")
 
     if os.path.exists(case_study_dir):
@@ -696,15 +651,27 @@ elif st.session_state.current_view == "quiz":
                 linked_qs = metadata.get("linked_questions", [])
                 if current_q_filename in linked_qs:
                     matched_case_study = cs_file
-
                     break
+
+    # 2. Render Header & Button side-by-side with vertical centering
+    col_header, col_btn = st.columns([3, 1], vertical_alignment="center")
+
+    with col_header:
+        st.markdown(
+            f'<h3 style="margin: 0; padding: 0; line-height: 1.2;">Question {current_idx + 1} of {total_qs}</h3>', 
+            unsafe_allow_html=True
+        )
 
     if matched_case_study:
         with col_btn:
             if st.button("📖 Case Study", use_container_width=True, type="secondary"):
                 show_case_study_dialog(matched_case_study)
 
-    st.write("---")
+    # 3. Custom tight divider below the question header
+    st.markdown(
+        '<hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
+        unsafe_allow_html=True
+    )
 
     # Using st.markdown allows for <br> tags or double-space line breaks
     # Wrap the markdown rendering in a div that uses your custom CSS
