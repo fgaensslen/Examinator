@@ -321,28 +321,22 @@ def load_questions(exam_folder):
     questions = []
     folder_path = os.path.join(QUESTIONS_DIR, exam_folder)
     files = sorted([f for f in os.listdir(folder_path) if f.endswith(".md")])
+    web_image_prefix = f"/questions/{exam_folder}/"
     
     for file in files:
         filepath = os.path.join(folder_path, file)
+        base_filename = os.path.splitext(file)[0]
         
         with open(filepath, 'r', encoding='utf-8') as f:
             file_raw = f.read()
             
-        # python-frontmatter automatically handles splitting the YAML from the body,
-        # ignoring any '---' that appear inside the YAML block (like your tables).
         post = frontmatter.loads(file_raw)
-        
-        # First check file convention on disk
-        q_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}.png")) else None
-
-        # Fallback: check for markdown image syntax if no file convention image was found
-        if not q_img:
-            md_image_match = re.search(r'!\[.*?\]\((.*?)\)', file_raw)
-            if md_image_match:
-                q_img = md_image_match.group(1)
-        ans_img = os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png") if os.path.exists(os.path.join(folder_path, f"{os.path.splitext(file)[0]}_answer.png")) else None
-        
         question_frontmatter = post.get("question", "")
+        
+        # Check if answer image exists, and return web URL route instead of disk path
+        ans_img_disk = os.path.join(folder_path, f"{base_filename}_answer.png")
+        ans_img = f"{web_image_prefix}{base_filename}_answer.png" if os.path.exists(ans_img_disk) else None
+        
         is_drag_drop = post.get("question_type") == "drag_drop"
         
         choices = []
@@ -351,11 +345,7 @@ def load_questions(exam_folder):
         
         if is_drag_drop:
             choices = post.get("values_pool", [])
-            correct_mapping = post.get("correct_mapping", {})
-            correct_indices = correct_mapping
-            
-            # Since frontmatter parsed everything perfectly, post.content ONLY contains 
-            # the SQL code block at the very bottom of the file. No metadata leakage!
+            correct_indices = post.get("correct_mapping", {})
             code_template = post.content.strip()
             question_text = question_frontmatter.strip()
             
@@ -376,10 +366,17 @@ def load_questions(exam_folder):
             choices = [item["text"] for item in raw_choices]
             correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
             
-            # Reconstruct the question text without the choices
+            # Reconstruct question text without the choice lines
             question_text = "\n".join(question_lines).strip()
             if not question_text:
                 question_text = question_frontmatter.strip()
+
+        # Always run image prefix transformation on finalized question_text
+        question_text = re.sub(
+            r'!\[(.*?)\]\((?!https?://|/)(.*?)\)', 
+            rf'![\1]({web_image_prefix}\2)', 
+            question_text
+        )
                 
         questions.append({
             "filename": file,
@@ -388,7 +385,6 @@ def load_questions(exam_folder):
             "choices": choices,
             "correct": correct_indices,
             "code_template": code_template,
-            "q_image": q_img,
             "ans_image": ans_img
         })
         
@@ -696,11 +692,6 @@ elif st.session_state.current_view == "quiz":
     # Using st.markdown allows for <br> tags or double-space line breaks
     # Wrap the markdown rendering in a div that uses your custom CSS
     st.markdown(q["question"], unsafe_allow_html=True)    
-    
-    # Render Question Image ONLY if it exists in directory
-    if q["q_image"]:
-        st.image(q["q_image"], use_container_width=True)
-        st.write("")  # Little space buffer
     
     is_checked = current_idx in st.session_state.checked_questions
     current_selections = st.session_state.selected_answers[current_idx]
