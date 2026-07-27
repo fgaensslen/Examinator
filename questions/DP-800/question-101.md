@@ -14,7 +14,7 @@ After a review of the current environment, the following changes are requested:
 • The security team requires authentication by using Microsoft Entra managed identities only. Storing API keys in an application is prohibited.
 
 
-Which two actions should you include in the solution? Each correct answer presents a complete solution.
+Which **two** actions should you include in the solution? Each correct answer presents a complete solution.
 
 
 NOTE: Each correct selection is worth one point."

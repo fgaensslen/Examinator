@@ -2,7 +2,7 @@
 question: "You need to recommend a solution that will resolve the ingestion pipeline failure issues.
 
 
-Which two actions should you recommend? Each correct answer presents part of the solution.
+Which **two** actions should you recommend? Each correct answer presents part of the solution.
 
 
 NOTE: Each correct selection is worth one point."

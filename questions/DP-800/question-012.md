@@ -17,7 +17,7 @@ Changes to dbo.Employee must trigger the new function within five seconds.
 Each invocation must process no more than 100 changes.
 
 
-Which two database configurations should you perform? Each correct answer presents part of the solution.
+Which **two** database configurations should you perform? Each correct answer presents part of the solution.
 
 
 NOTE: Each correct selection is worth one point."

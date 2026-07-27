@@ -8,7 +8,7 @@ You plan to generate embeddings inside the SQL Server instance and store them in
 You need to ensure that only a database user account named AIApplicationUser can run embedding generation by using the model.
 
 
-Which two actions should you perform? Each correct answer presents part of the solution.
+Which **two** actions should you perform? Each correct answer presents part of the solution.
 
 
 NOTE: Each correct selection is worth one point."

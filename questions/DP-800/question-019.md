@@ -13,7 +13,9 @@ You need to improve the performance of the hourly analytics queries without sign
 
 • Support near-real-time (NRT) analytics on the dbo.Orders table.
 
+
 • Reduce read time when retrieving analytical data from dbo.Orders.
+
 
 • Support indexing only rows that match a predicate, such as Active = 1.
 

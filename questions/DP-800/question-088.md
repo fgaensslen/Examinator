@@ -5,7 +5,7 @@ question: "Your company has an ecommerce catalog in a Microsoft SQL Server 2025 
 The description fields are updated daily by a content pipeline, and price can change multiple times per day. You want customers to be able to submit natural language queries and apply structured filters for brand and price.
 
 
-You plan to store embeddings in a new VECTOR(1536) column and use VECTOR_SEARCH(... METRIC=‘cosine’ ...).
+You plan to store embeddings in a new VECTOR(1536) column and use VECTOR_SEARCH(... METRIC='cosine' ...).
 
 
 For each of the following statements, select Yes if the statement is true. Otherwise, select No.

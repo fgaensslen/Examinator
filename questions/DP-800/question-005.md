@@ -14,7 +14,7 @@ question: "You have a SQL database in Microsoft Fabric that contains a column na
 Data analysis shows that some customers have subaddressing in their email address, for example, user1+promo@contoso.com.
 
 
-You need to return a normalized email value that removes the subaddressing, for example, user1 +promo@contoso.com must be normalized to user1@contoso.com.
+You need to return a normalized email value that removes the subaddressing, for example, user1+promo@contoso.com must be normalized to user1@contoso.com.
 
 
 Which Transact-SQL expression should you use?"

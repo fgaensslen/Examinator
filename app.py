@@ -413,13 +413,19 @@ if st.session_state.current_view == "dashboard":
     for exam_name, q_count in exams:
         # Create an expander for each exam card
         with st.expander(f"📄 {exam_name} ({q_count} Questions)", expanded=False):
-            
+
+            # Assuming 'total_available_questions' is your maximum limit
+            max_qs = q_count
+
+            # Set default to 10, but cap it at max_qs just in case an exam has fewer than 10 questions
+            default_value = min(10, max_qs)
+
             # 1. Slider for number of questions
             # Using unique keys for each slider
             num_qs = st.slider(f"Number of questions", 
                                min_value=1, 
                                max_value=q_count, 
-                               value=q_count, 
+                               value=default_value, 
                                key=f"slider_{exam_name}")
             
             # 2. Start Practice Test Button
@@ -799,11 +805,14 @@ elif st.session_state.current_view == "quiz":
     
     # 1. Previous Button
     with col1:
-        if st.button("⬅️ Previous", key=f"prev_{current_idx}", disabled=(current_idx == 0), use_container_width=True):
-            st.session_state.current_q_idx -= 1
-            if st.session_state.current_q_idx < (st.session_state.panel_page - 1) * items_per_page:
-                st.session_state.panel_page -= 1
-            st.rerun()
+        if current_idx > 0:
+            if st.button("⬅️ Previous Question", key=f"prev_{current_idx}", disabled=(current_idx == 0), use_container_width=True):
+                st.session_state.current_q_idx -= 1
+                if st.session_state.current_q_idx < (st.session_state.panel_page - 1) * items_per_page:
+                    st.session_state.panel_page -= 1
+                st.rerun()
+        else:
+            st.empty()
             
     with col2:
         if st.session_state.mode == "browse":
@@ -832,11 +841,15 @@ elif st.session_state.current_view == "quiz":
                     st.session_state.panel_page += 1
                 st.rerun()
         else:
-            if st.button("🚀 Submit Exam", key="submit_exam", use_container_width=True):
-                answered_count = len([i for i in range(total_qs) if st.session_state.selected_answers.get(i)])
-                st.session_state.summary_data = (answered_count, total_qs - answered_count)
-                st.session_state.show_summary = True
-                st.rerun()
+            # Only show the Submit Exam button if we are in "exam" mode, not in "browse" mode
+            if st.session_state.mode == "exam":
+                if st.button("🚀 Submit Exam", key="submit_exam", use_container_width=True):
+                    answered_count = len([i for i in range(total_qs) if st.session_state.selected_answers.get(i)])
+                    st.session_state.summary_data = (answered_count, total_qs - answered_count)
+                    st.session_state.show_summary = True
+                    st.rerun()
+            else:
+                st.empty()
 
     @st.dialog("Exam Results")
     def show_summary(answered, unanswered):

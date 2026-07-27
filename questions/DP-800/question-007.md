@@ -8,27 +8,22 @@ You need to create a scalar user-defined function (UDF) that returns the number 
 You write the following code. 
 
 
-01 CREATE FUNCTION dbo.ufnYearsSinceOrder (@OrderDate datetime2)
+What should you insert at line 05? 
 
+```sql
+
+01 CREATE FUNCTION dbo.ufnYearsSinceOrder (@OrderDate datetime2)
 
 02 RETURNS int
 
-
 03 AS
-
 
 04 BEGIN
 
-
 05
 
+06 END"
 
-06 END
-
-
-
-What should you insert at line 05? "
-documentation: "https://learn.microsoft.com/en-us/azure/"
 ---
 - [ ]RETURN DATEDIFF(year, GETDATE(), @OrderDate);
 - [ ]DATEDIFF(month, @orderdate, GETDATE()) / 12

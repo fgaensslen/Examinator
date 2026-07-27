@@ -5,7 +5,7 @@ question: "You have a Microsoft SQL Server 2025 database that contains a table n
 You have an application named App1. App1 has a feature that uses the following query.
 
 
-VECTOR_DISTANCE(‘cosine’, @query_vector, embedding)
+VECTOR_DISTANCE('cosine', @query_vector, embedding)
 
 
 Users report that the feature is slow during peak usage times.
