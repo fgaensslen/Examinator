@@ -36,7 +36,7 @@ question: |
     23 );
     24
     25 EXEC @retval =
-    26   ...
+    26 ...
     27 END;
     28 GO    
 ---

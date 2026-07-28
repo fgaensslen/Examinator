@@ -474,6 +474,8 @@ if st.session_state.current_view == "dashboard":
                 st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
                 
                 st.session_state.mode = "exam"
+                st.session_state.current_q_idx = 0
+                st.session_state.panel_page = 1
                 st.session_state.selected_answers = {}
                 st.session_state.checked_questions = set()
                 st.session_state.current_view = "quiz"
@@ -484,6 +486,7 @@ if st.session_state.current_view == "dashboard":
                 st.session_state.selected_exam = exam_name
                 st.session_state.quiz_data = load_questions(exam_name)
                 st.session_state.mode = "browse"
+                st.session_state.current_q_idx = 0
                 st.session_state.selected_answers = {}
                 st.session_state.checked_questions = set()
                 st.session_state.current_view = "quiz"
@@ -495,6 +498,11 @@ if st.session_state.current_view == "dashboard":
 elif st.session_state.current_view == "quiz":
     questions = st.session_state.quiz_data
     total_qs = len(questions)
+
+    # Out-of-bounds safety check
+    if st.session_state.current_q_idx >= total_qs:
+        st.session_state.current_q_idx = 0
+
     current_idx = st.session_state.current_q_idx
     
     items_per_page = 20
