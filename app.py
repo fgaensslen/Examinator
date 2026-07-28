@@ -317,12 +317,6 @@ def get_available_exams():
                 exams.append((item, len(md_files)))
     return sorted(exams)
 
-import os
-import re
-import random
-import frontmatter
-from pathlib import Path
-
 # Dynamically point to the new static folder
 BASE_DIR = Path(__file__).resolve().parent
 QUESTIONS_DIR = BASE_DIR / "static" / "questions"
@@ -339,7 +333,7 @@ def load_questions(exam_folder):
     # ------------------------------------------------------------------
     # Streamlit's dedicated URL route for static file serving
     # ------------------------------------------------------------------
-    web_image_prefix = f"/app/static/questions/{exam_folder}/"
+    web_image_prefix = f"app/static/questions/{exam_folder}/"
     
     for file in files:
         filepath = folder_path / file
