@@ -362,7 +362,9 @@ def load_questions(exam_folder):
         code_template = ""
         
         if is_drag_drop:
-            choices = post.get("values_pool", [])
+            choices = list(post.get("values_pool", []))
+            random.shuffle(choices)  # <--- Shuffles the dropdown items randomly
+            
             correct_indices = post.get("correct_mapping", {})
             code_template = post.content.strip()
             question_text = question_frontmatter.strip()
