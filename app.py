@@ -331,12 +331,59 @@ st.markdown("""
         max-height: 30px !important;
         font-size: 13px !important;
     }
+
+    /* ------------------------------------------------------------- */
+    /* RIGHT-ALIGN EXPANDER HEADER META TEXT                         */
+    /* ------------------------------------------------------------- */
+
+    /* 1. Force the markdown wrapper inside the header to grow to 100% width */
+    [data-testid="stExpanderSummary"] div[data-testid="stMarkdownContainer"],
+    details summary div[data-testid="stMarkdownContainer"] {
+        flex-grow: 1 !important;
+        width: 100% !important;
+    }
+
+    /* 2. Turn the paragraph into a full-width flex container */
+    [data-testid="stExpanderSummary"] div[data-testid="stMarkdownContainer"] > p,
+    details summary div[data-testid="stMarkdownContainer"] > p {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* 3. Push the colored/gray text span directly to the far right edge */
+    [data-testid="stExpanderSummary"] div[data-testid="stMarkdownContainer"] p span,
+    details summary div[data-testid="stMarkdownContainer"] p span {
+        margin-left: auto !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # -------------------------------------------------------------
 # Helper Functions
 # -------------------------------------------------------------
+def load_last_updates(
+    filepath: str = "static/last_update.md",
+) -> dict[str, str]:
+    """Reads static/last_update.md and returns a dict: {'DP-800': '18.07.2026', ...}"""
+    updates = {}
+    if not os.path.exists(filepath):
+        return updates
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        current_exam = None
+        for line in f:
+            line = line.strip()
+            if line.startswith("#"):
+                current_exam = line.lstrip("#").strip()
+            elif line and current_exam:
+                updates[current_exam] = line
+                current_exam = None
+
+    return updates
+
 def detect_code_language(template_text):
     text = template_text.strip()
     
@@ -528,9 +575,20 @@ if st.session_state.current_view == "dashboard":
     
     if not exams:
         st.warning("No question folders found.")
+
+    # Load the update dates
+    last_updates = load_last_updates()
     
-    for exam_name, q_count in exams:
-        with st.expander(f"📄 {exam_name} ({q_count} Questions)", expanded=False):
+    for exam_name, q_count in exams:        
+        date_str = last_updates.get(exam_name)
+
+        # Format the title with the date if available
+        if date_str:
+                label = f"📄 {exam_name} ({q_count} Questions) :gray[(Last Update: {date_str})]"
+        else:
+            label = f"📄 {exam_name} ({q_count} Questions)"
+
+        with st.expander(label, expanded=False):
             default_value = min(10, q_count)
 
             num_qs = st.slider("Number of questions", 
