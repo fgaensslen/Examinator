@@ -11,6 +11,7 @@ How should you complete the GitHub CLI script? To answer, drag the appropriate v
 
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
+code_lang: "CODE"
 values_pool:
     - "gh pr create"
     - "gh pr merge"

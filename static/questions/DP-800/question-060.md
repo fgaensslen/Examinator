@@ -10,6 +10,7 @@ How should you complete the workflow? To answer, select the appropriate options 
 
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
+code_lang: "YAML"
 values_pool:
     - "merge"
     - "pull_request"

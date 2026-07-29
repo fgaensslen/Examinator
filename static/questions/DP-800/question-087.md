@@ -16,6 +16,7 @@ What should you recommend? To answer, select the appropriate options in the answ
 
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
+code_lang: "TEXT"
 values_pool:
     - "employee_profiles and benefits_enrollment"
     - "knowledge_base"

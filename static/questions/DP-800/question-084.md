@@ -22,6 +22,7 @@ Which Transact-SQL commands should you use for each requirement? To answer, drag
 
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
+code_lang: "TEXT"
 values_pool:
     - "AI_GENERATE_CHUNKS"
     - "FOR XML PATH"

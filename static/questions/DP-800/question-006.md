@@ -37,6 +37,6 @@ BEGIN
     WHERE   o.CreateDate >= 
     {blank_2}
     AND o.CreateDate <  
-    {blank_3} ;
+    {blank_3};
 END;
 GO

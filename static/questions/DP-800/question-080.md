@@ -44,6 +44,7 @@ question: |
       ]
 
 question_type: "drag_drop"
+code_lang: "TEXT"
 values_pool:
     - "JSON_MODIFY"
     - "OPENJSON"

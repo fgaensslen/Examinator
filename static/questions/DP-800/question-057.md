@@ -7,6 +7,7 @@ For each of the following statements, select Yes if the statement is true. Other
 
 NOTE: Each correct selection is worth one point."
 question_type: "drag_drop"
+code_lang: "TEXT"
 values_pool:
     - "Yes"
     - "No"

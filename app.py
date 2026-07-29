@@ -1,14 +1,16 @@
+import html
+import math
 import os
 from pathlib import Path
 import random
 import re
-import math
-import streamlit as st
 import frontmatter
+import streamlit as st
 import yaml
-import html
 
-QUESTIONS_DIR = "./questions"
+# Path Configuration
+BASE_DIR = Path(__file__).resolve().parent
+QUESTIONS_DIR = BASE_DIR / "static" / "questions"
 
 # Page config
 st.set_page_config(page_title="Examinator", page_icon="🎓", layout="centered")
@@ -66,7 +68,7 @@ st.markdown("""
         width: auto !important;
     }
     
-    /* MAKES ALL BUTTONS IN THE SIDEBAR SMALLER */
+    /* MAKES ALL BUTTONS IN THE SIDEBAR SMALLER & CONSISTENT */
     div[data-testid="stSidebar"] button p {
         font-size: 12px !important;
     }
@@ -74,6 +76,8 @@ st.markdown("""
         padding: 2px 4px !important;
         min-height: 28px !important;
         height: 28px !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
     }
     
     /* Target the bottom pagination container specifically to maintain rigid layout geometry */
@@ -108,9 +112,9 @@ st.markdown("""
         justify-content: flex-start !important; 
         text-align: left !important;
         width: 100% !important;
-        padding: 10px 16px !important;      /* SMALLER PADDING */
-        border-radius: 8px !important;      /* SMALLER RADIUS */
-        min-height: 45px !important;        /* SMALLER HEIGHT */
+        padding: 10px 16px !important;
+        border-radius: 8px !important;
+        min-height: 45px !important;
         height: auto !important;
         margin-bottom: 8px !important;
     }
@@ -131,7 +135,7 @@ st.markdown("""
         font-size: 15px !important;
     }
 
-    /* FEEDBACK CARD CONTAINERS MATCHING THE SCREENSHOT - NO BUBBLES, TEXT LEFT ALIGNED */
+    /* FEEDBACK CARD CONTAINERS - NO BUBBLES, TEXT LEFT ALIGNED */
     [data-testid="stMainBlockContainer"] div[data-testid="stButton"] button,
     .feedback-card {
         display: flex !important;
@@ -139,11 +143,11 @@ st.markdown("""
         justify-content: flex-start !important; 
         text-align: left !important;
         width: 100% !important;
-        padding: 10px 16px !important;     /* Uniform padding */
-        border-radius: 8px !important;     /* Uniform radius */
-        min-height: 48px !important;       /* Strict minimum height */
+        padding: 10px 16px !important;
+        border-radius: 8px !important;
+        min-height: 48px !important;
         height: auto !important;
-        margin-bottom: 8px !important;     /* Uniform spacing */
+        margin-bottom: 8px !important;
         box-sizing: border-box !important;
     }
 
@@ -236,31 +240,23 @@ st.markdown("""
             
     /* Sidebar Map Styles */
     .map-btn-answered {
-        border: 2px solid #3b82f6 !important; /* Blue for answered */
+        border: 2px solid #3b82f6 !important;
         background-color: #dbeafe !important;
     }
-
     .map-btn-unanswered {
-        border: 1px solid #e2e8f0 !important; /* Gray for unanswered */
+        border: 1px solid #e2e8f0 !important;
         background-color: #ffffff !important;
     }
-
-    /* Ensure sidebar buttons align with your new grid layout */
-    [data-testid="stSidebar"] button {
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-    }        
     .map-btn {
         display: block;
         padding: 10px;
         text-align: center;
-        text-decoration: none !important; /* This removes the underline */
+        text-decoration: none !important;
         border-radius: 5px;
         border: 1px solid #ccc;
         color: inherit;
         font-weight: normal;
     }
-    /* Add this to ensure it stays gone on hover */
     .map-btn:hover {
         text-decoration: none !important;
     }
@@ -268,14 +264,92 @@ st.markdown("""
     .map-answered { background-color: #dbeafe; color: #1e40af; border-color: #3b82f6; }
     .map-correct { background-color: #d1fae5; color: #065f46; border-color: #10b981; }
     .map-wrong { background-color: #fee2e2; color: #991b1b; border-color: #ef4444; }
-    .map-current { outline: 3px solid #6366f1; }            
-            
+    .map-current { outline: 3px solid #6366f1; }     
+
+    /* CODE BLOCK & CONTAINER STYLING */
+    .code-box-header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 12px;
+        font-weight: bold;
+        color: #64748b;
+        letter-spacing: 1px;
+    }
+
+    .code-line, 
+    .code-line p {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+        font-size: 13.5px !important;
+        line-height: 1.25 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        white-space: pre !important;
+    }
+
+    /* PREVENT CONTAINER OVERFLOW */
+    div[data-testid="stContainer"] {
+        overflow-x: auto !important;
+    }
+
+    /* INLINE FLEX ROW FOR DRAG-AND-DROP CODE LINES */
+    .code-line-row {
+        display: block !important;
+        margin: 2px 0 !important;
+    }
+
+    .code-line-row [data-testid="stHorizontalBlock"] {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+        width: auto !important;
+        margin: 0 !important;
+    }
+
+    .code-line-row [data-testid="column"] {
+        width: auto !important;
+        flex: 0 0 auto !important;
+        min-width: unset !important;
+        padding: 0 !important;
+    }
+
+    /* CONTROL DROPDOWN WIDTH */
+    .code-line-row [data-testid="stSelectbox"] {
+        width: 320px !important;
+        min-width: 220px !important;
+        margin: 0 !important;
+    }
+
+    .code-line-row [data-testid="stSelectbox"] > div {
+        min-height: 30px !important;
+        max-height: 30px !important;
+        font-size: 13px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # -------------------------------------------------------------
 # Helper Functions
 # -------------------------------------------------------------
+def detect_code_language(template_text):
+    text = template_text.strip()
+    
+    if (text.startswith("{") or text.startswith("[")) and ":" in text:
+        return "JSON"
+        
+    # Removed |dbo\. so plain text descriptions don't trigger SQL formatting
+    sql_pattern = r'\b(SELECT|FROM|WHERE|INSERT|UPDATE|DELETE|JOIN|ALTER|CREATE|ORDER\s+BY|GROUP\s+BY)\b'
+    if re.search(sql_pattern, text, re.IGNORECASE):
+        return "SQL"
+        
+    return "TEXT"
+
 def parse_case_study(file_path):
     """Parses a case study markdown file containing YAML frontmatter and section headings."""
     if not os.path.exists(file_path):
@@ -296,15 +370,10 @@ def parse_case_study(file_path):
                 st.error(f"YAML Error in {file_path}: {e}")
             content = parts[2]
             
-    # Improved regex to capture headings and their bodies correctly
-    # Find all matches of # Heading followed by body content
     pattern = r"^#\s+(.+?)\n(.*?)(?=\n^#\s+|\Z)"
     matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
     
-    sections = {}
-    for heading, body in matches:
-        sections[heading.strip()] = body.strip()
-        
+    sections = {heading.strip(): body.strip() for heading, body in matches}
     return sections, metadata
 
 def get_available_exams():
@@ -312,15 +381,12 @@ def get_available_exams():
         return []
     exams = []
     for item in os.listdir(QUESTIONS_DIR):
-        if os.path.isdir(os.path.join(QUESTIONS_DIR, item)) and not item.startswith(".") and not item.startswith("__"):
-            md_files = [f for f in os.listdir(os.path.join(QUESTIONS_DIR, item)) if f.endswith(".md")]
+        item_path = os.path.join(QUESTIONS_DIR, item)
+        if os.path.isdir(item_path) and not item.startswith(".") and not item.startswith("__"):
+            md_files = [f for f in os.listdir(item_path) if f.endswith(".md")]
             if md_files:
                 exams.append((item, len(md_files)))
     return sorted(exams)
-
-# Dynamically point to the new static folder
-BASE_DIR = Path(__file__).resolve().parent
-QUESTIONS_DIR = BASE_DIR / "static" / "questions"
 
 def load_questions(exam_folder):
     questions = []
@@ -330,10 +396,6 @@ def load_questions(exam_folder):
         return questions
 
     files = sorted([f for f in os.listdir(folder_path) if f.endswith(".md")])
-    
-    # ------------------------------------------------------------------
-    # Streamlit's dedicated URL route for static file serving
-    # ------------------------------------------------------------------
     web_image_prefix = f"app/static/questions/{exam_folder}/"
     
     for file in files:
@@ -346,24 +408,45 @@ def load_questions(exam_folder):
         post = frontmatter.loads(file_raw)
         question_frontmatter = post.get("question", "")
         
-        # Return Streamlit static URL for answer image
         ans_img_path = folder_path / f"{base_filename}_answer.png"
         ans_img = f"{web_image_prefix}{base_filename}_answer.png" if ans_img_path.exists() else None
         
         is_drag_drop = post.get("question_type") == "drag_drop"
         
-        choices = []
-        correct_indices = []
-        code_template = ""
-        
         if is_drag_drop:
             choices = list(post.get("values_pool", []))
-            random.shuffle(choices)  # <--- Shuffles the dropdown items randomly
+            random.shuffle(choices)
             
             correct_indices = post.get("correct_mapping", {})
-            code_template = post.content.strip()
-            question_text = question_frontmatter.strip()
+            raw_template = post.content.strip()
             
+            # 1. Read explicit language setting from frontmatter
+            explicit_lang = str(post.get("code_lang", post.get("language", ""))).strip().upper()
+            
+            # 2. Check for fence blocks
+            fence_match = re.match(r'^```([a-zA-Z0-9_+-]*)\s*\n(.*?)\n```$', raw_template, re.DOTALL)
+            
+            # Handle explicit frontmatter setting
+            if explicit_lang:
+                if explicit_lang in ["TEXT", "NONE", "PLAIN"]:
+                    is_code = False
+                    code_lang = ""
+                    code_template = raw_template
+                else:
+                    is_code = True
+                    code_lang = explicit_lang
+                    code_template = raw_template
+            elif fence_match:
+                is_code = True
+                code_lang = fence_match.group(1).upper() or "CODE"
+                code_template = fence_match.group(2).strip()
+            else:
+                detected_lang = detect_code_language(raw_template)
+                is_code = detected_lang != "TEXT"
+                code_lang = detected_lang if is_code else ""
+                code_template = raw_template
+
+            question_text = question_frontmatter.strip()          
         else:
             raw_choices = []
             content_lines = post.content.strip().split("\n")
@@ -381,11 +464,14 @@ def load_questions(exam_folder):
             choices = [item["text"] for item in raw_choices]
             correct_indices = [i for i, item in enumerate(raw_choices) if item["is_correct"]]
             
+            code_template = ""
+            is_code = False
+            code_lang = ""
+            
             question_text = "\n".join(question_lines).strip()
             if not question_text:
                 question_text = question_frontmatter.strip()
 
-        # Safely convert markdown image references to the Streamlit route
         question_text = re.sub(
             r'!\[(.*?)\]\((?!https?://|app/static/|\./app/static/)(.*?)\)', 
             rf'![\1]({web_image_prefix}\2)', 
@@ -399,6 +485,8 @@ def load_questions(exam_folder):
             "choices": choices,
             "correct": correct_indices,
             "code_template": code_template,
+            "is_code": is_code,
+            "code_lang": code_lang,
             "ans_image": ans_img
         })
         
@@ -427,10 +515,10 @@ if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
 # -------------------------------------------------------------
-# View 1: Main Dashboard (Updated)
+# View 1: Main Dashboard
 # -------------------------------------------------------------
 if st.session_state.current_view == "dashboard":    
-    st.markdown(f"""
+    st.markdown("""
         <div style="text-align: center;">
             <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
         </div>
@@ -442,29 +530,19 @@ if st.session_state.current_view == "dashboard":
         st.warning("No question folders found.")
     
     for exam_name, q_count in exams:
-        # Create an expander for each exam card
         with st.expander(f"📄 {exam_name} ({q_count} Questions)", expanded=False):
+            default_value = min(10, q_count)
 
-            # Assuming 'total_available_questions' is your maximum limit
-            max_qs = q_count
-
-            # Set default to 10, but cap it at max_qs just in case an exam has fewer than 10 questions
-            default_value = min(10, max_qs)
-
-            # 1. Slider for number of questions
-            # Using unique keys for each slider
-            num_qs = st.slider(f"Number of questions", 
+            num_qs = st.slider("Number of questions", 
                                min_value=1, 
                                max_value=q_count, 
                                value=default_value, 
                                key=f"slider_{exam_name}")
             
-            # 2. Start Practice Test Button
             if st.button("Start Practice Test", key=f"start_{exam_name}", type="primary", use_container_width=True):
                 st.session_state.selected_exam = exam_name
                 st.session_state.quiz_data = load_questions(exam_name)
                 
-                # Randomize and slice
                 random.shuffle(st.session_state.quiz_data)
                 st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
                 
@@ -476,7 +554,6 @@ if st.session_state.current_view == "dashboard":
                 st.session_state.current_view = "quiz"
                 st.rerun()
             
-            # 3. "Browse individually" link/button
             if st.button("Browse questions individually", key=f"browse_{exam_name}", use_container_width=True):
                 st.session_state.selected_exam = exam_name
                 st.session_state.quiz_data = load_questions(exam_name)
@@ -488,13 +565,12 @@ if st.session_state.current_view == "dashboard":
                 st.rerun()
 
 # -------------------------------------------------------------
-# View 3: Quiz Presentation with Sidebar Navigation
+# View 2: Quiz Presentation with Sidebar Navigation
 # -------------------------------------------------------------
 elif st.session_state.current_view == "quiz":
     questions = st.session_state.quiz_data
     total_qs = len(questions)
 
-    # Out-of-bounds safety check
     if st.session_state.current_q_idx >= total_qs:
         st.session_state.current_q_idx = 0
 
@@ -508,10 +584,7 @@ elif st.session_state.current_view == "quiz":
     end_item_idx = min(start_item_idx + items_per_page, total_qs)
     
     if current_idx not in st.session_state.selected_answers:
-        if questions[current_idx]["is_drag_drop"]:
-            st.session_state.selected_answers[current_idx] = {}
-        else:
-            st.session_state.selected_answers[current_idx] = []
+        st.session_state.selected_answers[current_idx] = {} if questions[current_idx]["is_drag_drop"] else []
         
     # --- SIDEBAR NAV PANEL ---
     with st.sidebar:
@@ -594,11 +667,8 @@ elif st.session_state.current_view == "quiz":
     # --- MAIN BODY PRESENTATION ---
     @st.dialog("Case Study Details", width="large")
     def show_case_study_dialog(case_study_filename):
-        # Dynamically point to the active exam's case_studies folder
         current_exam = st.session_state.get("selected_exam", "")
         case_study_dir = os.path.join(QUESTIONS_DIR, current_exam, "case_studies")
-        
-        # Combine directory and filename properly
         file_path = os.path.join(case_study_dir, case_study_filename)
         
         sections, metadata = parse_case_study(file_path)
@@ -613,7 +683,6 @@ elif st.session_state.current_view == "quiz":
         for tab, (heading, body) in zip(tabs, sections.items()):
             with tab:
                 st.markdown(f"### {heading}")
-                
                 tokens = re.split(r"(!\[.*?\]\(.*?\))", body)
                 for token in tokens:
                     token = token.strip()
@@ -622,7 +691,6 @@ elif st.session_state.current_view == "quiz":
                     img_match = re.match(r"!\[(.*?)\]\((.*?)\)", token)
                     if img_match:
                         alt_text, img_file = img_match.groups()
-                        # Images are typically stored in the same case_studies folder
                         img_path = os.path.join(case_study_dir, img_file)
                         if os.path.exists(img_path):
                             st.image(img_path, caption=alt_text, width=300)
@@ -645,7 +713,7 @@ elif st.session_state.current_view == "quiz":
     current_q_filename = q.get("filename", f"question_{current_idx:03d}.md")
     current_exam = st.session_state.get("selected_exam", "")
 
-    # 1. Determine if a case study exists FIRST
+    # Determine if a case study exists
     matched_case_study = None
     case_study_dir = os.path.join(QUESTIONS_DIR, current_exam, "case_studies")
 
@@ -658,7 +726,6 @@ elif st.session_state.current_view == "quiz":
                     matched_case_study = cs_file
                     break
 
-    # 2. Render Header & Button side-by-side with vertical centering
     col_header, col_btn = st.columns([3, 1], vertical_alignment="center")
 
     with col_header:
@@ -672,15 +739,17 @@ elif st.session_state.current_view == "quiz":
             if st.button("📖 Case Study", use_container_width=True, type="secondary"):
                 show_case_study_dialog(matched_case_study)
 
-    # 3. Custom tight divider below the question header
     st.markdown(
         '<hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
         unsafe_allow_html=True
     )
 
-    # Using st.markdown allows for <br> tags or double-space line breaks
-    # Wrap the markdown rendering in a div that uses your custom CSS
-    st.markdown(q["question"], unsafe_allow_html=True)    
+    st.markdown(q["question"], unsafe_allow_html=True)   
+
+    st.markdown(
+        '<hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
+        unsafe_allow_html=True
+    )
     
     is_checked = current_idx in st.session_state.checked_questions
     current_selections = st.session_state.selected_answers[current_idx]
@@ -690,54 +759,128 @@ elif st.session_state.current_view == "quiz":
         values_pool = q["choices"]
         correct_map = q["correct"]
         code_template = q["code_template"]
+        is_code = q.get("is_code", False)
+        code_lang = q.get("code_lang", "")
         
         dropdown_options = [""] + values_pool
-        
         template_lines = code_template.split("\n")
         
-        for line in template_lines:
-            has_placeholder = any(f"{{{b_key}}}" in line for b_key in correct_map.keys())
+        container_ctx = st.container(border=True) if is_code else st.container()
+        
+        with container_ctx:
+            if is_code and code_lang:
+                st.markdown(f'<div class="code-box-header"><span>{code_lang}</span></div>', unsafe_allow_html=True)
             
-            if not has_placeholder:
-                leading_spaces = len(line) - len(line.lstrip(' '))
-                indent_str = "&nbsp;" * (leading_spaces * 4)
-                formatted_line = indent_str + line.lstrip(' ').replace(" ", "&nbsp;")
-                st.markdown(f'<div style="line-height: 1.4; margin: 0; padding: 0; white-space: nowrap;">{formatted_line}</div>', unsafe_allow_html=True)
-            else:
-                for b_key in sorted(correct_map.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x else 0):
-                    placeholder = f"{{{b_key}}}"
-                    if placeholder in line:
-                        parts = line.split(placeholder)
-                        leading_spaces = len(parts[0]) - len(parts[0].lstrip(' '))
-                        indent_str = "&nbsp;" * (leading_spaces * 4)
-                        
-                        col_prefix = parts[0].strip().replace(" ", "&nbsp;")
-                        col_suffix = parts[1].strip().replace(" ", "&nbsp;") if len(parts) > 1 else ""
-                        
-                        b_val = current_selections.get(b_key, "")
-                        if not is_checked:
-                            c_input, c_text = st.columns([8.5, 2.5], vertical_alignment="center")
-                            with c_input:
-                                b_choice = st.selectbox(
-                                    f"Select for {b_key}", 
-                                    dropdown_options, 
-                                    index=dropdown_options.index(b_val) if b_val in dropdown_options else 0, 
-                                    key=f"dd_{current_idx}_{b_key}", 
-                                    label_visibility="collapsed"
-                                )
-                                st.session_state.selected_answers[current_idx][b_key] = b_choice
-                            with c_text:
-                                # Apply white-space: nowrap to prevent ugly automatic wrapping mid-text
-                                st.markdown(f'<div style="line-height: 1.3; margin: 0; white-space: nowrap;">{col_prefix} {col_suffix}</div>', unsafe_allow_html=True)
-                        else:
-                            b_correct = correct_map.get(b_key, "")
-                            if b_val == b_correct:
-                                badge_html = f'<span class="code-blank-correct">[{b_val}]</span>'
-                            else:
-                                badge_html = f'<span class="code-blank-wrong">[{b_val}]</span> <span style="color: green; font-size: 1.0em;">[{b_correct}]</span>'
+            for line in template_lines:
+                has_placeholder = any(f"{{{b_key}}}" in line for b_key in correct_map.keys())
+                
+                if not has_placeholder:
+                    if not line.strip():
+                        st.write("")
+                        continue
+                    if is_code:
+                        leading_spaces = len(line) - len(line.lstrip(' '))
+                        indent_str = "&nbsp;" * leading_spaces
+                        safe_line = line.strip().replace(" ", "&nbsp;")
+                        st.markdown(f'<div class="code-line">{indent_str}{safe_line}</div>', unsafe_allow_html=True)
+                    else:
+                        st.markdown(line)
+                else:
+                    for b_key in sorted(correct_map.keys(), key=lambda x: int(x.split('_')[1]) if '_' in x else 0):
+                        placeholder = f"{{{b_key}}}"
+                        if placeholder in line:
+                            parts = line.split(placeholder)
+                            raw_prefix = parts[0]
+                            raw_suffix = parts[1] if len(parts) > 1 else ""
                             
-                            combined_html = f'<div style="line-height: 1.3; margin: 2px 0; white-space: nowrap;">{indent_str}{badge_html} {col_prefix} {col_suffix}</div>'
-                            st.markdown(combined_html, unsafe_allow_html=True)
+                            leading_spaces = len(raw_prefix) - len(raw_prefix.lstrip(' '))
+                            col_prefix = raw_prefix.strip().replace(" ", "&nbsp;")
+                            col_suffix = raw_suffix.strip().replace(" ", "&nbsp;")
+                            
+                            b_val = current_selections.get(b_key, "")
+                            
+                            if not is_checked:
+                                if is_code:
+                                    st.markdown(f'<div class="code-line-row" style="margin-left: {leading_spaces}ch;">', unsafe_allow_html=True)
+                                    
+                                    cols_list = []
+                                    if col_prefix:
+                                        cols_list.append("prefix")
+                                    cols_list.append("selectbox")
+                                    if col_suffix:
+                                        cols_list.append("suffix")
+                                    
+                                    cols = st.columns(len(cols_list), vertical_alignment="center")
+                                    c_idx = 0
+                                    
+                                    if "prefix" in cols_list:
+                                        with cols[c_idx]:
+                                            st.markdown(f'<div class="code-line">{col_prefix}</div>', unsafe_allow_html=True)
+                                        c_idx += 1
+                                        
+                                    with cols[c_idx]:
+                                        b_choice = st.selectbox(
+                                            f"Select for {b_key}", 
+                                            dropdown_options, 
+                                            index=dropdown_options.index(b_val) if b_val in dropdown_options else 0, 
+                                            key=f"dd_{current_idx}_{b_key}", 
+                                            label_visibility="collapsed"
+                                        )
+                                        st.session_state.selected_answers[current_idx][b_key] = b_choice
+                                    c_idx += 1
+                                    
+                                    if "suffix" in cols_list:
+                                        with cols[c_idx]:
+                                            st.markdown(f'<div class="code-line">{col_suffix}</div>', unsafe_allow_html=True)
+                                            
+                                    st.markdown('</div>', unsafe_allow_html=True)
+                                else:
+                                    if col_prefix and not col_suffix:
+                                        c_label, c_input = st.columns([3, 7], vertical_alignment="center")
+                                        with c_label:
+                                            st.markdown(f"**{col_prefix}**")
+                                        with c_input:
+                                            b_choice = st.selectbox(
+                                                f"Select for {b_key}", 
+                                                dropdown_options, 
+                                                index=dropdown_options.index(b_val) if b_val in dropdown_options else 0, 
+                                                key=f"dd_{current_idx}_{b_key}", 
+                                                label_visibility="collapsed"
+                                            )
+                                            st.session_state.selected_answers[current_idx][b_key] = b_choice
+                                    else:
+                                        if col_prefix:
+                                            st.markdown(f"**{col_prefix}**")
+                                        b_choice = st.selectbox(
+                                            f"Select for {b_key}", 
+                                            dropdown_options, 
+                                            index=dropdown_options.index(b_val) if b_val in dropdown_options else 0, 
+                                            key=f"dd_{current_idx}_{b_key}", 
+                                            label_visibility="collapsed"
+                                        )
+                                        st.session_state.selected_answers[current_idx][b_key] = b_choice
+                                        if col_suffix:
+                                            st.markdown(col_suffix)
+                            else:
+                                b_correct = correct_map.get(b_key, "")
+                                safe_val = html.escape(b_val if b_val else "[No answer]")
+                                safe_correct = html.escape(b_correct)
+                                
+                                if b_val == b_correct:
+                                    badge_html = f'<span class="code-blank-correct">[{safe_val}]</span>'
+                                else:
+                                    badge_html = f'<span class="code-blank-wrong">[{safe_val}]</span> <span style="color: green; font-weight: bold;">[{safe_correct}]</span>'
+                                
+                                if is_code:
+                                    indent_str = "&nbsp;" * leading_spaces
+                                    prefix_str = f"{col_prefix} " if col_prefix else ""
+                                    suffix_str = f" {col_suffix}" if col_suffix else ""
+                                    combined_html = f'<div class="code-line">{indent_str}{prefix_str}{badge_html}{suffix_str}</div>'
+                                    st.markdown(combined_html, unsafe_allow_html=True)
+                                else:
+                                    prefix_str = f"**{col_prefix}** " if col_prefix else ""
+                                    suffix_str = f" {col_suffix}" if col_suffix else ""
+                                    st.markdown(f"{prefix_str}{badge_html}{suffix_str}", unsafe_allow_html=True)
     else:
         for c_idx, choice in enumerate(q["choices"]):
             is_selected = c_idx in current_selections
@@ -745,8 +888,6 @@ elif st.session_state.current_view == "quiz":
             
             if not is_checked:
                 btn_type = "primary" if is_selected else "secondary"
-
-                # Escape backslashes AND dollar signs to prevent Streamlit LaTeX math parsing
                 button_label = choice.replace("\\", "\\\\").replace("$", "\\$")
                 
                 if st.button(button_label, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
@@ -764,8 +905,6 @@ elif st.session_state.current_view == "quiz":
                                 st.toast(f"You can only select {max_allowed} answers.")
                     st.rerun()
             else:
-
-                # Escape HTML special characters for custom feedback cards
                 safe_choice = html.escape(choice)
 
                 if is_correct_choice:
@@ -793,7 +932,6 @@ elif st.session_state.current_view == "quiz":
                         unsafe_allow_html=True
                     )
 
-    # Render Answer/Explanation Image ONLY if checked and exists in directory
     if is_checked and q["ans_image"]:
         st.write("---")
         st.image(q["ans_image"], use_container_width=True)
@@ -803,10 +941,8 @@ elif st.session_state.current_view == "quiz":
     # --- Bottom Layout Action Buttons Row ---
     st.markdown('<div class="quiz-action-container">', unsafe_allow_html=True)
     
-    # Create 3 equal columns for perfect distribution
     col1, col2, col3 = st.columns(3)
     
-    # 1. Previous Button
     with col1:
         if current_idx > 0:
             if st.button("⬅️ Previous Question", key=f"prev_{current_idx}", disabled=(current_idx == 0), use_container_width=True):
@@ -822,9 +958,7 @@ elif st.session_state.current_view == "quiz":
             if q["is_drag_drop"]:
                 can_check = all(v != "" for v in current_selections.values())
             else:
-                required_count = len(q["correct"])
-                user_count = len(current_selections)
-                can_check = (user_count == required_count)
+                can_check = (len(current_selections) == len(q["correct"]))
             
             if st.button("Check Answer", 
                          key=f"chk_btn_{current_idx}", 
@@ -835,7 +969,6 @@ elif st.session_state.current_view == "quiz":
         else:
             st.empty()
 
-    # 3. Next / Submit Button
     with col3:
         if current_idx + 1 < total_qs:
             if st.button("Next Question ➡️", key=f"next_{current_idx}", use_container_width=True):
@@ -844,7 +977,6 @@ elif st.session_state.current_view == "quiz":
                     st.session_state.panel_page += 1
                 st.rerun()
         else:
-            # Only show the Submit Exam button if we are in "exam" mode, not in "browse" mode
             if st.session_state.mode == "exam":
                 if st.button("🚀 Submit Exam", key="submit_exam", use_container_width=True):
                     answered_count = len([i for i in range(total_qs) if st.session_state.selected_answers.get(i)])
@@ -856,17 +988,16 @@ elif st.session_state.current_view == "quiz":
 
     @st.dialog("Exam Results")
     def show_summary(answered, unanswered):
-        # Calculate actual correct answers
         correct_count = 0
         total_qs = len(questions)
         
-        for idx, q in enumerate(questions):
+        for idx, q_item in enumerate(questions):
             user_ans = st.session_state.selected_answers.get(idx, [])
-            if q["is_drag_drop"]:
-                if user_ans == q["correct"]:
+            if q_item["is_drag_drop"]:
+                if user_ans == q_item["correct"]:
                     correct_count += 1
             else:
-                if sorted(user_ans) == sorted(q["correct"]):
+                if sorted(user_ans) == sorted(q_item["correct"]):
                     correct_count += 1
                     
         score_pct = (correct_count / total_qs) * 100 if total_qs > 0 else 0        
@@ -877,11 +1008,10 @@ elif st.session_state.current_view == "quiz":
         
         if st.button("Close & Review", type="primary", use_container_width=True):
             st.session_state.submitted = True
-            st.session_state.checked_questions = set(range(total_qs)) # auto-reveal answers for review
+            st.session_state.checked_questions = set(range(total_qs))
             del st.session_state.show_summary
             st.rerun()
 
-    # Call dialogs if their respective flags are set
     if st.session_state.get("show_summary"):
         show_summary(*st.session_state.summary_data)
 

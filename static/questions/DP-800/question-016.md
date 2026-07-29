@@ -25,7 +25,7 @@ BEGIN
     SET NOCOUNT ON;
     SELECT p.Name
     FROM dbo.Patients AS p
-    {blank_1} (
+    {blank_1}(
         SELECT PatientId
         FROM dbo.Procedures AS pr
         {blank_2}

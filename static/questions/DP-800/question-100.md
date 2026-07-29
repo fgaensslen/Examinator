@@ -18,6 +18,7 @@ question: |
 
     NOTE: Each correct selection is worth one point.
 question_type: "drag_drop"
+code_lang: "SQL"
 values_pool:
     - "0"
     - "EXEC sys.sp_cdc_disable_db;"
