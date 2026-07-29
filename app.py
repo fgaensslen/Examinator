@@ -6,6 +6,7 @@ import math
 import streamlit as st
 import frontmatter
 import yaml
+import html
 
 QUESTIONS_DIR = "./questions"
 
@@ -386,7 +387,7 @@ def load_questions(exam_folder):
 
         # Safely convert markdown image references to the Streamlit route
         question_text = re.sub(
-            r'!\[(.*?)\]\((?!https?://|/app/static/)(.*?)\)', 
+            r'!\[(.*?)\]\((?!https?://|app/static/|\./app/static/)(.*?)\)', 
             rf'![\1]({web_image_prefix}\2)', 
             question_text
         )
@@ -744,8 +745,11 @@ elif st.session_state.current_view == "quiz":
             
             if not is_checked:
                 btn_type = "primary" if is_selected else "secondary"
+
+                # Escape backslashes AND dollar signs to prevent Streamlit LaTeX math parsing
+                button_label = choice.replace("\\", "\\\\").replace("$", "\\$")
                 
-                if st.button(choice, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
+                if st.button(button_label, key=f"btn_choice_{current_idx}_{c_idx}", use_container_width=True, type=btn_type):
                     max_allowed = len(q["correct"])
                     
                     if max_allowed == 1:
@@ -760,11 +764,15 @@ elif st.session_state.current_view == "quiz":
                                 st.toast(f"You can only select {max_allowed} answers.")
                     st.rerun()
             else:
+
+                # Escape HTML special characters for custom feedback cards
+                safe_choice = html.escape(choice)
+
                 if is_correct_choice:
                     badge_html = '<span class="badge-correct">Your Answer</span>' if is_selected else ''
                     st.markdown(
                         f'<div class="feedback-card card-correct">'
-                        f'<span class="choice-text">{choice}</span>'
+                        f'<span class="choice-text">{safe_choice}</span>'
                         f'{badge_html}'
                         f'</div>',
                         unsafe_allow_html=True
@@ -772,7 +780,7 @@ elif st.session_state.current_view == "quiz":
                 elif is_selected and not is_correct_choice:
                     st.markdown(
                         f'<div class="feedback-card card-wrong">'
-                        f'<span class="choice-text">{choice}</span>'
+                        f'<span class="choice-text">{safe_choice}</span>'
                         f'<span class="badge-wrong">Your Answer</span>'
                         f'</div>',
                         unsafe_allow_html=True
@@ -780,7 +788,7 @@ elif st.session_state.current_view == "quiz":
                 else:
                     st.markdown(
                         f'<div class="feedback-card card-neutral">'
-                        f'<span class="choice-text">{choice}</span>'
+                        f'<span class="choice-text">{safe_choice}</span>'
                         f'</div>',
                         unsafe_allow_html=True
                     )

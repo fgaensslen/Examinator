@@ -16,7 +16,7 @@ question: |
 
   Which Transact-SQL expression should you use?
 ---
-- [ ]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\\+.*$', '')
-- [ ]REGEXP_SUBSTR(JSON_VALUE(Payload, '\$.customer_email'), '\^[^+]+@.*$=')
-- [x]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\\+.*@', '@')
-- [ ]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\\+.*', '')
+- [ ]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\+.*$', '')
+- [ ]REGEXP_SUBSTR(JSON_VALUE(Payload, '\$.customer_email'), '^[^+]+@.*$=')
+- [x]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\+.*@', '@')
+- [ ]REGEXP_REPLACE(JSON_VALUE(Payload, '\$.customer_email'), '\+.*', '')
