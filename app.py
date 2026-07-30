@@ -97,15 +97,15 @@ st.markdown("""
         border-radius: 6px !important;
     }
 
-    /* REDUCE DEFAULT SPACING AROUND DROPDOWN BOXES */
-    /* Target vertical blocks that contain selectboxes - reduce gap but don't eliminate it */
-    [data-testid="stVerticalBlock"] [data-testid="stSelectbox"] {
-        margin-top: 0px !important;
+    /* REDUCE DROPDOWN MARGINS ONLY */
+    [data-testid="stSelectbox"] {
+        margin-top: -10px !important;
         margin-bottom: 0px !important;
     }
+
     /* Reduce the gap in vertical containers with selectboxes */
     div:has([data-testid="stSelectbox"]) {
-        row-gap: 0.3rem !important;
+        row-gap: 0.8rem !important;
     }
     
     .app-header {
