@@ -169,17 +169,17 @@ st.markdown("""
     }
     .card-correct {
         border: 3px solid #10b981 !important;
-        background-color: #ecfdf5 !important;
+        background-color: #86efac !important;
         color: #065f46 !important;
     }
     .card-wrong {
         border: 3px solid #ef4444 !important;
-        background-color: #fef2f2 !important;
+        background-color: #f87171 !important;
         color: #991b1b !important;
     }
     .card-neutral {
-        border: 1px solid rgba(128, 128, 128, 0.3) !important;
-        background-color: rgba(128, 128, 128, 0.05) !important;
+        border: 1px solid rgba(128, 128, 128, 0.5) !important;
+        background-color: rgba(128, 128, 128, 0.25) !important;
         color: inherit !important;
     }
     
@@ -191,8 +191,9 @@ st.markdown("""
     
     /* BADGES FOR SELECTED REVIEW STATE */
     .badge-wrong {
-        background-color: #fee2e2;
-        color: #ef4444;
+        background-color: #fecaca;
+        color: #991b1b;
+        border: 2px solid #ef4444;
         padding: 4px 10px;
         border-radius: 9999px;
         font-size: 12px;
@@ -203,8 +204,9 @@ st.markdown("""
         margin-left: 15px;
     }
     .badge-correct {
-        background-color: #d1fae5;
-        color: #10b981;
+        background-color: #bbf7d0;
+        color: #065f46;
+        border: 2px solid #10b981;
         padding: 4px 10px;
         border-radius: 9999px;
         font-size: 12px;
