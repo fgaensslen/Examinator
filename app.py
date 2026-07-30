@@ -248,6 +248,12 @@ st.markdown("""
         margin: 0 !important;
         padding: 0 !important;
     }
+    /* Restore list indentation */
+    [data-testid="stMarkdownContainer"] ul,
+    [data-testid="stMarkdownContainer"] ol {
+        padding-left: 1.5rem !important;
+        margin-left: 0 !important;
+    }
             
     /* Sidebar Map Styles */
     .map-btn-answered {
