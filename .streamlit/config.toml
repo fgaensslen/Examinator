@@ -1,2 +1,8 @@
 [server]
 enableStaticServing = true
+
+[theme.light]
+primaryColor = "#1e40af"  # Darker blue for light mode background
+
+[theme.dark]
+primaryColor = "#3b82f6"  # Brighter blue for dark mode background
