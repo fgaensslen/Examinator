@@ -64,7 +64,7 @@ if st.session_state.current_view == "dashboard":
                                value=default_value, 
                                key=f"slider_{exam_name}")
             
-            if st.button("Start Practice Test", key=f"start_{exam_name}", type="primary", use_container_width=True):
+            if st.button("Start Practice Exam", key=f"start_{exam_name}", type="primary", use_container_width=True):
                 st.session_state.selected_exam = exam_name
                 st.session_state.quiz_data = load_questions(exam_name)
                 
