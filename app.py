@@ -139,9 +139,9 @@ elif st.session_state.current_view == "quiz":
                         btn_type = "primary" if item_idx == current_idx else "secondary"
                         
                         label = f"{item_idx + 1}"
-                        if is_wrong: label = f"✕ {item_idx + 1}"
-                        elif is_correct: label = f"✓ {item_idx + 1}"
-                        elif is_answered: label = f"● {item_idx + 1}"
+                        if is_wrong: label = f"{item_idx + 1} ✗"
+                        elif is_correct: label = f"{item_idx + 1} ✓"
+                        elif is_answered: label = f"{item_idx + 1} ●"
 
                         if st.button(label, key=f"nav_grid_{item_idx}", type=btn_type, use_container_width=True):
                             st.session_state.current_q_idx = item_idx

@@ -1,3 +1,7 @@
+# Pdf Extractor
+Im Script "Pdf_Extractor.py" die Pfade zur Quelle und Ziel entsprechend anpassend und einfach ausführen.
+
+# Examtopics.com Extractor
 1. Suchen nach der entsprechenden Zertifizierung, zum Beispiel site:examtopics.com/discussions/microsoft/view "exam dp-800" oder site:examtopics.com/discussions/appian/view "exam ACD101"
 2. Den Source-Code der Suchseiten einzeln durchgehen und den Inhalt jedes Mal in eine google_source.txt kopieren. Dann das "Parse_Google_Results.py" Script ausführen. Für alle Suchseiten wiederholen
 3. Die erzeugte links.txt Datei enthält evtl. strings, welche nach "-discussion/" bereinigt werden müssen. Dafür auf RegEx umstellen, Suchen nach "(-discussion/).*" und Replace "$1"
