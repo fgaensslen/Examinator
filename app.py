@@ -469,7 +469,12 @@ elif st.session_state.current_view == "quiz":
                                 if b_val == b_correct:
                                     badge_html = f'<span class="code-blank-correct">[{safe_val}]</span>'
                                 else:
-                                    badge_html = f'<span class="code-blank-wrong">[{safe_val}]</span> <span style="color: green; font-weight: bold;">[{safe_correct}]</span>'
+                                    badge_html = (
+                                        f'<span style="display:inline-block; vertical-align:top;">'
+                                        f'<span class="code-blank-wrong">[{safe_val}]</span>'
+                                        f'<br><span style="color: green; font-weight: bold;">[{safe_correct}]</span>'
+                                        f'</span>'
+                                    )
                                 
                                 if is_code:
                                     indent_str = "&nbsp;" * leading_spaces
