@@ -19,6 +19,87 @@ from parsers import parse_case_study
 from state import initialize_session_state
 from helpers import check_answer_status, render_divider, render_selectbox
 
+
+def colorize_sql_fragment(text: str) -> str:
+    """Colorize SQL keywords/operators in an already display-formatted text fragment."""
+    if not text:
+        return text
+
+    # Protect quoted literals so later keyword/type passes do not recolor inside quotes.
+    string_tokens = []
+    token_prefix = "%%SQLSTRTOKEN"
+    token_suffix = "%%"
+
+    def _stash_string(m):
+        string_tokens.append(m.group(0))
+        return f"{token_prefix}{len(string_tokens) - 1}{token_suffix}"
+
+    text = re.sub(r"'[^']*'|\"[^\"]*\"", _stash_string, text)
+
+    # Variables (e.g. @KnownIssueDescription)
+    text = re.sub(
+        r"(@[A-Za-z_][A-Za-z0-9_]*)",
+        r"<span style='color:#111827;'>\1</span>",
+        text,
+    )
+
+    # Core SQL keywords + control-flow / DDL / transaction tokens.
+    blue_keywords = (
+        "SELECT", "FROM", "WHERE", "JOIN", "AS", "ORDER", "BY", "GROUP", "HAVING",
+        "DESC", "ASC", "TOP", "DISTINCT", "MATCH", "INSERT", "INTO", "VALUES",
+        "UPDATE", "SET", "DELETE", "CREATE", "ALTER", "DROP", "OR", "PROCEDURE",
+        "BEGIN", "END", "TRY", "CATCH", "THROW", "TRANSACTION", "COMMIT", "ROLLBACK",
+        "DECLARE", "IF", "ELSE", "RETURN", "OUTPUT", "EXEC", "EXECUTE", "USE",
+        "TABLE", "VIEW", "FUNCTION", "WITH", "OVER", "PARTITION", "UNION", "ALL",
+        "CASE", "WHEN", "THEN", "IS", "NOT", "NULL", "EXISTS", "IN", "BETWEEN"
+    )
+    text = re.sub(
+        r"\b(" + "|".join(blue_keywords) + r")\b",
+        lambda m: f"<span style='color:#2b7de9;'>{m.group(0)}</span>",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # SQL data types (blue in SSMS-like style).
+    type_keywords = (
+        "INT", "BIGINT", "SMALLINT", "TINYINT", "BIT", "DECIMAL", "NUMERIC", "FLOAT",
+        "REAL", "MONEY", "SMALLMONEY", "CHAR", "NCHAR", "VARCHAR", "NVARCHAR", "TEXT",
+        "NTEXT", "DATE", "DATETIME", "DATETIME2", "SMALLDATETIME", "TIME", "UNIQUEIDENTIFIER"
+    )
+    text = re.sub(
+        r"\b(" + "|".join(type_keywords) + r")\b",
+        lambda m: f"<span style='color:#2b7de9;'>{m.group(0)}</span>",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # Built-in function names (magenta-ish in SSMS-like appearance).
+    function_keywords = (
+        "SYSUTCDATETIME", "GETDATE", "CURRENT_TIMESTAMP", "DATEDIFF", "DATEADD", "DATEPART",
+        "JSON_VALUE", "JSON_QUERY", "ISNULL", "COALESCE", "COUNT", "SUM", "AVG", "MIN", "MAX",
+        "EDIT_DISTANCE", "EDIT_DISTANCE_SIMILARITY"
+    )
+    text = re.sub(
+        r"\b(" + "|".join(function_keywords) + r")\s*(?=\()",
+        lambda m: f"<span style='color:#ff00ff;'>{m.group(0)}</span>",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # Keep logical connectors visually distinct, but keep ON blue.
+    text = re.sub(
+        r"\b(AND)\b",
+        lambda m: f"<span style='color:#f08a24;'>{m.group(0)}</span>",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # Restore quoted literals in red.
+    for idx, token in enumerate(string_tokens):
+        text = text.replace(f"{token_prefix}{idx}{token_suffix}", f"<span style='color:#ef4444;'>{token}</span>")
+
+    return text
+
 # Page config
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="centered")
 
@@ -296,6 +377,8 @@ elif st.session_state.current_view == "quiz":
                         leading_spaces = len(line) - len(line.lstrip(' '))
                         indent_str = "&nbsp;" * leading_spaces
                         safe_line = line.strip().replace(" ", "&nbsp;")
+                        if code_lang.upper() == "SQL":
+                            safe_line = colorize_sql_fragment(safe_line)
                         st.markdown(f'<div class="code-line">{indent_str}{safe_line}</div>', unsafe_allow_html=True)
                     else:
                         st.markdown(line)
@@ -310,6 +393,9 @@ elif st.session_state.current_view == "quiz":
                             leading_spaces = len(raw_prefix) - len(raw_prefix.lstrip(' '))
                             col_prefix = raw_prefix.strip().replace(" ", "&nbsp;")
                             col_suffix = raw_suffix.strip().replace(" ", "&nbsp;")
+                            if is_code and code_lang.upper() == "SQL":
+                                col_prefix = colorize_sql_fragment(col_prefix)
+                                col_suffix = colorize_sql_fragment(col_suffix)
                             
                             b_val = current_selections.get(b_key, "")
                             
