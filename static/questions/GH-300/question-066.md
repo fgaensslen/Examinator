@@ -4,5 +4,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 ---
 - [x]Running code suggestions through filters designed to detect public code
 - [ ]Comparing suggestions against public code using machine learning
-- [ ]Reviewing the user’s browsing history to identify public repositories
+- [ ]Reviewing the user's browsing history to identify public repositories
 - [ ]Analyzing the context and structure of the code being written

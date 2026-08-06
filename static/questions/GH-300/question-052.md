@@ -1,5 +1,5 @@
 ---
-question: "What role does chat history play in GitHub Copilot’s code suggestions?"
+question: "What role does chat history play in GitHub Copilot's code suggestions?"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Chat history is irrelevant to GitHub Copilot and does not affect its functionality.

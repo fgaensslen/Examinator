@@ -1,5 +1,5 @@
 ---
-question: "You are reaching your organization’s storage limit for GitHub artifacts and packages. What should you do to prevent the storage limit from being reached? (Each correct answer presents a complete solution. Choose two.)"
+question: "You are reaching your organization's storage limit for GitHub artifacts and packages. What should you do to prevent the storage limit from being reached? (Each correct answer presents a complete solution. Choose two.)"
 documentation: "https://docs.github.com/en/organizations/managing-organization-settings/configuring-the-retention-period-for-artifacts-and-logs-in-your-organization"
 ---
 - [ ] Use self-hosted runners for all workflow runs.

@@ -1,5 +1,5 @@
 ---
-question: "As a developer, one of your workflows will require XCode version 11.2 hosted on macOS Catalina (i.e., v10.15). You’ve already created and configured a self-hosted runner to conform to those requirements and registered it with your organization. What else should you do to ensure that the workflow accesses the correct runner instance? (Each answer presents a complete solution. Choose three.)"
+question: "As a developer, one of your workflows will require XCode version 11.2 hosted on macOS Catalina (i.e., v10.15). You've already created and configured a self-hosted runner to conform to those requirements and registered it with your organization. What else should you do to ensure that the workflow accesses the correct runner instance? (Each answer presents a complete solution. Choose three.)"
 documentation: "https://docs.github.com/en/actions/hosting-your-own-runners/using-labels-with-self-hosted-runners"
 ---
 - [ ] Add your runner to the appropriate runner groups.

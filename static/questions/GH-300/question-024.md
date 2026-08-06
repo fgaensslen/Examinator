@@ -6,4 +6,4 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 - [x]Generate suggestions
 - [ ]Retraining the model
 - [ ]Storing user data
-- [x]Capturing the user’s context
+- [x]Capturing the user's context

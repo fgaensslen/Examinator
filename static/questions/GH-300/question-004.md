@@ -4,5 +4,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 ---
 - [ ]Focusing on accessibility will ensure fairness.
 - [x]Training AI data and algorithms to be free from biases will ensure fairness.
-- [ ]Regularly monitoring the AI tool’s performance will ensure fairness in its outputs.
+- [ ]Regularly monitoring the AI tool's performance will ensure fairness in its outputs.
 - [ ]Focusing on collecting large datasets for training will ensure fairness.

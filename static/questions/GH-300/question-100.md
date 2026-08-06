@@ -1,5 +1,5 @@
 ---
-question: "What is the primary role of the ‘/optimize’ slash command in Visual Studio?"
+question: "What is the primary role of the '/optimize' slash command in Visual Studio?"
 documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"
 ---
 - [ ]Translates code into a more performant language.

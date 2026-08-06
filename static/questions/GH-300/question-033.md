@@ -4,5 +4,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 ---
 - [ ]Real-time debugging and error resolution statistics.
 - [ ]Automated generation of complete project documentation.
-- [ ]Detailed analysis of GitHub Copilot’s suggestions vs. manual coding.
+- [ ]Detailed analysis of GitHub Copilot's suggestions vs. manual coding.
 - [x]Insights on the types of coding languages where GitHub Copilot is most helpful.

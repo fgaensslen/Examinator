@@ -4,5 +4,5 @@ documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/respo
 ---
 - [ ]By using a specific slash command in the prompt.
 - [ ]By using a specific command in the terminal.
-- [ ]By using a specific setting in GitHub Copilot’s configuration.
+- [ ]By using a specific setting in GitHub Copilot's configuration.
 - [x]By using specific prompt examples in your chat request.
