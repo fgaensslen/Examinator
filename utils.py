@@ -10,6 +10,7 @@ from config import QUESTIONS_DIR, LAST_UPDATES_FILE
 from parsers import detect_code_language
 
 
+@st.cache_data
 def load_last_updates(filepath: str = None) -> dict[str, str]:
     """Reads last_update.md and returns a dict: {'DP-800': '18.07.2026', ...}"""
     if filepath is None:
@@ -32,6 +33,7 @@ def load_last_updates(filepath: str = None) -> dict[str, str]:
     return updates
 
 
+@st.cache_data
 def get_available_exams() -> list[tuple[str, int]]:
     """Returns list of (exam_name, question_count) tuples."""
     if not os.path.exists(QUESTIONS_DIR):
