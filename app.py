@@ -542,6 +542,17 @@ elif st.session_state.current_view == "quiz":
         st.image(q["ans_image"], use_container_width=True)
 
     st.write("")
+
+    @st.dialog("Selection Hint")
+    def show_selection_hint(required_count: int, selected_count: int):
+        remaining = required_count - selected_count
+        st.info(
+            f"This question requires **{required_count}** answers. "
+            f"You have selected **{selected_count}** so far. "
+            f"\n\nPlease select **{remaining}** more to continue."
+        )
+        if st.button("OK", use_container_width=True):
+            st.rerun()
     
     # --- Bottom Layout Action Buttons Row ---
     st.markdown('<div class="quiz-action-container">', unsafe_allow_html=True)
@@ -564,11 +575,15 @@ elif st.session_state.current_view == "quiz":
                 can_check = all(v != "" for v in current_selections.values())
             else:
                 can_check = (len(current_selections) == len(q["correct"]))
+            required_answers = len(q["correct"]) if not q["is_drag_drop"] else 0
             
             if st.button("Check Answer", 
                          key=f"chk_btn_{current_idx}", 
-                         disabled=is_checked or not can_check, 
+                         disabled=is_checked or (q["is_drag_drop"] and not can_check), 
                          use_container_width=True):
+                if (not q["is_drag_drop"]) and required_answers >= 2 and len(current_selections) < required_answers:
+                    show_selection_hint(required_answers, len(current_selections))
+                    st.stop()
                 st.session_state.checked_questions.add(current_idx)
                 st.rerun()
         else:
@@ -577,6 +592,12 @@ elif st.session_state.current_view == "quiz":
     with col3:
         if current_idx + 1 < total_qs:
             if st.button("Next Question ➡️", key=f"next_{current_idx}", use_container_width=True):
+                if st.session_state.mode == "exam" and (not q["is_drag_drop"]):
+                    required_answers = len(q["correct"])
+                    selected_count = len(current_selections)
+                    if required_answers >= 2 and selected_count < required_answers:
+                        show_selection_hint(required_answers, selected_count)
+                        st.stop()
                 st.session_state.current_q_idx += 1
                 if st.session_state.current_q_idx >= (st.session_state.panel_page * ITEMS_PER_PAGE):
                     st.session_state.panel_page += 1
