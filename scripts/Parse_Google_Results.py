@@ -37,4 +37,4 @@ def extract_links_from_file(filename="google_source.txt"):
         print(url)
 
 if __name__ == "__main__":
-    extract_links_from_file()
+    extract_links_from_file(r"C:\Users\Florian\Downloads\google_source.txt")  # Update the path to your saved Google page source

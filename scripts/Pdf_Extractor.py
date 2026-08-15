@@ -6,19 +6,6 @@ from PIL import Image
 import io
 import shutil
 
-def get_documentation_url(question_text):
-    """Basic keyword-based mapping for documentation links."""
-    mappings = {
-        "AI": "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai",
-        "JSON": "https://learn.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server",
-        "T-SQL": "https://learn.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql",
-        "GitHub": "https://docs.github.com/en/actions"
-    }
-    for keyword, url in mappings.items():
-        if keyword in question_text:
-            return url
-    return "https://learn.microsoft.com/en-us/azure/"
-
 def extract_content(pdf_path, temp_dir):
     """
     Parses questions with a robust regex to capture all 59+ items.
@@ -92,8 +79,7 @@ def package_study_materials(pdf_path, output_zip_path):
         file_name = f"{q['id'].replace(' ', '_').replace('#', '').replace(':', '')}.md"
         with open(os.path.join(temp_dir, file_name), "w", encoding="utf-8") as f:
             f.write("---\n")
-            f.write(f'question: "{q["question"]}"\n')
-            f.write(f'documentation: "{get_documentation_url(q["question"])}"\n')
+            f.write(f'question: "{q["question"]}"\n')            
             f.write("---\n\n")
             
             # Write Options with formatting

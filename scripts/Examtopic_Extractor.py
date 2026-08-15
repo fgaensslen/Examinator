@@ -2,7 +2,7 @@ import asyncio
 import os
 from playwright.async_api import async_playwright
 
-INPUT_FILE = r"C:\Users\Florian\Downloads\clean_final.txt"  # Your text file containing the clean URLs
+INPUT_FILE = r"C:\Users\Florian\Downloads\links.txt"  # Your text file containing the clean URLs
 OUTPUT_FILE = r"C:\Users\Florian\Downloads\exam_content.txt"
 
 async def scrape_questions():
