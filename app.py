@@ -576,10 +576,12 @@ elif st.session_state.current_view == "quiz":
             else:
                 can_check = (len(current_selections) == len(q["correct"]))
             required_answers = len(q["correct"]) if not q["is_drag_drop"] else 0
+
+            single_answer_disabled = (not q["is_drag_drop"]) and required_answers == 1 and len(current_selections) == 0
             
             if st.button("Check Answer", 
                          key=f"chk_btn_{current_idx}", 
-                         disabled=is_checked or (q["is_drag_drop"] and not can_check), 
+                         disabled=is_checked or (q["is_drag_drop"] and not can_check) or single_answer_disabled,
                          use_container_width=True):
                 if (not q["is_drag_drop"]) and required_answers >= 2 and len(current_selections) < required_answers:
                     show_selection_hint(required_answers, len(current_selections))
