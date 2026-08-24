@@ -2,6 +2,8 @@
 linked_questions:
   - question-001.md
   - question-031.md
+  - question-043.md
+  - question-048.md
 ---
 
 # Case Study
