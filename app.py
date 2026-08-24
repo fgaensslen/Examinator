@@ -288,7 +288,7 @@ elif st.session_state.current_view == "quiz":
                         alt_text, img_file = img_match.groups()
                         img_path = os.path.join(case_study_dir, img_file)
                         if os.path.exists(img_path):
-                            st.image(img_path, caption=alt_text, width=300)
+                            st.image(img_path, caption=alt_text, width="content")
                         else:
                             st.warning(f"Image not found: {img_file}")
                     else:

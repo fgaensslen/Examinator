@@ -8,6 +8,7 @@ from playwright.async_api import async_playwright
 INPUT_FILE = r"C:\Users\Florian\Downloads\extracted_links.txt"
 OUTPUT_FILE = r"C:\Users\Florian\Downloads\exam_content.txt"
 IMAGE_DIR = r"C:\Users\Florian\Downloads\exam_images"
+SCREENSHOT_DIR = r"C:\Users\Florian\Downloads\exam_screenshots"
 
 async def download_image(request_context, img_url, save_path):
     """Downloads an image using the browser's active session context."""
@@ -27,13 +28,14 @@ async def scrape_questions():
         print(f"[-] Error: {INPUT_FILE} not found.")
         return
 
-    # Ensure output image directory exists
+    # Ensure output directories exist
     os.makedirs(IMAGE_DIR, exist_ok=True)
+    os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 
     with open(INPUT_FILE, "r", encoding="utf-8") as f:
         urls = [line.strip() for line in f if line.strip()]
 
-    print(f"[*] Starting speed-scrape of {len(urls)} questions with image downloading...")
+    print(f"[*] Starting speed-scrape of {len(urls)} questions with images and screenshots...")
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
@@ -47,6 +49,15 @@ async def scrape_questions():
             try:
                 await page.goto(url, wait_until="domcontentloaded")
 
+                # Unique ID prefix based on topic and question numbers from the URL
+                match = re.search(r'topic-(\d+)-question-(\d+)', url)
+                prefix = f"t{match.group(1)}_q{match.group(2)}" if match else f"q_{idx}"
+
+                # Capture full page or viewport screenshot
+                screenshot_filename = f"{prefix}_screenshot.png"
+                screenshot_filepath = os.path.join(SCREENSHOT_DIR, screenshot_filename)
+                await page.screenshot(path=screenshot_filepath, full_page=True)
+
                 # Extract both text and image URLs from the main question card
                 data = await page.evaluate('''() => {
                     const card = document.querySelector('.exam-question-card') || document.body;
@@ -56,10 +67,6 @@ async def scrape_questions():
                         images: images
                     };
                 }''')
-
-                # Unique ID prefix based on topic and question numbers from the URL
-                match = re.search(r'topic-(\d+)-question-(\d+)', url)
-                prefix = f"t{match.group(1)}_q{match.group(2)}" if match else f"q_{idx}"
 
                 downloaded_image_names = []
                 
@@ -87,6 +94,7 @@ async def scrape_questions():
                 # Format text content along with image logs
                 with open(OUTPUT_FILE, "a", encoding="utf-8") as out:
                     out.write(f"\n\n{'='*40}\nURL: {url}\n{'='*40}\n")
+                    out.write(f"[SCREENSHOT: {screenshot_filename}]\n")
                     if downloaded_image_names:
                         out.write(f"[ATTACHED IMAGES: {', '.join(downloaded_image_names)}]\n\n")
                     out.write(data['text'])
@@ -99,6 +107,7 @@ async def scrape_questions():
         await browser.close()
     print(f"[+] Finished! Text saved to {OUTPUT_FILE}")
     print(f"[+] Images downloaded to {IMAGE_DIR}")
+    print(f"[+] Screenshots saved to {SCREENSHOT_DIR}")
 
     # Delete all downloaded .webp images
     webp_files = list(Path(IMAGE_DIR).glob("*.webp"))
