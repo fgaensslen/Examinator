@@ -2,7 +2,7 @@ import os
 import re
 import glob
 
-exam_name = "ab-900"
+exam_name = "" # <<<<< WRITE YOUR EXAM NAME HERE, LIKE "AZ-900" or "SC-900" etc.>>>>>
 downloads_dir = r"C:\Users\Florian\Downloads"
 output_file = r"C:\Users\Florian\Downloads\extracted_links.txt"
 

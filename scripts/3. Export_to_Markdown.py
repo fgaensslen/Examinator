@@ -1,7 +1,7 @@
 import os
 import re
 
-EXAM = "AB-900"
+EXAM = "" # <<<<< WRITE YOUR EXAM NAME HERE, LIKE "AZ-900" or "SC-900" etc.>>>>>
 INPUT_FILE = r"C:\Users\Florian\Downloads\exam_content.txt"
 OUTPUT_DIR = r"C:\Users\Florian\Downloads\\" + EXAM
 
