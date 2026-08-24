@@ -1,8 +1,9 @@
 import os
 import re
 
+EXAM = "AB-900"
 INPUT_FILE = r"C:\Users\Florian\Downloads\exam_content.txt"
-OUTPUT_DIR = r"C:\Users\Florian\Downloads\GH-300_Quiz_Files"
+OUTPUT_DIR = r"C:\Users\Florian\Downloads\\" + EXAM
 
 def parse_sequentially():
     if not os.path.exists(INPUT_FILE):
@@ -37,7 +38,7 @@ def parse_sequentially():
         
         # Isolate question body text safely
         question_text = ""
-        q_block_match = re.search(r'\[All GH-300 Questions\]\s*\n(.*?)\n\s*A\.', content, re.DOTALL)
+        q_block_match = re.search(rf'\[All {EXAM} Questions\]\s*\n(.*?)\n\s*A\.', content, re.DOTALL)
         if not q_block_match:
             q_block_match = re.search(r'Question #:\s*\d+\s*\nTopic #:\s*\d+\s*\n(.*?)\n\s*A\.', content, re.DOTALL)
             
@@ -68,7 +69,6 @@ def parse_sequentially():
         md_lines = [
             "---",
             f'question: "{question_text}"',
-            'documentation: "https://learn.microsoft.com/en-us/azure/cognitive-services/responsible-use-of-ai"',
             "---\n"
         ]
         
