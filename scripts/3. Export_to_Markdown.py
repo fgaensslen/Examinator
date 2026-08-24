@@ -1,7 +1,7 @@
 import os
 import re
 
-EXAM = "" # <<<<< WRITE YOUR EXAM NAME HERE, LIKE "AZ-900" or "SC-900" etc.>>>>>
+EXAM = "GH-600" # <<<<< WRITE YOUR EXAM NAME HERE, LIKE "AZ-900" or "SC-900" etc.>>>>>
 INPUT_FILE = r"C:\Users\Florian\Downloads\exam_content.txt"
 OUTPUT_DIR = r"C:\Users\Florian\Downloads\\" + EXAM
 
@@ -36,11 +36,20 @@ def parse_sequentially():
         filename = f"question-{str(sequential_id).zfill(3)}.md"
         filepath = os.path.join(OUTPUT_DIR, filename)
         
-        # Isolate question body text safely
+        # Stop at the first answer choice, or at the discussion section for
+        # drag-and-drop and hotspot questions that have no choices in the dump.
         question_text = ""
-        q_block_match = re.search(rf'\[All {EXAM} Questions\]\s*\n(.*?)\n\s*A\.', content, re.DOTALL)
+        q_block_match = re.search(
+            r'\[All .*? Questions\]\s*\n(.*?)(?=^\s*A\.\s|^\s*Show Suggested Answer)',
+            content,
+            re.DOTALL | re.MULTILINE,
+        )
         if not q_block_match:
-            q_block_match = re.search(r'Question #:\s*\d+\s*\nTopic #:\s*\d+\s*\n(.*?)\n\s*A\.', content, re.DOTALL)
+            q_block_match = re.search(
+                r'Question #:\s*\d+\s*\nTopic #:\s*\d+\s*\n(.*?)(?=^\s*A\.\s|^\s*Show Suggested Answer)',
+                content,
+                re.DOTALL | re.MULTILINE,
+            )
             
         if q_block_match:
             question_text = q_block_match.group(1).strip().replace('"', '\\"')
