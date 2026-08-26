@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import random
 import re
+import urllib.parse
 import frontmatter
 import streamlit as st
 import yaml
@@ -100,6 +101,17 @@ def colorize_sql_fragment(text: str) -> str:
 
     return text
 
+
+@st.cache_data
+def load_svg_data_uri(file_name: str) -> str:
+    """Return a data URI for an SVG file in static/, or empty string if missing."""
+    logo_path = BASE_DIR / "static" / file_name
+    if not logo_path.exists():
+        return ""
+
+    svg_raw = logo_path.read_text(encoding="utf-8")
+    return f"data:image/svg+xml;utf8,{urllib.parse.quote(svg_raw)}"
+
 # Page config
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="centered")
 
@@ -124,6 +136,8 @@ if st.session_state.current_view == "dashboard":
         st.warning("No question folders found.")
 
     last_updates = load_last_updates()
+    ms_logo_uri = load_svg_data_uri("MS_logo.svg")
+    github_logo_uri = load_svg_data_uri("GitHub_logo.svg")
 
     def _exam_category(exam_code: str) -> str:
         prefix = exam_code.split("-")[0].upper()
@@ -176,13 +190,19 @@ if st.session_state.current_view == "dashboard":
             for exam_name, q_count in section_exams:
                 date_str = last_updates.get(exam_name)
                 update_line = f"Updated {date_str}" if date_str else "Update date unavailable"
+                logo_uri = github_logo_uri if exam_name.upper().startswith("GH-") else ms_logo_uri
+                logo_html = (
+                    f'<img src="{logo_uri}" alt="logo" style="height:16px; width:16px; object-fit:contain; display:inline-block;" />'
+                    if logo_uri
+                    else ""
+                )
 
                 with st.container(border=True):
                     st.markdown(
                         f"""
                         <div style="padding-left:0; margin-bottom:4px;">
                             <div class="exam-tile-code-chip" style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:linear-gradient(90deg,#1e40af 0%,#2563eb 60%,#3b82f6 100%); color:#ffffff; border:1px solid #1d4ed8; border-radius:8px; padding:9px 11px;">
-                                <span class="exam-tile-code" style="font-size:15px; font-weight:900; color:#ffffff; line-height:1.1;">{exam_name}</span>
+                                <span class="exam-tile-code" style="font-size:15px; font-weight:900; color:#ffffff; line-height:1.1; display:flex; align-items:center; gap:7px;">{logo_html}<span>{exam_name}</span></span>
                                 <span class="exam-tile-count" style="font-size:15px;color:#ffffff; white-space:nowrap;">{q_count} Questions</span>
                             </div>
                             <div class="exam-tile-meta" style="margin-top:6px; font-size:13px; color:#4b5563;">{update_line}</div>
@@ -192,11 +212,16 @@ if st.session_state.current_view == "dashboard":
                     )
 
                     default_value = min(DEFAULT_QUESTIONS, q_count)
+                    st.markdown(
+                        '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',
+                        unsafe_allow_html=True,
+                    )
                     num_qs = st.slider(
                         "Number of questions",
                         min_value=1,
                         max_value=q_count,
                         value=default_value,
+                        label_visibility="collapsed",
                         key=f"slider_{exam_name}",
                     )
 
@@ -221,7 +246,7 @@ if st.session_state.current_view == "dashboard":
                         st.rerun()
 
                     if st.button(
-                        "Browse questions individually",
+                        "Browse all questions",
                         key=f"browse_{exam_name}",
                         use_container_width=True,
                     ):
