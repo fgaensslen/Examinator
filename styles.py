@@ -375,6 +375,9 @@ details summary div[data-testid="stMarkdownContainer"] p span {
 }
 
 /* Keep the favorite control visually inside the exam header. */
+div[class*="st-key-favorite-storage"] {
+    display: none !important;
+}
 div[class*="st-key-exam-header-"] {
     background: linear-gradient(90deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%);
     border: 1px solid #1d4ed8;

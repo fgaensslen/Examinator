@@ -17,7 +17,7 @@ from config import (
 from styles import apply_styles
 from utils import load_last_updates, get_available_exams, load_questions
 from parsers import parse_case_study
-from state import initialize_session_state, toggle_favorite
+from state import initialize_session_state, toggle_favorite, flush_pending_favorites
 from helpers import check_answer_status, render_divider, render_selectbox
 
 
@@ -120,6 +120,8 @@ apply_styles()
 
 # Initialize session state
 initialize_session_state()
+if "favorite_storage_pending" in st.session_state:
+    flush_pending_favorites()
 
 # -------------------------------------------------------------
 # View 1: Main Dashboard
@@ -232,6 +234,7 @@ if st.session_state.current_view == "dashboard":
                                 key=f"favorite_{exam_name}",
                             ):
                                 toggle_favorite(exam_name)
+                                st.rerun()
 
                     st.markdown(
                         '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',

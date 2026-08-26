@@ -11,19 +11,20 @@ def initialize_session_state():
     if "favorite_storage_version" not in st.session_state:
         st.session_state.favorite_storage_version = 0
 
-    stored_value = streamlit_js_eval(
-        js_expressions="localStorage.getItem('examinator_favorites') || '[]'",
-        key=f"favorite_storage_load_{st.session_state.favorite_storage_version}",
-        default=None,
-    )
-    if stored_value is None:
-        st.stop()
+    if "favorite_storage_pending" not in st.session_state:
+        stored_value = streamlit_js_eval(
+            js_expressions="localStorage.getItem('examinator_favorites') || '[]'",
+            key=f"favorite_storage_load_{st.session_state.favorite_storage_version}",
+            default=None,
+        )
+        if stored_value is None:
+            st.stop()
 
-    try:
-        stored_favorites = json.loads(stored_value)
-    except (TypeError, json.JSONDecodeError):
-        stored_favorites = []
-    st.session_state.favorite_exams = set(stored_favorites)
+        try:
+            stored_favorites = json.loads(stored_value)
+        except (TypeError, json.JSONDecodeError):
+            stored_favorites = []
+        st.session_state.favorite_exams = set(stored_favorites)
 
     if "current_view" not in st.session_state:
         st.session_state.current_view = "dashboard"
@@ -46,7 +47,7 @@ def initialize_session_state():
 
 
 def toggle_favorite(exam_name: str):
-    """Toggle an exam favorite and persist it in a browser cookie."""
+    """Toggle an exam favorite and queue it for browser storage."""
     favorites = st.session_state.favorite_exams
     if exam_name in favorites:
         favorites.remove(exam_name)
@@ -55,8 +56,18 @@ def toggle_favorite(exam_name: str):
 
     stored_value = json.dumps(sorted(favorites))
     st.session_state.favorite_storage_version += 1
-    streamlit_js_eval(
-        js_expressions=f"(localStorage.setItem('examinator_favorites', {json.dumps(stored_value)}), 'saved')",
-        key=f"favorite_storage_save_{st.session_state.favorite_storage_version}",
-        default=None,
-    )
+    st.session_state.favorite_storage_pending = stored_value
+
+
+def flush_pending_favorites():
+    """Write a pending favorite update from a hidden top-level component."""
+    stored_value = st.session_state.pop("favorite_storage_pending", None)
+    if stored_value is None:
+        return
+
+    with st.container(key="favorite-storage"):
+        streamlit_js_eval(
+            js_expressions=f"(localStorage.setItem('examinator_favorites', {json.dumps(stored_value)}), 'saved')",
+            key="favorite_storage_save",
+            default=None,
+        )
