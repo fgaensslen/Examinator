@@ -17,7 +17,7 @@ from config import (
 from styles import apply_styles
 from utils import load_last_updates, get_available_exams, load_questions
 from parsers import parse_case_study
-from state import initialize_session_state
+from state import initialize_session_state, toggle_favorite
 from helpers import check_answer_status, render_divider, render_selectbox
 
 
@@ -127,7 +127,7 @@ initialize_session_state()
 if st.session_state.current_view == "dashboard":
     st.markdown("""
         <div style="text-align: center;">
-            <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
+            <h1 style="margin: 0; padding: 0; line-height: 1.5;">Examinator</h1>
         </div>
     """, unsafe_allow_html=True)
 
@@ -185,7 +185,10 @@ if st.session_state.current_view == "dashboard":
                 unsafe_allow_html=True,
             )
 
-            section_exams = categorized_exams.get(section_name, [])
+            section_exams = sorted(
+                categorized_exams.get(section_name, []),
+                key=lambda exam: exam[0] not in st.session_state.favorite_exams,
+            )
 
             for exam_name, q_count in section_exams:
                 date_str = last_updates.get(exam_name)
@@ -198,24 +201,44 @@ if st.session_state.current_view == "dashboard":
                 )
 
                 with st.container(border=True):
-                    st.markdown(
-                        f"""
-                        <div style="padding-left:0; margin-bottom:4px;">
-                            <div class="exam-tile-code-chip" style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:linear-gradient(90deg,#1e40af 0%,#2563eb 60%,#3b82f6 100%); color:#ffffff; border:1px solid #1d4ed8; border-radius:8px; padding:9px 11px;">
-                                <span class="exam-tile-code" style="font-size:15px; font-weight:900; color:#ffffff; line-height:1.1; display:flex; align-items:center; gap:7px;">{logo_html}<span>{exam_name}</span></span>
-                                <span class="exam-tile-count" style="font-size:15px;color:#ffffff; white-space:nowrap;">{q_count} Questions</span>
-                            </div>
-                            <div class="exam-tile-meta" style="margin-top:6px; font-size:13px; color:#4b5563;">{update_line}</div>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+                    with st.container(key=f"exam-header-{exam_name}"):
+                        code_col, count_col = st.columns(
+                            [4, 3], gap="small", vertical_alignment="center"
+                        )
+                        with code_col:
+                            st.markdown(
+                                f"""
+                                <div class="exam-tile-code-chip" style="color:#ffffff;">
+                                    <span class="exam-tile-code" style="font-size:15px; font-weight:900; color:#ffffff; line-height:1.1; display:flex; align-items:center; gap:7px;">{logo_html}<span>{exam_name}</span></span>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
+                        with count_col:
+                            st.markdown(
+                                f'<div class="exam-tile-count" style="font-size:15px;color:#ffffff; white-space:nowrap; text-align:right;">{q_count} Questions</div>',
+                                unsafe_allow_html=True,
+                            )
+                        update_col, favorite_col = st.columns([6, 1], gap="small", vertical_alignment="bottom")
+                        with update_col:
+                            st.markdown(
+                                f'<div class="exam-tile-meta" style="margin-top:6px; font-size:13px; color:#dbeafe;">{update_line}</div>',
+                                unsafe_allow_html=True,
+                            )
+                        with favorite_col:
+                            is_favorite = exam_name in st.session_state.favorite_exams
+                            if st.button(
+                                "★" if is_favorite else "☆",
+                                key=f"favorite_{exam_name}",
+                            ):
+                                toggle_favorite(exam_name)
+                                st.rerun()
 
-                    default_value = min(DEFAULT_QUESTIONS, q_count)
                     st.markdown(
                         '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',
                         unsafe_allow_html=True,
                     )
+                    default_value = min(DEFAULT_QUESTIONS, q_count)
                     num_qs = st.slider(
                         "Number of questions",
                         min_value=1,
@@ -387,7 +410,7 @@ elif st.session_state.current_view == "quiz":
 
     st.markdown(f"""
         <div style="text-align: center;">
-            <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
+            <h1 style="margin: 0; padding: 0; line-height: 1.5;">Examinator</h1>
             <h4 style="margin: 4px 0 10px 0; padding: 0; color: gray; font-weight: normal;">
                 <b>{st.session_state.selected_exam}</b> - {'Study Mode' if st.session_state.mode == 'browse' else 'Practice Exam'}
             </h4>

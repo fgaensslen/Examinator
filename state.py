@@ -5,6 +5,12 @@ import streamlit as st
 
 def initialize_session_state():
     """Initialize all session state variables."""
+    if "favorite_exams" not in st.session_state:
+        query_favorites = st.query_params.get("favorites", "")
+        st.session_state.favorite_exams = {
+            exam_name for exam_name in query_favorites.split(",") if exam_name
+        }
+
     if "current_view" not in st.session_state:
         st.session_state.current_view = "dashboard"
     if "selected_exam" not in st.session_state:
@@ -23,3 +29,17 @@ def initialize_session_state():
         st.session_state.checked_questions = set()
     if "submitted" not in st.session_state:
         st.session_state.submitted = False
+
+
+def toggle_favorite(exam_name: str):
+    """Toggle an exam favorite and persist it in the URL."""
+    favorites = st.session_state.favorite_exams
+    if exam_name in favorites:
+        favorites.remove(exam_name)
+    else:
+        favorites.add(exam_name)
+
+    if favorites:
+        st.query_params["favorites"] = ",".join(sorted(favorites))
+    else:
+        st.query_params.pop("favorites", None)

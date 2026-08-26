@@ -374,6 +374,100 @@ details summary div[data-testid="stMarkdownContainer"] p span {
     margin-bottom: 14px;
 }
 
+/* Keep the favorite control visually inside the exam header. */
+div[class*="st-key-exam-header-"] {
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%);
+    border: 1px solid #1d4ed8;
+    border-radius: 8px;
+    padding: 9px 11px 3px !important;
+    margin-bottom: 4px;
+    overflow: visible !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] {
+    width: 100% !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="column"]:first-child {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="column"]:nth-child(2) {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: max-content !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="column"]:last-child {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="column"] > div {
+    width: 100% !important;
+}
+div[class*="st-key-exam-header-"] .exam-tile-code-chip {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+div[class*="st-key-exam-header-"] .exam-tile-count {
+    display: block !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    text-align: right !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="stButton"] button {
+    background: transparent !important;
+    border: 0 !important;
+    color: #ffffff !important;
+    font-size: 24px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    justify-content: flex-end !important;
+    transform: translateY(8px);
+}
+div[class*="st-key-exam-header-"] [data-testid="stButton"] button > div,
+div[class*="st-key-exam-header-"] [data-testid="stButton"] button p {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    justify-content: flex-end !important;
+    transform: translateY(8px) !important;
+    position: relative !important;
+    left: 20px !important;
+}
+body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button > div,
+body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button p {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button:hover p {
+    font-size: 0 !important;
+}
+body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button:hover p::after {
+    content: "★";
+    color: #ffffff !important;
+    font-size: 15px !important;
+}
 .poster-hero .poster-brand {
     font-size: 12px;
     text-transform: uppercase;
