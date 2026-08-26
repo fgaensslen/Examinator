@@ -587,16 +587,16 @@ body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [dat
 }
 
 .exam-column-title-wrap {
-    background: linear-gradient(90deg, #f1f5f9 0%, #eef2ff 100%);
-    border: 1px solid #dbe3ef;
-    border-radius: 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
     padding: 8px 10px;
     margin-bottom: 10px;
 }
 
 .exam-column-title {
     font-size: 13px;
-    color: #1f2937;
+    color: inherit;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;

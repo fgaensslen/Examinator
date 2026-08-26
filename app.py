@@ -179,7 +179,7 @@ if st.session_state.current_view == "dashboard":
             st.markdown(
                 f"""
                 <div class="exam-column-title-wrap {section_class}">
-                    <div class="exam-column-title" style="font-size:{title_size}; font-weight:{title_weight}; text-transform:none; color:#0f172a; text-align:center;">
+                    <div class="exam-column-title" style="font-size:{title_size}; font-weight:{title_weight}; text-transform:none; color:inherit; text-align:center;">
                         {section_name}
                     </div>
                 </div>
