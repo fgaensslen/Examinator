@@ -232,7 +232,6 @@ if st.session_state.current_view == "dashboard":
                                 key=f"favorite_{exam_name}",
                             ):
                                 toggle_favorite(exam_name)
-                                st.rerun()
 
                     st.markdown(
                         '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',

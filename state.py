@@ -1,15 +1,29 @@
 """Session state management for Examinator."""
 
+import json
+
 import streamlit as st
+from streamlit_js_eval import streamlit_js_eval
 
 
 def initialize_session_state():
     """Initialize all session state variables."""
-    if "favorite_exams" not in st.session_state:
-        query_favorites = st.query_params.get("favorites", "")
-        st.session_state.favorite_exams = {
-            exam_name for exam_name in query_favorites.split(",") if exam_name
-        }
+    if "favorite_storage_version" not in st.session_state:
+        st.session_state.favorite_storage_version = 0
+
+    stored_value = streamlit_js_eval(
+        js_expressions="localStorage.getItem('examinator_favorites') || '[]'",
+        key=f"favorite_storage_load_{st.session_state.favorite_storage_version}",
+        default=None,
+    )
+    if stored_value is None:
+        st.stop()
+
+    try:
+        stored_favorites = json.loads(stored_value)
+    except (TypeError, json.JSONDecodeError):
+        stored_favorites = []
+    st.session_state.favorite_exams = set(stored_favorites)
 
     if "current_view" not in st.session_state:
         st.session_state.current_view = "dashboard"
@@ -32,14 +46,17 @@ def initialize_session_state():
 
 
 def toggle_favorite(exam_name: str):
-    """Toggle an exam favorite and persist it in the URL."""
+    """Toggle an exam favorite and persist it in a browser cookie."""
     favorites = st.session_state.favorite_exams
     if exam_name in favorites:
         favorites.remove(exam_name)
     else:
         favorites.add(exam_name)
 
-    if favorites:
-        st.query_params["favorites"] = ",".join(sorted(favorites))
-    else:
-        st.query_params.pop("favorites", None)
+    stored_value = json.dumps(sorted(favorites))
+    st.session_state.favorite_storage_version += 1
+    streamlit_js_eval(
+        js_expressions=f"(localStorage.setItem('examinator_favorites', {json.dumps(stored_value)}), 'saved')",
+        key=f"favorite_storage_save_{st.session_state.favorite_storage_version}",
+        default=None,
+    )
