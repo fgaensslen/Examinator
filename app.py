@@ -112,7 +112,7 @@ initialize_session_state()
 # -------------------------------------------------------------
 # View 1: Main Dashboard
 # -------------------------------------------------------------
-if st.session_state.current_view == "dashboard":    
+if st.session_state.current_view == "dashboard":
     st.markdown("""
         <div style="text-align: center;">
             <h1 style="margin: 0; padding: 0; line-height: 1.5;">🎓 Examinator</h1>
@@ -120,55 +120,121 @@ if st.session_state.current_view == "dashboard":
     """, unsafe_allow_html=True)
 
     exams = get_available_exams()
-    
     if not exams:
         st.warning("No question folders found.")
 
-    # Load the update dates
     last_updates = load_last_updates()
-    
-    for exam_name, q_count in exams:        
-        date_str = last_updates.get(exam_name)
 
-        # Format the title with the date if available
-        if date_str:
-                label = f"📄 {exam_name} ({q_count} Questions) :gray[(Last Update: {date_str})]"
-        else:
-            label = f"📄 {exam_name} ({q_count} Questions)"
+    def _exam_category(exam_code: str) -> str:
+        prefix = exam_code.split("-")[0].upper()
+        if prefix == "GH":
+            return "GitHub"
+        if prefix in {"SC", "MS", "MD"}:
+            return "Security"
+        if prefix in {"MB", "PL", "AB"}:
+            return "AI Business Solutions"
+        return "Cloud & AI Platforms"
 
-        with st.expander(label, expanded=False):
-            default_value = min(10, q_count)
+    section_order = [
+        "Cloud & AI Platforms",
+        "AI Business Solutions",
+        "Security",
+        "GitHub",
+    ]
+    categorized_exams = {section: [] for section in section_order}
 
-            num_qs = st.slider("Number of questions", 
-                               min_value=1, 
-                               max_value=q_count, 
-                               value=default_value, 
-                               key=f"slider_{exam_name}")
-            
-            if st.button("Start Practice Exam", key=f"start_{exam_name}", type="primary", use_container_width=True):
-                st.session_state.selected_exam = exam_name
-                st.session_state.quiz_data = load_questions(exam_name)
-                
-                random.shuffle(st.session_state.quiz_data)
-                st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
-                
-                st.session_state.mode = "exam"
-                st.session_state.current_q_idx = 0
-                st.session_state.panel_page = 1
-                st.session_state.selected_answers = {}
-                st.session_state.checked_questions = set()
-                st.session_state.current_view = "quiz"
-                st.rerun()
-            
-            if st.button("Browse questions individually", key=f"browse_{exam_name}", use_container_width=True):
-                st.session_state.selected_exam = exam_name
-                st.session_state.quiz_data = load_questions(exam_name)
-                st.session_state.mode = "browse"
-                st.session_state.current_q_idx = 0
-                st.session_state.selected_answers = {}
-                st.session_state.checked_questions = set()
-                st.session_state.current_view = "quiz"
-                st.rerun()
+    for exam_name, q_count in exams:
+        section = _exam_category(exam_name)
+        categorized_exams[section].append((exam_name, q_count))
+
+    visible_sections = [s for s in section_order if categorized_exams.get(s)]
+
+    if not visible_sections:
+        st.info("No exam categories available.")
+
+    st.markdown('<div class="exam-board">', unsafe_allow_html=True)
+    board_cols = st.columns(len(visible_sections), gap="medium") if visible_sections else []
+
+    for col_idx, section_name in enumerate(visible_sections):
+        section_class = re.sub(r"[^a-z0-9]+", "-", section_name.lower()).strip("-")
+        with board_cols[col_idx]:
+            title_size = "20px"
+            title_weight = "900"
+            st.markdown(
+                f"""
+                <div class="exam-column-title-wrap {section_class}">
+                    <div class="exam-column-title" style="font-size:{title_size}; font-weight:{title_weight}; text-transform:none; color:#0f172a; text-align:center;">
+                        {section_name}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            section_exams = categorized_exams.get(section_name, [])
+
+            for exam_name, q_count in section_exams:
+                date_str = last_updates.get(exam_name)
+                update_line = f"Updated {date_str}" if date_str else "Update date unavailable"
+
+                with st.container(border=True):
+                    st.markdown(
+                        f"""
+                        <div style="padding-left:0; margin-bottom:4px;">
+                            <div class="exam-tile-code-chip" style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:linear-gradient(90deg,#1e40af 0%,#2563eb 60%,#3b82f6 100%); color:#ffffff; border:1px solid #1d4ed8; border-radius:8px; padding:9px 11px;">
+                                <span class="exam-tile-code" style="font-size:15px; font-weight:900; color:#ffffff; line-height:1.1;">{exam_name}</span>
+                                <span class="exam-tile-count" style="font-size:15px;color:#ffffff; white-space:nowrap;">{q_count} Questions</span>
+                            </div>
+                            <div class="exam-tile-meta" style="margin-top:6px; font-size:13px; color:#4b5563;">{update_line}</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    default_value = min(DEFAULT_QUESTIONS, q_count)
+                    num_qs = st.slider(
+                        "Number of questions",
+                        min_value=1,
+                        max_value=q_count,
+                        value=default_value,
+                        key=f"slider_{exam_name}",
+                    )
+
+                    if st.button(
+                        "Start Practice Exam",
+                        key=f"start_{exam_name}",
+                        type="secondary",
+                        use_container_width=True,
+                    ):
+                        st.session_state.selected_exam = exam_name
+                        st.session_state.quiz_data = load_questions(exam_name)
+
+                        random.shuffle(st.session_state.quiz_data)
+                        st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
+
+                        st.session_state.mode = "exam"
+                        st.session_state.current_q_idx = 0
+                        st.session_state.panel_page = 1
+                        st.session_state.selected_answers = {}
+                        st.session_state.checked_questions = set()
+                        st.session_state.current_view = "quiz"
+                        st.rerun()
+
+                    if st.button(
+                        "Browse questions individually",
+                        key=f"browse_{exam_name}",
+                        use_container_width=True,
+                    ):
+                        st.session_state.selected_exam = exam_name
+                        st.session_state.quiz_data = load_questions(exam_name)
+                        st.session_state.mode = "browse"
+                        st.session_state.current_q_idx = 0
+                        st.session_state.selected_answers = {}
+                        st.session_state.checked_questions = set()
+                        st.session_state.current_view = "quiz"
+                        st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # -------------------------------------------------------------
 # View 2: Quiz Presentation with Sidebar Navigation

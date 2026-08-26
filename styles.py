@@ -361,6 +361,214 @@ details summary div[data-testid="stMarkdownContainer"] > p {
 details summary div[data-testid="stMarkdownContainer"] p span {
     margin-left: auto !important;
 }
+
+/* ------------------------------------------------------------- */
+/* DASHBOARD POSTER-STYLE LAYOUT                                */
+/* ------------------------------------------------------------- */
+
+.poster-hero {
+    border: 1px solid #d7d1c6;
+    background: linear-gradient(125deg, #f7f3ea 0%, #f2ece1 45%, #efe7d9 100%);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+
+.poster-hero .poster-brand {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #7a7468;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.poster-hero h1 {
+    margin: 0;
+    color: #dd4b25;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    line-height: 1;
+}
+
+.poster-hero p {
+    margin: 8px 0 0 0;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.poster-board {
+    border: 1px solid #ddd6c8;
+    border-radius: 16px;
+    padding: 12px;
+    background: #f6f3ee;
+    max-height: 73vh;
+    overflow-y: auto;
+}
+
+.poster-column-title-wrap {
+    background: #e2ded5;
+    border: 1px solid #d0c9bb;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 7px 9px;
+}
+
+.poster-column-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 800;
+    color: #2f2f2f;
+    text-transform: uppercase;
+    letter-spacing: 0.55px;
+    line-height: 1.2;
+}
+
+.poster-tile {
+    border: 1px solid #cfcdc6;
+    border-left: 5px solid #111;
+    border-radius: 8px;
+    padding: 9px 10px;
+    background: #fff;
+    margin-bottom: 6px;
+}
+
+.poster-tile-code {
+    margin: 0;
+    color: #111;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.poster-tile-sub {
+    margin-top: 3px;
+    color: #373737;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.poster-tile-meta {
+    margin-top: 6px;
+    color: #6b6b6b;
+    font-size: 11px;
+    line-height: 1.25;
+}
+
+.poster-tile.track-fundamentals {
+    border-left-color: #111;
+}
+
+.poster-tile.track-role {
+    border-left-color: #2f80ed;
+}
+
+.poster-tile.track-specialty {
+    border-left-color: #7f56d9;
+}
+
+@media (max-width: 1024px) {
+    .poster-board {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .poster-hero h1 {
+        font-size: 30px;
+    }
+}
+
+/* ------------------------------------------------------------- */
+/* EXAM TILE DASHBOARD                                           */
+/* ------------------------------------------------------------- */
+
+.exam-board {
+    margin-top: 8px;
+}
+
+.exam-column-title-wrap {
+    background: linear-gradient(90deg, #f1f5f9 0%, #eef2ff 100%);
+    border: 1px solid #dbe3ef;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+}
+
+.exam-column-title {
+    font-size: 13px;
+    color: #1f2937;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.exam-column-title-wrap.cloud-ai-platforms .exam-column-title,
+.exam-column-title-wrap.github .exam-column-title {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.exam-tile {
+    border-left: 5px solid #6b7280;
+    padding-left: 0;
+    margin-bottom: 4px;
+}
+
+.exam-tile-code-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+    border-radius: 8px;
+    padding: 7px 10px;
+}
+
+.exam-tile-code {
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.exam-tile-count {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.25px;
+    white-space: nowrap;
+}
+
+.exam-tile-sub {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.exam-tile-meta {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.exam-tile.track-fundamentals {
+    border-left-color: #111827;
+}
+
+.exam-tile.track-role {
+    border-left-color: #2563eb;
+}
+
+.exam-tile.track-specialty {
+    border-left-color: #7c3aed;
+}
 </style>
 """
 
