@@ -14,7 +14,7 @@ question: |
     What is a possible cause of the failure?
 ---
 
-- [ ] Summarizer cannot be invoked as a subagent because disable-model-invocation is set to true.
-- [x] Orchestrator is missing a handoff entry to trigger Summarizer.
+- [x] Summarizer cannot be invoked as a subagent because disable-model-invocation is set to true.
+- [ ] Orchestrator is missing a handoff entry to trigger Summarizer.
 - [ ] Orchestrator cannot call Summarizer because user-invocable is set to false.
 - [ ] Summarizer is missing the editing tools required to complete the workflow.

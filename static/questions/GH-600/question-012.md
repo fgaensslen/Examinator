@@ -13,8 +13,8 @@ values_pool:
     - "No"
 correct_mapping:
     blank_1: "Yes"
-    blank_2: "No"
-    blank_3: "No"
+    blank_2: "Yes"
+    blank_3: "Yes"
 ---
 The agent responded with messages.
 {blank_1}

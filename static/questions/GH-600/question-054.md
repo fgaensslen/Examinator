@@ -8,8 +8,8 @@ question: |
     NOTE: Each correct selection is worth one point.
 ---
 
-- [ ] manually by repository members
-- [x] when the repository is archived
-- [x] when the code that created the memory is deleted
-- [ ] automatically after 28 days
+- [x] manually by repository members
+- [ ] when the repository is archived
+- [ ] when the code that created the memory is deleted
+- [x] automatically after 28 days
 - [ ] when pull requests are merged

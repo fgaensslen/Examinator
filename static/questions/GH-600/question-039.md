@@ -15,5 +15,5 @@ question: |
 - [ ] copilot agent run CodeAgent --deny-tool 'edit,execute'
 - [ ] copilot agent run CodeAgent --allow-all-tools
 - [ ] copilot agent run CodeAgent
-- [ ] copilot agent run CodeAgent --allow-tool 'read,search'
-- [x] copilot agent run CodeAgent --allow-tool 'read,search' --deny-tool 'edit,execute'
+- [x] copilot agent run CodeAgent --allow-tool 'read,search'
+- [ ] copilot agent run CodeAgent --allow-tool 'read,search' --deny-tool 'edit,execute'
