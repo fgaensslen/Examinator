@@ -471,6 +471,32 @@ body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [dat
     color: #ffffff !important;
     font-size: 15px !important;
 }
+/* Keep the exam header rows side-by-side on narrow/mobile viewports. */
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="column"],
+div[class*="st-key-exam-header-"] [data-testid="stColumn"] {
+    min-width: 0 !important;
+    flex-basis: auto !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:first-child,
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:first-child {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:last-child,
+div[class*="st-key-exam-header-"] [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:last-child {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: max-content !important;
+}
+html body [data-testid="stMainBlockContainer"] div[class*="st-key-exam-header-"] [data-testid="stButton"] button {
+    left: 0 !important;
+    width: auto !important;
+}
 .poster-hero .poster-brand {
     font-size: 12px;
     text-transform: uppercase;
