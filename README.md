@@ -1,14 +1,14 @@
 # Examtopics.com Extractor
-1. Suchen nach der entsprechenden Zertifizierung, zum Beispiel `site:examtopics.com/discussions/microsoft/view "exam dp-800"` oder `site:examtopics.com/discussions/appian/view "exam ACD101"`
+1. Search for the corresponding certification, for example `site:examtopics.com/discussions/microsoft/view "exam dp-800"` or `site:examtopics.com/discussions/appian/view "exam ACD101"`
 
-2. Auf die Bookmarkleiste des Browsers rechtsklicken > "Seite hinzufügen" > einen Namen eingeben und folgendes Script in die URL-Zeile eintragen. Beim Klicken dieses Bookmarks wird der Source-Code der aktuellen Seite in eine `google_source.txt` Datei heruntergeladen.
+2. Right-click on your browser's bookmarks bar > "Add Page" > enter a name and paste the following script into the URL field. When you click this bookmark, the source code of the current page will be downloaded to a `google_source.txt` file.
 ```
 javascript:(function(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='google_source.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);})();
 ```
-3. Nun das Script `1_Parse_Google_Results.py` ausführen. Für alle Suchseiten wiederholen. Am Ende werden alle Links in einer `extracted_links.txt` Datei gespeichert.
-4. Unter Umständen kann es sein, dass einige Links nicht über die Google-Suche verfügbar sind. Deshalb das Script `2_Create_Missing_URLS.py` ausführen und die fehlenden Links werden in der vorhandenen Datei ergänzt.
-5. Ausführen von Script `3_Examtopic_Extractor.py` und den Content aller Links in eine `exam_content.txt` schreiben und Bilder in einen `exam_images` extrahieren
-6. Ausführen von Script `Export_to_Markdown.py` um jede Frage aus `exam_content.txt` in eine eigene Markdown-Datei zu extrahieren
+3. Now run the script `1_Parse_Google_Results.py`. Repeat for all search pages. At the end, all links will be saved in an `extracted_links.txt` file.
+4. It's possible that some links are not available through the Google search. Therefore, run the script `2_Create_Missing_URLS.py` and the missing links will be added to the existing file.
+5. Run script `3_Examtopic_Extractor.py` and write the content of all links to an `exam_content.txt` file and extract images to an `exam_images` folder
+6. Run script `Export_to_Markdown.py` to extract each question from `exam_content.txt` into its own Markdown file
 
-# Pdf Extractor
-Im Script `Pdf_Extractor.py` die Pfade zur Quelle und Ziel entsprechend anpassend und einfach ausführen
+# PDF Extractor
+In the script `Pdf_Extractor.py`, adjust the paths for source and destination accordingly and simply execute it
