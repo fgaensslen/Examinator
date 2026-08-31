@@ -236,40 +236,43 @@ if st.session_state.current_view == "dashboard":
                                 toggle_favorite(exam_name)
                                 st.rerun()
 
-                    st.markdown(
-                        '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',
-                        unsafe_allow_html=True,
-                    )
-                    default_value = min(DEFAULT_QUESTIONS, q_count)
-                    num_qs = st.slider(
-                        "Number of questions",
-                        min_value=1,
-                        max_value=q_count,
-                        value=default_value,
-                        label_visibility="collapsed",
-                        key=f"slider_{exam_name}",
-                    )
+                    # Group slider and Start button in a container for visual cohesion
+                    with st.container(border=True):
+                        st.markdown(
+                            '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',
+                            unsafe_allow_html=True,
+                        )
+                        default_value = min(DEFAULT_QUESTIONS, q_count)
+                        num_qs = st.slider(
+                            "Number of questions",
+                            min_value=1,
+                            max_value=q_count,
+                            value=default_value,
+                            label_visibility="collapsed",
+                            key=f"slider_{exam_name}",
+                        )
 
-                    if st.button(
-                        "Start Practice Exam",
-                        key=f"start_{exam_name}",
-                        type="secondary",
-                        use_container_width=True,
-                    ):
-                        st.session_state.selected_exam = exam_name
-                        st.session_state.quiz_data = load_questions(exam_name)
+                        if st.button(
+                            "Start Practice Exam",
+                            key=f"start_{exam_name}",
+                            type="secondary",
+                            use_container_width=True,
+                        ):
+                            st.session_state.selected_exam = exam_name
+                            st.session_state.quiz_data = load_questions(exam_name)
 
-                        random.shuffle(st.session_state.quiz_data)
-                        st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
+                            random.shuffle(st.session_state.quiz_data)
+                            st.session_state.quiz_data = st.session_state.quiz_data[:num_qs]
 
-                        st.session_state.mode = "exam"
-                        st.session_state.current_q_idx = 0
-                        st.session_state.panel_page = 1
-                        st.session_state.selected_answers = {}
-                        st.session_state.checked_questions = set()
-                        st.session_state.current_view = "quiz"
-                        st.rerun()
+                            st.session_state.mode = "exam"
+                            st.session_state.current_q_idx = 0
+                            st.session_state.panel_page = 1
+                            st.session_state.selected_answers = {}
+                            st.session_state.checked_questions = set()
+                            st.session_state.current_view = "quiz"
+                            st.rerun()
 
+                    # Separate button for browsing all questions
                     if st.button(
                         "Browse all questions",
                         key=f"browse_{exam_name}",
