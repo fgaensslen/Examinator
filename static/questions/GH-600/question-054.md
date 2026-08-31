@@ -3,7 +3,7 @@ question: |
     You have a GitHub Enterprise organization that has Copilot memory enabled.
     You create a new repository.
 
-    What are two ways that memories will be deleted from the repository? Each correct answer presents a complete solution.
+    What are **two** ways that memories will be deleted from the repository? Each correct answer presents a complete solution.
 
     NOTE: Each correct selection is worth one point.
 ---
