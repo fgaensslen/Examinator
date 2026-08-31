@@ -89,7 +89,7 @@ def load_questions(exam_folder: str) -> list[dict]:
             
             # Handle explicit frontmatter setting
             if explicit_lang:
-                if explicit_lang in ["TEXT", "NONE", "PLAIN"]:
+                if explicit_lang in ["TEXT"]:
                     is_code = False
                     code_lang = ""
                     code_template = raw_template
