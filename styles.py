@@ -101,6 +101,12 @@ div:has([data-testid="stSelectbox"]) {
 [class*="st-key-drag_drop_block_"] [data-testid="stMarkdownContainer"] p {
     margin-bottom: 0 !important;
 }
+/* Pull the result-badge row up the same amount the selectbox is pulled up,
+   so the gap under a question line stays identical before/after checking. */
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-correct),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-wrong) {
+    margin-top: -10px !important;
+}
 
 .app-header {
     display: flex;
