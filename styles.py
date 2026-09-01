@@ -92,6 +92,16 @@ div:has([data-testid="stSelectbox"]) {
     row-gap: 0.8rem !important;
 }
 
+/* Keep drag-and-drop blank rows at a consistent gap whether the row shows a
+   selectbox (unanswered) or a result badge (answered/checked), so spacing
+   doesn't shift once a question is checked. */
+[class*="st-key-drag_drop_block_"] {
+    row-gap: 0.8rem !important;
+}
+[class*="st-key-drag_drop_block_"] [data-testid="stMarkdownContainer"] p {
+    margin-bottom: 0 !important;
+}
+
 .app-header {
     display: flex;
     justify-content: center;
