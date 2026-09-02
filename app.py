@@ -496,7 +496,7 @@ elif st.session_state.current_view == "quiz":
                     if is_code:
                         leading_spaces = len(line) - len(line.lstrip(' '))
                         indent_str = "&nbsp;" * leading_spaces
-                        safe_line = line.strip().replace(" ", "&nbsp;")
+                        safe_line = line.strip()
                         if code_lang.upper() == "SQL":
                             safe_line = colorize_sql_fragment(safe_line)
                         st.markdown(f'<div class="code-line">{indent_str}{safe_line}</div>', unsafe_allow_html=True)
@@ -587,12 +587,12 @@ elif st.session_state.current_view == "quiz":
                                 safe_correct = html.escape(b_correct)
                                 
                                 if b_val == b_correct:
-                                    badge_html = f'<span class="code-blank-correct">[{safe_val}]</span>'
+                                    badge_html = f'<span class="code-blank-correct">{safe_val}</span>'
                                 else:
                                     badge_html = (
                                         f'<span style="display:inline-block; vertical-align:top;">'
-                                        f'<span class="code-blank-wrong">[{safe_val}]</span>'
-                                        f'<br><span style="color: green; font-weight: bold;">[{safe_correct}]</span>'
+                                        f'<span class="code-blank-wrong">{safe_val}</span>'
+                                        f'<br><span style="color: green; font-weight: bold;">{safe_correct}</span>'
                                         f'</span>'
                                     )
                                 

@@ -307,7 +307,8 @@ div:has([data-testid="stSelectbox"]) {
     line-height: 1.25 !important;
     margin: 0 !important;
     padding: 0 !important;
-    white-space: pre !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
 }
 
 /* PREVENT CONTAINER OVERFLOW */
