@@ -11,8 +11,8 @@ values_pool:
   - "'agent',"
   - "'edit',"
   - "'search',"
-  - "'execute','"
-  - "'read','"
+  - "'execute',"
+  - "'read',"
   - "'web',"
 correct_mapping:
   blank_1: "'search',"
