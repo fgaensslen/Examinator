@@ -31,7 +31,7 @@ hooks:
       cmd="$COPILOT_COMMAND"
       # Block absolute paths or parent traversal
       if echo "$cmd" | grep -Eq '(^|[[:space:]])/(|[[:space:]]*)(|\.\./)'; then
-        echo "Blocked by guardrail: command attempts to access paths outside the repo." >&2
+        echo "Blocked by guardrail: command attempts to access paths outside the repo.">&2
         exit 1
       fi
       exit 0
