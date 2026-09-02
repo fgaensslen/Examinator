@@ -64,21 +64,30 @@ div[data-testid="stSidebar"] button {
     font-weight: 600 !important;
 }
 
-/* Target the bottom pagination container specifically to maintain rigid layout geometry */
-.custom-pagination-row [data-testid="stHorizontalBlock"] {
-    gap: 4px !important;
-    justify-content: flex-start !important;
-}
-.custom-pagination-row button {
+/* Keep pagination controls independent of Streamlit's Markdown wrapper DOM. */
+html body div[class*="st-key-nav_prev_page"] button,
+html body div[class*="st-key-nav_next_page"] button,
+html body div[class*="st-key-nav_page_"] button {
     width: 32px !important;
     height: 32px !important;
     min-width: 32px !important;
     max-width: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
     padding: 0px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 6px !important;
+}
+html body div[class*="st-key-nav_prev_page"] button > div,
+html body div[class*="st-key-nav_next_page"] button > div,
+html body div[class*="st-key-nav_page_"] button > div,
+html body div[class*="st-key-nav_prev_page"] button p,
+html body div[class*="st-key-nav_next_page"] button p,
+html body div[class*="st-key-nav_page_"] button p {
+    justify-content: center !important;
+    text-align: center !important;
 }
 
 /* REDUCE DROPDOWN MARGINS ONLY */
