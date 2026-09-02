@@ -585,14 +585,16 @@ elif st.session_state.current_view == "quiz":
                                 b_correct = correct_map.get(b_key, "")
                                 safe_val = html.escape(b_val if b_val else "[No answer]")
                                 safe_correct = html.escape(b_correct)
+                                correct_class = "code-blank-correct" if is_code else "text-blank-correct"
+                                wrong_class = "code-blank-wrong" if is_code else "text-blank-wrong"
                                 
                                 if b_val == b_correct:
-                                    badge_html = f'<span class="code-blank-correct">{safe_val}</span>'
+                                    badge_html = f'<span class="{correct_class}">{safe_val}</span>'
                                 else:
                                     badge_html = (
                                         f'<span style="display:inline-block; vertical-align:top;">'
-                                        f'<span class="code-blank-wrong">{safe_val}</span>'
-                                        f'<br><span style="color: green; font-weight: bold;">{safe_correct}</span>'
+                                        f'<span class="{wrong_class}">{safe_val}</span>'
+                                        f'<br><span style="color: green; font-weight: 400;">{safe_correct}</span>'
                                         f'</span>'
                                     )
                                 

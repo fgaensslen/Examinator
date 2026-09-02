@@ -104,7 +104,9 @@ div:has([data-testid="stSelectbox"]) {
 /* Pull the result-badge row up the same amount the selectbox is pulled up,
    so the gap under a question line stays identical before/after checking. */
 [class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-correct),
-[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-wrong) {
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-wrong),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-correct),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong) {
     margin-top: -10px !important;
 }
 
@@ -218,27 +220,31 @@ div:has([data-testid="stSelectbox"]) {
 }
 
 /* IN-CODE BLANK FEEDBOX FEEDBACK STYLING */
-.code-blank-correct {
+.code-blank-correct,
+.text-blank-correct {
     border: 2px solid #10b981 !important;
     background-color: #ecfdf5 !important;
     color: #065f46 !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    font-family: 'Consolas', monospace !important;
-    font-weight: bold !important;
+    font-weight: 400 !important;
     display: inline-block !important;
     margin: 2px 0 !important;
 }
-.code-blank-wrong {
+.code-blank-wrong,
+.text-blank-wrong {
     border: 2px solid #ef4444 !important;
     background-color: #fef2f2 !important;
     color: #991b1b !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    font-family: 'Consolas', monospace !important;
-    font-weight: bold !important;
+    font-weight: 400 !important;
     display: inline-block !important;
     margin: 2px 0 !important;
+}
+.code-blank-correct,
+.code-blank-wrong {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
 }
 
 /* ELIMINATE JUMPING AND OFFSET EFFECTS ON STATE CHANGE */
