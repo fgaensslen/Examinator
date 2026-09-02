@@ -461,7 +461,7 @@ elif st.session_state.current_view == "quiz":
     st.markdown(q["question"], unsafe_allow_html=True)   
 
     st.markdown(
-        '<hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
+        '<hr style="margin: -8px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
         unsafe_allow_html=True
     )
     
