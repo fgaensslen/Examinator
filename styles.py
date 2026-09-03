@@ -104,10 +104,12 @@ div:has([data-testid="stSelectbox"]) {
 /* Keep drag-and-drop blank rows at a consistent gap whether the row shows a
    selectbox (unanswered) or a result badge (answered/checked), so spacing
    doesn't shift once a question is checked. */
-[class*="st-key-drag_drop_block_"] {
+[class*="st-key-drag_drop_block_"],
+[class*="st-key-text_drag_drop_block_"] {
     row-gap: 0.8rem !important;
 }
-[class*="st-key-drag_drop_block_"] [data-testid="stMarkdownContainer"] p {
+[class*="st-key-drag_drop_block_"] [data-testid="stMarkdownContainer"] p,
+[class*="st-key-text_drag_drop_block_"] [data-testid="stMarkdownContainer"] p {
     margin-bottom: 0 !important;
 }
 /* Pull the result-badge row up the same amount the selectbox is pulled up,
@@ -115,7 +117,9 @@ div:has([data-testid="stSelectbox"]) {
 [class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-correct),
 [class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-wrong),
 [class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-correct),
-[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong) {
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong),
+[class*="st-key-text_drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-correct),
+[class*="st-key-text_drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong) {
     margin-top: -10px !important;
 }
 
@@ -254,11 +258,11 @@ div:has([data-testid="stSelectbox"]) {
 
 .code-blank-wrong {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
-    transform: translateY(-8px) !important;
+    transform: translateY(-6px) !important;
 }
 .code-answer-correct {
     display: inline-block !important;
-    transform: translateY(-8px) !important;
+    transform: translateY(-5px) !important;
 }
 
 /* ELIMINATE JUMPING AND OFFSET EFFECTS ON STATE CHANGE */
