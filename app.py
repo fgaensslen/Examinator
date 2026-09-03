@@ -282,6 +282,7 @@ if st.session_state.current_view == "dashboard":
                         st.session_state.quiz_data = load_questions(exam_name)
                         st.session_state.mode = "browse"
                         st.session_state.current_q_idx = 0
+                        st.session_state.panel_page = 1
                         st.session_state.selected_answers = {}
                         st.session_state.checked_questions = set()
                         st.session_state.current_view = "quiz"
@@ -302,6 +303,10 @@ elif st.session_state.current_view == "quiz":
     current_idx = st.session_state.current_q_idx
     
     total_pages = math.ceil(total_qs / ITEMS_PER_PAGE)
+    st.session_state.panel_page = min(
+        max(st.session_state.panel_page, 1),
+        total_pages,
+    )
     curr_page = st.session_state.panel_page
     
     start_item_idx = (curr_page - 1) * ITEMS_PER_PAGE
