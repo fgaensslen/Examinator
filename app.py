@@ -484,7 +484,11 @@ elif st.session_state.current_view == "quiz":
         dropdown_options = [""] + values_pool
         template_lines = code_template.split("\n")
         
-        drag_drop_key = f"drag_drop_block_{current_idx}"
+        drag_drop_key = (
+            f"drag_drop_block_{current_idx}"
+            if is_code
+            else f"text_drag_drop_block_{current_idx}"
+        )
         container_ctx = st.container(border=True, key=drag_drop_key) if is_code else st.container(key=drag_drop_key)
         
         with container_ctx:
