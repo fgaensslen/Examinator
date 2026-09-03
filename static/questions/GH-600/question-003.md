@@ -25,9 +25,7 @@ correct_mapping:
 ---
 Create durable run outputs that are downloadable after completion:
 {blank_1}
-
 Provide ongoing, human-reviewable task progress signals inside the pull request:
 {blank_2}
-
 Provide a real-time view of agent actions for audit and troubleshooting:
 {blank_3}

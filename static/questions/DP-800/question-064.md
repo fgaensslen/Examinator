@@ -26,8 +26,7 @@ WITH AggregatedCPU AS
 (
     SELECT
         q.query_hash,
-        SUM(count_executions *
-        {blank_1} / 1000.0) AS total_cpu_ms
+        SUM(count_executions * {blank_1} / 1000.0) AS total_cpu_ms
     FROM sys.query_store_query_text AS qt
     INNER JOIN sys.query_store_query AS q
         ON qt.query_text_id = q.query_text_id
@@ -35,8 +34,7 @@ WITH AggregatedCPU AS
         ON q.query_id = p.query_id
     INNER JOIN sys.query_store_runtime_stats AS rs
         ON rs.plan_id = p.plan_id
-    INNER JOIN
-        {blank_2} AS rsi
+    INNER JOIN {blank_2} AS rsi
         ON rsi.runtime_stats_interval_id = rs.runtime_stats_interval_id
     WHERE rs.execution_type_desc IN ('Regular', 'Aborted', 'Exception')
     AND rsi.start_time >= {blank_3}

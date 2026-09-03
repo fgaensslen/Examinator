@@ -39,8 +39,6 @@ EXEC sys.sp_cdc_enable_table
     @source_schema = N'dbo',
     @source_name = N'Articles',
     @role_name = NULL,
-    @captured_column_list = 
-    {blank_2},
-    @supports_net_changes = 
-    {blank_3};
+    @captured_column_list = {blank_2},
+    @supports_net_changes = {blank_3};
 GO

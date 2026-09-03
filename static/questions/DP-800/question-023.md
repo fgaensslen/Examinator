@@ -23,7 +23,5 @@ correct_mapping:
     blank_2: "'2020-01-01 00:00:00', '2021-01-01 00:00:00'"
 ---
 CREATE PARTITION FUNCTION PartitionByYear (datetime2)
-AS
-{blank_1}
-FOR VALUES (
-{blank_2});
+AS {blank_1}
+FOR VALUES ({blank_2});

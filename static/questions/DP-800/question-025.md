@@ -36,8 +36,7 @@ CREATE FUNCTION dbo.ufn_DaysSinceOrder
 {blank_1}
 BEGIN
     DECLARE @Days int;
-    SELECT @Days = 
-    {blank_2};
+    SELECT @Days = {blank_2};
     RETURN @Days;
 END;
 GO

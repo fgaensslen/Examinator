@@ -33,5 +33,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       - name: Step 1
-        run: dotnet
-        {blank_2}
+        run: dotnet {blank_2}

@@ -23,10 +23,8 @@ correct_mapping:
     blank_2: "INCLUDE (LogId, LogDateTime, [log])"
 ---
 ALTER TABLE WebSite.Logs
-ADD severity 
-{blank_1};
+ADD severity {blank_1};
 GO
 CREATE INDEX ix_severity
-ON WebSite.Logs(severity)
-    {blank_2};
+ON WebSite.Logs(severity) {blank_2};
 GO

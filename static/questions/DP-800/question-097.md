@@ -33,12 +33,9 @@ correct_mapping:
 ---
 {
     "search": "ocean view",
-    "queryType": 
-    {blank_1},
-    "semanticConfiguration": 
-    {blank_2},
-    "captions": 
-    {blank_3},
+    "queryType": {blank_1},
+    "semanticConfiguration": {blank_2},
+    "captions": {blank_3},
     "top": 10,
     "hybridSearch": { "maxTextRecallSize": 50 },
     "vectorQueries": [

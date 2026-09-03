@@ -521,10 +521,9 @@ elif st.session_state.current_view == "quiz":
                             
                             if not is_checked:
                                 if is_code:
-                                    st.markdown(f'<div class="code-line-row" style="margin-left: {leading_spaces}ch;">', unsafe_allow_html=True)
-                                    
+                                    indented_prefix = f"{'&nbsp;' * leading_spaces}{col_prefix}"
                                     cols_list = []
-                                    if col_prefix:
+                                    if indented_prefix:
                                         cols_list.append("prefix")
                                     cols_list.append("selectbox")
                                     if col_suffix:
@@ -535,7 +534,7 @@ elif st.session_state.current_view == "quiz":
                                     
                                     if "prefix" in cols_list:
                                         with cols[c_idx]:
-                                            st.markdown(f'<div class="code-line">{col_prefix}</div>', unsafe_allow_html=True)
+                                            st.markdown(f'<div class="code-line">{indented_prefix}</div>', unsafe_allow_html=True)
                                         c_idx += 1
                                         
                                     with cols[c_idx]:
@@ -552,8 +551,6 @@ elif st.session_state.current_view == "quiz":
                                     if "suffix" in cols_list:
                                         with cols[c_idx]:
                                             st.markdown(f'<div class="code-line">{col_suffix}</div>', unsafe_allow_html=True)
-                                            
-                                    st.markdown('</div>', unsafe_allow_html=True)
                                 else:
                                     if col_prefix and not col_suffix:
                                         c_label, c_input = st.columns([3, 7], vertical_alignment="center")
@@ -594,7 +591,7 @@ elif st.session_state.current_view == "quiz":
                                     badge_html = (
                                         f'<span style="display:inline-block; vertical-align:top;">'
                                         f'<span class="{wrong_class}">{safe_val}</span>'
-                                        f'<br><span style="color: green; font-weight: 400;">{safe_correct}</span>'
+                                        f'<br><span class="code-answer-correct" style="color: green; font-weight: 400;">{safe_correct}</span>'
                                         f'</span>'
                                     )
                                 
