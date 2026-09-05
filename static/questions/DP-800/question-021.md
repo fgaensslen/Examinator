@@ -29,8 +29,7 @@ WITH TicketRanks AS
 SELECT
     t.TicketId,
     CAST(t.CreatedAt AS date) AS TicketDate,
-    {blank_1}
-    (t.Payload, '$.customer.id') AS CustomerId,
+    {blank_1} (t.Payload, '$.customer.id') AS CustomerId,
     t.CreatedAt,
     {blank_2}() OVER
     (
@@ -48,6 +47,5 @@ SELECT
     TicketId,
     CreatedAt
 FROM TicketRanks
-WHERE rn = 
-{blank_3}
+WHERE rn = {blank_3}
 ORDER BY TicketDate, CustomerId;

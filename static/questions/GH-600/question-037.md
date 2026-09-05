@@ -15,9 +15,9 @@ correct_mapping:
     blank_2: "Yes"
     blank_3: "Yes"
 ---
-Once "MCP1" is configured, "agent1" can invoke "MCP1" tools autonomously.
+Once MCP1 is configured, agent1 can invoke MCP1 tools autonomously.
 {blank_1}
-"agent1" can use the MCP resources and MCP prompts exposed by "MCP1".
+agent1 can use the MCP resources and MCP prompts exposed by MCP1.
 {blank_2}
-If new tools are added to "MCP1", they will be available automatically to "agent1".
+If new tools are added to MCP1, they will be available automatically to agent1.
 {blank_3}

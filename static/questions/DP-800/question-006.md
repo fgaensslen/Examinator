@@ -28,15 +28,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @EndDate date;
-    SET @EndDate = 
-    {blank_1}
+    SET @EndDate = {blank_1}
     SELECT  o.CreateDate,
             o.OrderId,
             o.ShipDate
     FROM    dbo.Orders AS o
-    WHERE   o.CreateDate >= 
-    {blank_2}
-    AND o.CreateDate <  
-    {blank_3};
+    WHERE   o.CreateDate >= {blank_2}
+    AND o.CreateDate < {blank_3};
 END;
 GO

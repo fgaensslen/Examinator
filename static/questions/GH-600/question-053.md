@@ -35,7 +35,7 @@ jobs:
       - name: Checkout exact ref for rollback safety
         uses: actions/checkout@v4
         with:
-          ref: ${{ {blank_1} }}
+          ref: ${{{blank_1}}}
       - name: Validate agent profile exists at this ref
         run: |
           test -f {blank_2}

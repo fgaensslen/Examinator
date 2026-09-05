@@ -281,6 +281,7 @@ if st.session_state.current_view == "dashboard":
                             st.session_state.quiz_data = load_questions(exam_name)
                             st.session_state.mode = "browse"
                             st.session_state.current_q_idx = 0
+                            st.session_state.panel_page = 1
                             st.session_state.selected_answers = {}
                             st.session_state.checked_questions = set()
                             st.session_state.current_view = "quiz"
@@ -301,6 +302,10 @@ elif st.session_state.current_view == "quiz":
     current_idx = st.session_state.current_q_idx
     
     total_pages = math.ceil(total_qs / ITEMS_PER_PAGE)
+    st.session_state.panel_page = min(
+        max(st.session_state.panel_page, 1),
+        total_pages,
+    )
     curr_page = st.session_state.panel_page
     
     start_item_idx = (curr_page - 1) * ITEMS_PER_PAGE
@@ -460,7 +465,7 @@ elif st.session_state.current_view == "quiz":
     st.markdown(q["question"], unsafe_allow_html=True)   
 
     st.markdown(
-        '<hr style="margin: 10px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
+        '<hr style="margin: -8px 0 15px 0; border: none; border-top: 1px solid #e0e0e0;">', 
         unsafe_allow_html=True
     )
     
@@ -478,7 +483,12 @@ elif st.session_state.current_view == "quiz":
         dropdown_options = [""] + values_pool
         template_lines = code_template.split("\n")
         
-        container_ctx = st.container(border=True) if is_code else st.container()
+        drag_drop_key = (
+            f"drag_drop_block_{current_idx}"
+            if is_code
+            else f"text_drag_drop_block_{current_idx}"
+        )
+        container_ctx = st.container(border=True, key=drag_drop_key) if is_code else st.container(key=drag_drop_key)
         
         with container_ctx:
             if is_code and code_lang:
@@ -494,7 +504,7 @@ elif st.session_state.current_view == "quiz":
                     if is_code:
                         leading_spaces = len(line) - len(line.lstrip(' '))
                         indent_str = "&nbsp;" * leading_spaces
-                        safe_line = line.strip().replace(" ", "&nbsp;")
+                        safe_line = line.strip()
                         if code_lang.upper() == "SQL":
                             safe_line = colorize_sql_fragment(safe_line)
                         st.markdown(f'<div class="code-line">{indent_str}{safe_line}</div>', unsafe_allow_html=True)
@@ -519,10 +529,9 @@ elif st.session_state.current_view == "quiz":
                             
                             if not is_checked:
                                 if is_code:
-                                    st.markdown(f'<div class="code-line-row" style="margin-left: {leading_spaces}ch;">', unsafe_allow_html=True)
-                                    
+                                    indented_prefix = f"{'&nbsp;' * leading_spaces}{col_prefix}"
                                     cols_list = []
-                                    if col_prefix:
+                                    if indented_prefix:
                                         cols_list.append("prefix")
                                     cols_list.append("selectbox")
                                     if col_suffix:
@@ -533,7 +542,7 @@ elif st.session_state.current_view == "quiz":
                                     
                                     if "prefix" in cols_list:
                                         with cols[c_idx]:
-                                            st.markdown(f'<div class="code-line">{col_prefix}</div>', unsafe_allow_html=True)
+                                            st.markdown(f'<div class="code-line">{indented_prefix}</div>', unsafe_allow_html=True)
                                         c_idx += 1
                                         
                                     with cols[c_idx]:
@@ -550,8 +559,6 @@ elif st.session_state.current_view == "quiz":
                                     if "suffix" in cols_list:
                                         with cols[c_idx]:
                                             st.markdown(f'<div class="code-line">{col_suffix}</div>', unsafe_allow_html=True)
-                                            
-                                    st.markdown('</div>', unsafe_allow_html=True)
                                 else:
                                     if col_prefix and not col_suffix:
                                         c_label, c_input = st.columns([3, 7], vertical_alignment="center")
@@ -583,14 +590,16 @@ elif st.session_state.current_view == "quiz":
                                 b_correct = correct_map.get(b_key, "")
                                 safe_val = html.escape(b_val if b_val else "[No answer]")
                                 safe_correct = html.escape(b_correct)
+                                correct_class = "code-blank-correct" if is_code else "text-blank-correct"
+                                wrong_class = "code-blank-wrong" if is_code else "text-blank-wrong"
                                 
                                 if b_val == b_correct:
-                                    badge_html = f'<span class="code-blank-correct">[{safe_val}]</span>'
+                                    badge_html = f'<span class="{correct_class}">{safe_val}</span>'
                                 else:
                                     badge_html = (
                                         f'<span style="display:inline-block; vertical-align:top;">'
-                                        f'<span class="code-blank-wrong">[{safe_val}]</span>'
-                                        f'<br><span style="color: green; font-weight: bold;">[{safe_correct}]</span>'
+                                        f'<span class="{wrong_class}">{safe_val}</span>'
+                                        f'<br><span class="code-answer-correct" style="color: green; font-weight: 400;">{safe_correct}</span>'
                                         f'</span>'
                                     )
                                 

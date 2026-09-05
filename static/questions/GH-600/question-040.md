@@ -35,8 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run:
-        {blank_1}
+        run: {blank_1}
   codeql:
     runs-on: ubuntu-latest
     permissions:

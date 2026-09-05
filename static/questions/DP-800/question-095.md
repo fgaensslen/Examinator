@@ -45,8 +45,7 @@ BEGIN
     ;WITH ann AS
     (
         SELECT t.product_id, t.product_name, s.distance
-        FROM 
-        {blank_2} (
+        FROM {blank_2} (
             TABLE = dbo.Products AS t,
             COLUMN = embedding,
             SIMILAR_TO = @qv,

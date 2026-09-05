@@ -41,18 +41,14 @@ correct_mapping:
         {
             "vector": [/* embedding array */],
             "fields": "DescriptionVector",
-            "k": 
-            {blank_1}
+            "k": {blank_1}
             "kind": "vector"
         }
     ],
-    "queryType": 
-    {blank_2}
+    "queryType": {blank_2}
     "semanticConfiguration": "hotels",
-    "captions": 
-    {blank_3}
-    "answers": 
-    {blank_4}
+    "captions": {blank_3}
+    "answers": {blank_4}
     "top": 10,
     "hybridSearch": { "maxTextRecallSize": 50 }
 }

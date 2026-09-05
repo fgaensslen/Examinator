@@ -33,7 +33,7 @@ correct_mapping:
 WITH PhoneCTE AS
 (
     SELECT  DISTINCT c.CustomerId,
-        {blank_1} AS PhoneRaw
+            {blank_1} AS PhoneRaw
     FROM dbo.Customers AS c
 )
 SELECT

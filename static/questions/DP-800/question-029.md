@@ -25,9 +25,7 @@ BEGIN
     SET LastModifiedUtc = SYSUTCDATETIME()
     FROM dbo.MaintenanceEvents m
     INNER JOIN inserted i
-    ON
-    {blank_1}
-    WHERE
-    {blank_2}
+    ON {blank_1}
+    WHERE {blank_2}
 END;
 GO

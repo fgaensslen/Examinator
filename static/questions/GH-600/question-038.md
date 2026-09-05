@@ -24,15 +24,11 @@ correct_mapping:
 {
   "servers": {
     "github": {
-      "type": "
-      {blank_1}
-      ",
+      "type": "{blank_1}",
       "url": "https://api.githubcopilot.com/mcp/",
       "requestInit": {
         "headers": {
-          "Authorization": "
-          {blank_2}
-          ${env:GITHUB_PAT}"
+          "Authorization": "{blank_2} ${env:GITHUB_PAT}"
         }
       }
     }

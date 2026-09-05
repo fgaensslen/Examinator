@@ -64,21 +64,30 @@ div[data-testid="stSidebar"] button {
     font-weight: 600 !important;
 }
 
-/* Target the bottom pagination container specifically to maintain rigid layout geometry */
-.custom-pagination-row [data-testid="stHorizontalBlock"] {
-    gap: 4px !important;
-    justify-content: flex-start !important;
-}
-.custom-pagination-row button {
+/* Keep pagination controls independent of Streamlit's Markdown wrapper DOM. */
+html body div[class*="st-key-nav_prev_page"] button,
+html body div[class*="st-key-nav_next_page"] button,
+html body div[class*="st-key-nav_page_"] button {
     width: 32px !important;
     height: 32px !important;
     min-width: 32px !important;
     max-width: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
     padding: 0px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 6px !important;
+}
+html body div[class*="st-key-nav_prev_page"] button > div,
+html body div[class*="st-key-nav_next_page"] button > div,
+html body div[class*="st-key-nav_page_"] button > div,
+html body div[class*="st-key-nav_prev_page"] button p,
+html body div[class*="st-key-nav_next_page"] button p,
+html body div[class*="st-key-nav_page_"] button p {
+    justify-content: center !important;
+    text-align: center !important;
 }
 
 /* REDUCE DROPDOWN MARGINS ONLY */
@@ -90,6 +99,28 @@ div[data-testid="stSidebar"] button {
 /* Reduce the gap in vertical containers with selectboxes */
 div:has([data-testid="stSelectbox"]) {
     row-gap: 0.8rem !important;
+}
+
+/* Keep drag-and-drop blank rows at a consistent gap whether the row shows a
+   selectbox (unanswered) or a result badge (answered/checked), so spacing
+   doesn't shift once a question is checked. */
+[class*="st-key-drag_drop_block_"],
+[class*="st-key-text_drag_drop_block_"] {
+    row-gap: 0.8rem !important;
+}
+[class*="st-key-drag_drop_block_"] [data-testid="stMarkdownContainer"] p,
+[class*="st-key-text_drag_drop_block_"] [data-testid="stMarkdownContainer"] p {
+    margin-bottom: 0 !important;
+}
+/* Pull the result-badge row up the same amount the selectbox is pulled up,
+   so the gap under a question line stays identical before/after checking. */
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-correct),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.code-blank-wrong),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-correct),
+[class*="st-key-drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong),
+[class*="st-key-text_drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-correct),
+[class*="st-key-text_drag_drop_block_"] [data-testid="stElementContainer"]:has(.text-blank-wrong) {
+    margin-top: -10px !important;
 }
 
 .app-header {
@@ -202,27 +233,36 @@ div:has([data-testid="stSelectbox"]) {
 }
 
 /* IN-CODE BLANK FEEDBOX FEEDBACK STYLING */
-.code-blank-correct {
+.code-blank-correct,
+.text-blank-correct {
     border: 2px solid #10b981 !important;
     background-color: #ecfdf5 !important;
     color: #065f46 !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    font-family: 'Consolas', monospace !important;
-    font-weight: bold !important;
+    font-weight: 400 !important;
     display: inline-block !important;
     margin: 2px 0 !important;
 }
-.code-blank-wrong {
+.code-blank-wrong,
+.text-blank-wrong {
     border: 2px solid #ef4444 !important;
     background-color: #fef2f2 !important;
     color: #991b1b !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    font-family: 'Consolas', monospace !important;
-    font-weight: bold !important;
+    font-weight: 400 !important;
     display: inline-block !important;
     margin: 2px 0 !important;
+}
+
+.code-blank-wrong {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    transform: translateY(-6px) !important;
+}
+.code-answer-correct {
+    display: inline-block !important;
+    transform: translateY(-5px) !important;
 }
 
 /* ELIMINATE JUMPING AND OFFSET EFFECTS ON STATE CHANGE */
@@ -291,7 +331,8 @@ div:has([data-testid="stSelectbox"]) {
     line-height: 1.25 !important;
     margin: 0 !important;
     padding: 0 !important;
-    white-space: pre !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
 }
 
 /* PREVENT CONTAINER OVERFLOW */
@@ -305,7 +346,8 @@ div[data-testid="stContainer"] {
     margin: 2px 0 !important;
 }
 
-.code-line-row [data-testid="stHorizontalBlock"] {
+.code-line-row [data-testid="stHorizontalBlock"],
+[class*="st-key-drag_drop_block_"] [data-testid="stHorizontalBlock"] {
     display: inline-flex !important;
     flex-direction: row !important;
     align-items: center !important;
@@ -315,7 +357,10 @@ div[data-testid="stContainer"] {
     margin: 0 !important;
 }
 
-.code-line-row [data-testid="column"] {
+.code-line-row [data-testid="column"],
+.code-line-row [data-testid="stColumn"],
+[class*="st-key-drag_drop_block_"] [data-testid="column"],
+[class*="st-key-drag_drop_block_"] [data-testid="stColumn"] {
     width: auto !important;
     flex: 0 0 auto !important;
     min-width: unset !important;
@@ -323,13 +368,16 @@ div[data-testid="stContainer"] {
 }
 
 /* CONTROL DROPDOWN WIDTH */
-.code-line-row [data-testid="stSelectbox"] {
-    width: 320px !important;
+.code-line-row [data-testid="stSelectbox"],
+[class*="st-key-drag_drop_block_"] [data-testid="stSelectbox"] {
+    width: 300px !important;
     min-width: 220px !important;
     margin: 0 !important;
+    transform: translateY(-5px) !important;
 }
 
-.code-line-row [data-testid="stSelectbox"] > div {
+.code-line-row [data-testid="stSelectbox"] > div,
+[class*="st-key-drag_drop_block_"] [data-testid="stSelectbox"] > div {
     min-height: 30px !important;
     max-height: 30px !important;
     font-size: 13px !important;
