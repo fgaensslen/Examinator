@@ -236,8 +236,8 @@ if st.session_state.current_view == "dashboard":
                                 toggle_favorite(exam_name)
                                 st.rerun()
 
-                    # Group slider and Start button in a container for visual cohesion
-                    with st.container(border=True):
+                    # Keep the exam controls collapsed until the user opens them.
+                    with st.expander("Choose a study mode", expanded=False):
                         st.markdown(
                             '<div style="font-size:15px; font-weight:600; margin: 0 0 2px 0;">Number of questions</div>',
                             unsafe_allow_html=True,
@@ -256,7 +256,7 @@ if st.session_state.current_view == "dashboard":
                             "Start Practice Exam",
                             key=f"start_{exam_name}",
                             type="secondary",
-                            use_container_width=True,
+                            width="stretch",
                         ):
                             st.session_state.selected_exam = exam_name
                             st.session_state.quiz_data = load_questions(exam_name)
@@ -272,20 +272,19 @@ if st.session_state.current_view == "dashboard":
                             st.session_state.current_view = "quiz"
                             st.rerun()
 
-                    # Separate button for browsing all questions
-                    if st.button(
-                        "Browse all questions",
-                        key=f"browse_{exam_name}",
-                        use_container_width=True,
-                    ):
-                        st.session_state.selected_exam = exam_name
-                        st.session_state.quiz_data = load_questions(exam_name)
-                        st.session_state.mode = "browse"
-                        st.session_state.current_q_idx = 0
-                        st.session_state.selected_answers = {}
-                        st.session_state.checked_questions = set()
-                        st.session_state.current_view = "quiz"
-                        st.rerun()
+                        if st.button(
+                            "Browse all questions",
+                            key=f"browse_{exam_name}",
+                            width="stretch",
+                        ):
+                            st.session_state.selected_exam = exam_name
+                            st.session_state.quiz_data = load_questions(exam_name)
+                            st.session_state.mode = "browse"
+                            st.session_state.current_q_idx = 0
+                            st.session_state.selected_answers = {}
+                            st.session_state.checked_questions = set()
+                            st.session_state.current_view = "quiz"
+                            st.rerun()
 
     st.markdown('</div>', unsafe_allow_html=True)
 
