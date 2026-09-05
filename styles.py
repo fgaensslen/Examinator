@@ -171,7 +171,7 @@ div:has([data-testid="stSelectbox"]) {
     width: 100% !important;
     padding: 10px 16px !important;
     border-radius: 8px !important;
-    min-height: 48px !important;
+    min-height: 45px !important;
     height: auto !important;
     margin-bottom: 8px !important;
     box-sizing: border-box !important;
@@ -193,7 +193,7 @@ div:has([data-testid="stSelectbox"]) {
     color: #991b1b !important;
 }
 .card-neutral {
-    border: 1px solid rgba(128, 128, 128, 0.5) !important;
+    border: 3px solid rgba(128, 128, 128, 0.5) !important;
     background-color: rgba(128, 128, 128, 0.25) !important;
     color: inherit !important;
 }
@@ -202,6 +202,23 @@ div:has([data-testid="stSelectbox"]) {
     flex-grow: 1 !important;
     margin: 0 !important;
     line-height: 1.4 !important;
+}
+
+.feedback-card:has(.badge-correct),
+.feedback-card:has(.badge-wrong) {
+    position: relative !important;
+}
+.feedback-card:has(.badge-correct) span.choice-text,
+.feedback-card:has(.badge-wrong) span.choice-text {
+    padding-right: 125px !important;
+}
+.feedback-card .badge-correct,
+.feedback-card .badge-wrong {
+    position: absolute !important;
+    right: 16px !important;
+    top: 50% !important;
+    margin-left: 0 !important;
+    transform: translateY(-50%) !important;
 }
 
 /* BADGES FOR SELECTED REVIEW STATE */
